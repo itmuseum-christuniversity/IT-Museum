@@ -1,0 +1,1477 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IT Museum | Christ University</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: #f8f9fa;
+        }
+
+        /* Header */
+        header {
+            background: #fff;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        nav {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 1.5rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #2c3e50;
+            text-decoration: none;
+        }
+
+        .logo span {
+            color: #3498db;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2.5rem;
+            list-style: none;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #555;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+            font-size: 1rem;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover {
+            color: #3498db;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 6rem 2rem;
+            text-align: center;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .hero h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            font-weight: 700;
+        }
+
+        .hero p {
+            font-size: 1.3rem;
+            margin-bottom: 2rem;
+            opacity: 0.95;
+        }
+
+        .cta-button {
+            display: inline-block;
+            padding: 1rem 2.5rem;
+            background: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            transition: transform 0.3s, box-shadow 0.3s;
+            margin: 0.5rem;
+            cursor: pointer;
+        }
+
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        /* Page Content */
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        /* Section Styling */
+        .section {
+            max-width: 1400px;
+            margin: 5rem auto;
+            padding: 0 2rem;
+        }
+
+        .section-white {
+            background: white;
+            padding: 5rem 2rem;
+        }
+
+        .section h2 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: #2c3e50;
+        }
+
+        .section h3 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+            color: #667eea;
+        }
+
+        .content-box {
+            background: white;
+            padding: 3rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            margin-bottom: 2rem;
+        }
+
+        .content-box h3 {
+            font-size: 1.8rem;
+            color: #667eea;
+            margin-bottom: 1.5rem;
+        }
+
+        .content-box h4 {
+            font-size: 1.4rem;
+            color: #2c3e50;
+            margin: 1.5rem 0 1rem;
+        }
+
+        .content-box p {
+            font-size: 1.1rem;
+            color: #555;
+            margin-bottom: 1.5rem;
+            line-height: 1.8;
+        }
+
+        .content-box ul {
+            margin-left: 2rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .content-box li {
+            margin-bottom: 0.8rem;
+            color: #555;
+            line-height: 1.8;
+        }
+
+        /* Stats Grid */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2.5rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .stat-number {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            font-size: 1.1rem;
+            opacity: 0.95;
+        }
+
+        /* Mission/Vision Cards */
+        .mission-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .mission-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            border-top: 5px solid #667eea;
+        }
+
+        .mission-card h3 {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .mission-card p {
+            color: #666;
+            line-height: 1.8;
+        }
+
+        /* Researcher Cards */
+        .researcher-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .researcher-card {
+            background: white;
+            border-radius: 15px;
+            padding: 2rem;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            border-left: 5px solid #667eea;
+            transition: transform 0.3s;
+        }
+
+        .researcher-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        }
+
+        .researcher-card h3 {
+            font-size: 1.5rem;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .researcher-card .subtitle {
+            color: #667eea;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .researcher-card h4 {
+            font-size: 1.2rem;
+            color: #3498db;
+            margin: 1.5rem 0 0.8rem;
+        }
+
+        .researcher-card p, .researcher-card li {
+            color: #666;
+            line-height: 1.7;
+            font-size: 1rem;
+        }
+
+        .researcher-card ul {
+            margin-left: 1.5rem;
+        }
+
+        .researcher-card li {
+            margin-bottom: 0.6rem;
+        }
+
+        /* Variations Section */
+        .variations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .variation-item {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .variation-item h4 {
+            font-size: 1.3rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .variation-item p {
+            font-size: 1rem;
+            opacity: 0.95;
+        }
+
+        .highlight-box {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+            border-left: 5px solid #667eea;
+            padding: 1.5rem;
+            margin: 2rem 0;
+            border-radius: 10px;
+        }
+
+        .highlight-box p {
+            margin: 0;
+            color: #2c3e50;
+            font-size: 1.1rem;
+        }
+
+        /* Timeline */
+        .timeline-container {
+            position: relative;
+            padding: 2rem 0;
+        }
+
+        .timeline-item {
+            background: white;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            border-left: 5px solid #667eea;
+        }
+
+        .timeline-year {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Footer */
+        footer {
+            background: #2c3e50;
+            color: white;
+            padding: 3rem 2rem 1rem;
+        }
+
+        .footer-container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 2rem;
+        }
+
+        .footer-section h3 {
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            color: #3498db;
+        }
+
+        .footer-section p, .footer-section a {
+            color: #bdc3c7;
+            text-decoration: none;
+            line-height: 1.8;
+            display: block;
+        }
+
+        .footer-section a:hover {
+            color: #3498db;
+        }
+
+        .footer-bottom {
+            text-align: center;
+            padding-top: 2rem;
+            border-top: 1px solid #34495e;
+            color: #95a5a6;
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .nav-links {
+                flex-wrap: wrap;
+                justify-content: center;
+                gap: 1.2rem;
+            }
+
+            .nav-links a {
+                font-size: 0.9rem;
+            }
+
+            .hero h1 {
+                font-size: 2rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .section h2 {
+                font-size: 2rem;
+            }
+
+            .researcher-grid, .mission-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stat-number {
+                font-size: 2rem;
+            }
+        }
+        /* --- Admin Panel Styles --- */
+        .admin-only {
+            display: none; /* Hidden by default */
+        }
+
+        body.admin-mode .admin-only {
+            display: block;
+        }
+
+        .admin-overlay {
+            display: none;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        body.admin-mode .admin-overlay {
+            display: flex;
+        }
+        
+        .section {
+            position: relative; /* For overlay positioning */
+        }
+        
+        .researcher-card {
+            position: relative;
+        }
+
+        .admin-btn {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: background 0.3s;
+        }
+
+        .admin-btn:hover {
+            background: #2980b9;
+        }
+
+        .delete-btn {
+            background: #e74c3c;
+        }
+
+        .delete-btn:hover {
+            background: #c0392b;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            position: relative;
+            margin: 10% auto;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .form-group {
+            margin-bottom: 1rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+
+        .form-group input, .form-group textarea, .form-group select {
+            width: 100%;
+            padding: 0.8rem;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-family: inherit;
+        }
+
+        .form-group textarea {
+            height: 150px;
+            resize: vertical;
+        }
+
+        .fab-add {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 60px;
+            height: 60px;
+            background: #2ecc71;
+            color: white;
+            border-radius: 50%;
+            display: flex; /* Hidden by default via class, toggled by admin-only */
+            justify-content: center;
+            align-items: center;
+            font-size: 2rem;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+            cursor: pointer;
+            z-index: 1000;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <a href="#" class="logo" onclick="showPage('home')">IT Museum <span>| CHRIST</span></a>
+            <ul class="nav-links">
+                <li><a onclick="showPage('home')">Home</a></li>
+                <li><a onclick="showPage('collection')">Collection</a></li>
+                <li><a onclick="showPage('team')">Our Team</a></li>
+                <li><a onclick="showPage('blogs')">Blogs</a></li>
+                <li><a onclick="showPage('contact')">Contact</a></li>
+                <!-- Admin Login (Visible) -->
+                <li><a onclick="document.getElementById('admin-login-modal').style.display='flex'" style="color: #e74c3c; border: 1px solid #e74c3c; padding: 5px 15px; border-radius: 20px;">Admin</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- HOME PAGE -->
+    <div id="home" class="page active">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-content">
+                <h1>IT Museum | Christ University</h1>
+                <p>Bridging Traditional Indian Art and Modern Computer Science through Kolam Patterns</p>
+                <a class="cta-button" onclick="showPage('collection')">Explore Collection</a>
+                <a class="cta-button" onclick="showPage('team')">Meet Our Team</a>
+            </div>
+        </section>
+
+        <!-- About the Museum -->
+        <section class="section">
+            <h2>About the IT Museum</h2>
+            <div class="content-box">
+                <p>The IT Museum at Christ University, in collaboration with DataArt, is a groundbreaking multimedia project dedicated to exploring and preserving the fascinating relationship between traditional Indian art forms and modern computer science. Our primary focus is on Kolam Art - an ancient South Indian geometric tradition that has profound connections to pattern recognition, computer vision, automata theory, and artificial intelligence.</p>
+                
+                <p>This unique museum showcases how traditional Kolam patterns, drawn with mathematical precision and involving symmetry, recursion, and fractals, serve as valuable case studies for computational applications. Inspired by pioneering researchers like Dr. Gift Siromoney, we document Kolam's cultural heritage and mathematical foundations while integrating cutting-edge computational techniques.</p>
+
+                <p>Located at the prestigious Yeshwanthpur campus in Bangalore - India's Silicon Valley - our museum serves as a bridge between India's rich cultural heritage and cutting-edge technological innovation, inspiring the next generation of technologists to find inspiration in tradition.</p>
+            </div>
+
+            <!-- Stats -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-number">50+</div>
+                    <div class="stat-label">Years of Research</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">7</div>
+                    <div class="stat-label">Pioneer Researchers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">100+</div>
+                    <div class="stat-label">Kolam Patterns Documented</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">8</div>
+                    <div class="stat-label">Regional Variations</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Christ University Mission & Vision -->
+        <section class="section-white">
+            <div style="max-width: 1400px; margin: 0 auto;">
+                <h2>Christ University: Excellence in Education</h2>
+                
+                <div class="content-box">
+                    <h3>About Christ University</h3>
+                    <p>Christ University, a Deemed to be University under Section 3 of the UGC Act 1956, is an institution of higher education that stands as a beacon of academic excellence, research, and holistic development. Established in 1969, Christ University has evolved into one of India's premier educational institutions, known for its commitment to academic rigor, research innovation, and value-based education.</p>
+                    
+                    <p>The Yeshwanthpur Campus in Bangalore houses cutting-edge facilities and research centers, fostering an environment where traditional knowledge meets modern innovation. The IT Museum project exemplifies this philosophy by connecting ancient Indian art forms with contemporary computer science.</p>
+                </div>
+
+                <div class="mission-grid">
+                    <div class="mission-card">
+                        <h3>🎯 Our Mission</h3>
+                        <p>To empower individuals through holistic education that upholds universal human values, fosters critical thinking, and promotes social responsibility. We strive to create leaders who are intellectually competent, morally upright, and socially committed.</p>
+                    </div>
+
+                    <div class="mission-card">
+                        <h3>👁️ Our Vision</h3>
+                        <p>Excellence and service. Christ University aims to be a premier educational institution globally, committed to forming leaders who are intellectually competent, morally upright, psychologically integrated, and socially committed.</p>
+                    </div>
+
+                    <div class="mission-card">
+                        <h3>💡 Core Values</h3>
+                        <p>Faith in God, Moral Uprightness, Love of Fellow Beings, Social Responsibility, Pursuit of Excellence. These values guide every aspect of our educational philosophy and research endeavors, including this IT Museum project.</p>
+                    </div>
+                </div>
+
+                <div class="content-box">
+                    <h3>Why This Museum Matters</h3>
+                    <p>The IT Museum represents Christ University's commitment to:</p>
+                    <ul>
+                        <li><strong>Preserving Cultural Heritage:</strong> Documenting and digitizing traditional Kolam art forms before they fade from collective memory</li>
+                        <li><strong>Interdisciplinary Research:</strong> Bridging the gap between humanities, mathematics, and computer science</li>
+                        <li><strong>Innovation Through Tradition:</strong> Showing how ancient wisdom can inspire modern technological solutions</li>
+                        <li><strong>Global Recognition:</strong> Highlighting India's contributions to computer science and artificial intelligence through traditional art</li>
+                        <li><strong>Educational Excellence:</strong> Providing students and researchers with unique perspectives on pattern recognition, AI, and computational design</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- What is Kolam - Quick Introduction -->
+        <section class="section">
+            <h2>What is Kolam Art?</h2>
+            <div class="content-box">
+                <p>Kolam is an ancient Indian folk art extensively practiced in Southern India, particularly in Tamil Nadu. These intricate geometric patterns are drawn at the thresholds of homes using rice flour or colored powders, representing prosperity, positivity, and welcome.</p>
+
+                <div class="highlight-box">
+                    <p><strong>The Word "Kolam"</strong> in Tamil means "form and beauty" - a symbol of auspiciousness and divinity that has been practiced for thousands of years.</p>
+                </div>
+
+                <h4>Why Kolam Matters to Computer Science</h4>
+                <p>Kolam patterns are not just beautiful - they embody complex mathematical principles:</p>
+                <ul>
+                    <li><strong>Pattern Recognition:</strong> The structured, repetitive nature makes them ideal for AI training</li>
+                    <li><strong>Graph Theory:</strong> Many Kolams are Eulerian graphs drawn in a single continuous line</li>
+                    <li><strong>Automata Theory:</strong> Kolam follows rule-based generation similar to formal grammars</li>
+                    <li><strong>Fractals & Recursion:</strong> Nested patterns exhibit self-similarity across scales</li>
+                    <li><strong>Computational Geometry:</strong> Grid-based designs perfect for algorithmic modeling</li>
+                </ul>
+            </div>
+
+            <div class="variations-grid">
+                <div class="variation-item">
+                    <h4>Kolam</h4>
+                    <p>Tamil Nadu</p>
+                </div>
+                <div class="variation-item">
+                    <h4>Rangoli</h4>
+                    <p>Maharashtra</p>
+                </div>
+                <div class="variation-item">
+                    <h4>Muggulu</h4>
+                    <p>Andhra Pradesh</p>
+                </div>
+                <div class="variation-item">
+                    <h4>Alpana</h4>
+                    <p>West Bengal</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Project Overview -->
+        <section class="section-white">
+            <div style="max-width: 1400px; margin: 0 auto;">
+                <h2>Project Structure</h2>
+                <div class="content-box">
+                    <p>This research project is structured into four key blocks, each focusing on a distinct aspect of Kolam art and its computational applications:</p>
+                </div>
+
+                <div class="mission-grid">
+                    <div class="mission-card">
+                        <h3>📚 Cultural Studies</h3>
+                        <p>Exploring the historical, social, and cultural significance of Kolam art in Indian society. Understanding regional variations, traditional practices, and the art's evolution through generations.</p>
+                    </div>
+
+                    <div class="mission-card">
+                        <h3>🔢 Mathematics & Computer Science</h3>
+                        <p>Analyzing the mathematical foundations of Kolam patterns including graph theory, fractals, symmetry, and their applications in AI, machine learning, and computational design.</p>
+                    </div>
+
+                    <div class="mission-card">
+                        <h3>👥 Pioneer Biographies</h3>
+                        <p>Documenting the groundbreaking contributions of researchers like Dr. Gift Siromoney who first connected Kolam with formal grammars, automata theory, and computer science.</p>
+                    </div>
+
+                    <div class="mission-card">
+                        <h3>🚀 Indian IT Innovation</h3>
+                        <p>Highlighting how traditional Indian art forms inspire modern technological innovation, including patents in steganography, AI-based pattern generation, and educational tools.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action -->
+        <section class="section">
+            <h2>Explore the Museum</h2>
+            <div class="content-box" style="text-align: center;">
+                <p>Dive deep into the fascinating world where ancient tradition meets modern innovation. Discover how Kolam patterns have influenced computer science, artificial intelligence, and cybersecurity.</p>
+                <div style="margin-top: 2rem;">
+                    <a class="cta-button" onclick="showPage('collection')">View Full Collection</a>
+                    <a class="cta-button" onclick="showPage('team')">Meet the Researchers</a>
+                    <a class="cta-button" onclick="showPage('blogs')">Read Our Blogs</a>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Dynamic Sections Container -->
+        <div id="dynamic-home-sections"></div>
+        
+        <!-- Admin Add Section Button -->
+        <div class="section admin-only" style="text-align: center; border: 2px dashed #ccc; padding: 2rem; border-radius: 10px; margin-top: 2rem;">
+            <button class="cta-button" onclick="window.openAddSection()" style="background: #2ecc71; color: white;">+ Add New Section</button>
+        </div>
+    </div>
+
+    <!-- COLLECTION PAGE -->
+    <div id="collection" class="page">
+        <section class="hero" style="padding: 4rem 2rem;">
+            <div class="hero-content">
+                <h1>📚 Kolam Art Collection</h1>
+                <p>Explore the comprehensive documentation of Kolam patterns, computational models, and mathematical frameworks</p>
+            </div>
+        </section>
+
+        <!-- Kolam Introduction -->
+        <section class="section">
+            <h2>Understanding Kolam Art</h2>
+            
+            <div class="content-box">
+                <h3>Introduction to Kolam</h3>
+                <p>Kolam is an ancient Indian folk art extensively used to beautifully adorn the thresholds and open courtyards in front of houses, particularly in Southern India. This ornamentation and visually appealing art has been an essential and valuable part of Indian society for thousands of years, representing concepts of prosperity, positivity, and the welcome reception of guests and gods alike into the sacred space of the home.</p>
+                
+                <p>The word "Kolam" in the Tamil language means form and beauty. A symbol of auspiciousness and divinity, it is made with rice flour, finely ground rice powder (called kola-podi in Tamil), or at times vegetable and mineral-based colored powders on carefully swept and water-sprinkled cleaned grounds.</p>
+
+                <h4>The Art of Creating Kolam</h4>
+                <p>Women take this powder in a pinching-like manner at the tips of their fingers and start gently drawing the pattern by letting the powder fall in a controlled way to obtain the desired design. The process involves concentration, memory, and a series of disciplined hand and body movements. The designs can vary from simple to complex depending on the event, occasion, or season.</p>
+
+                <p>For special occasions, to make the design last longer, the rice flour is made wet by adding water. These semi-permanent patterns are called Makolam, created almost as if the fingers were acting as an ink pen.</p>
+            </div>
+
+            <div class="content-box">
+                <h3>Regional Variations Across India</h3>
+                <p>Although Kolam is practiced across the country, the geometric patterns and construction methods vary significantly from region to region:</p>
+                
+                <div class="variations-grid">
+                    <div class="variation-item">
+                        <h4>Kolam</h4>
+                        <p>Tamil Nadu</p>
+                    </div>
+                    <div class="variation-item">
+                        <h4>Puvidal</h4>
+                        <p>Kerala</p>
+                    </div>
+                    <div class="variation-item">
+                        <h4>Rangoli</h4>
+                        <p>Maharashtra, Karnataka</p>
+                    </div>
+                    <div class="variation-item">
+                        <h4>Muggulu</h4>
+                        <p>Andhra Pradesh</p>
+                    </div>
+                    <div class="variation-item">
+                        <h4>Alpana</h4>
+                        <p>West Bengal</p>
+                    </div>
+                    <div class="variation-item">
+                        <h4>Chowkpurna</h4>
+                        <p>Madhya Pradesh</p>
+                    </div>
+                    <div class="variation-item">
+                        <h4>Mandana</h4>
+                        <p>Rajasthan</p>
+                    </div>
+                    <div class="variation-item">
+                        <h4>Sanjhi</h4>
+                        <p>Uttar Pradesh</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-box">
+                <h3>Cultural and Social Significance</h3>
+                <p>Kolam drawing is an ancient and widespread practice in South India, practiced by women of all ages. Young girls start their initiation into the art at a very young age, learning by observing their mothers and grandmothers.</p>
+
+                <p>This ancient tradition is not just a way of adorning houses; it is also a meditative and social practice that challenges creativity, patience, and a sense of cultural continuity over generations. Colorful kolam competitions are held during festive celebrations, bringing neighbors and relatives together to exchange ideas and techniques.</p>
+            </div>
+
+            <div class="content-box">
+                <h3>Modern Adaptations and Innovations</h3>
+                <p>As times have progressed, the art of drawing kolams has undergone remarkable change, including the use of modern materials like contemporary colored powders, chalk, and even digital art. Some artists now employ innovative methods to draw kolams on large canvases for showcasing.</p>
+
+                <p>The digital revolution has provided designers with opportunities to experiment with intricate mathematical patterns and design computer-generated kolams. In urban settings, individuals use stencils to quickly draw intricate patterns, keeping the tradition alive despite time constraints.</p>
+
+                <div class="highlight-box">
+                    <p><strong>Research Connection:</strong> Researchers and mathematicians have been enthusiastic about kolam patterns due to their complex geometric nature. Studies in mathematics and computer science have explored how kolam patterns relate to algorithmic patterns, symmetry, and artificial intelligence.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Computational Models -->
+        <section class="section-white">
+            <div style="max-width: 1400px; margin: 0 auto;">
+                <h2>💻 Computational Models</h2>
+                
+                <div class="content-box">
+                    <h3>Modeling Kolam Patterns</h3>
+                    <p>Kolam patterns, drawn on a grid of dots (pulli), feature intricate designs that can be single-threaded (kambi) or multi-threaded, offering great opportunities for computational modeling.</p>
+
+                    <h4>L-Systems (Lindenmayer Systems)</h4>
+                    <p>L-systems use a set of rules to iteratively generate complex patterns, ideal for mimicking the step-by-step drawing process of Kolam:</p>
+                    <ul>
+                        <li><strong>Starting Command:</strong> "F" (move forward and draw)</li>
+                        <li><strong>Rules:</strong> Replace "F" with "F+F-F-F+F" (where "+" and "−" indicate 90° turns)</li>
+                        <li><strong>Example:</strong> "Square Loop Kolam" generated through iterative rule application</li>
+                    </ul>
+
+                    <h4>Fractals</h4>
+                    <p>Fractals create self-repeating patterns seen in many Kolam designs:</p>
+                    <ul>
+                        <li>Tools like Processing or OpenGL simulate fractal-based Kolams</li>
+                        <li>Example: "Star Kolam" with smaller stars appearing recursively</li>
+                        <li>Mirrors the layered creation of festival Kolams</li>
+                    </ul>
+
+                    <h4>Shape Grammars</h4>
+                    <p>Rule-based systems that transform initial shapes into complex designs:</p>
+                    <ul>
+                        <li><strong>Initial State:</strong> A grid of dots (e.g., 5x5)</li>
+                        <li><strong>Rules:</strong> Draw lines between adjacent dots, loop around unconnected dots</li>
+                        <li>Treats Kolam as a two-dimensional language</li>
+                    </ul>
+                </div>
+
+                <div class="content-box">
+                    <h3>AI & Machine Learning Applications</h3>
+                    
+                    <h4>Image Processing</h4>
+                    <ul>
+                        <li><strong>Edge Detection:</strong> OpenCV's Canny edge detector isolates Kolam lines from backgrounds</li>
+                        <li><strong>Pattern Segmentation:</strong> Watershed algorithms separate designs into components</li>
+                    </ul>
+
+                    <h4>Pattern Recognition</h4>
+                    <ul>
+                        <li><strong>CNNs:</strong> Classify Kolam types by analyzing line continuity and grid alignment</li>
+                        <li><strong>GANs:</strong> Generate new Kolam designs by learning from traditional patterns</li>
+                        <li><strong>Behavioral Simulation:</strong> ML models simulate human drawing strategies</li>
+                    </ul>
+
+                    <h4>Kolam-Inspired Algorithms</h4>
+                    <ul>
+                        <li><strong>Steganography:</strong> Embed data in Kolam designs through line orientations</li>
+                        <li><strong>Pathfinding:</strong> Single-thread Kolam influences path traversal algorithms</li>
+                        <li><strong>Educational Tools:</strong> Turtle graphics teach coding through Kolam generation</li>
+                        <li><strong>Design Automation:</strong> Algorithms for symmetrical pattern creation</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Mathematical Models -->
+        <section class="section">
+            <h2>🔢 Mathematical Models</h2>
+            
+            <div class="content-box">
+                <h3>Five Key Mathematical Frameworks</h3>
+                
+                <h4>1. Angular Encoding Model</h4>
+                <p>Maps angular movements in Kolam drawing to symbol sequences representing directions. Applied to single-loop Kolams (unicursal patterns), emphasizing symmetry and recursion.</p>
+
+                <h4>2. Descriptive Framework</h4>
+                <p>Uses geometric principles focusing on symmetry, fractals, and infinity. Analyzes geometric, freehand, and pulli-based Kolams, identifying universal properties like balance and harmony.</p>
+
+                <h4>3. Point Lattice System</h4>
+                <p>Organizes patterns on a grid integrating Fibonacci sequences and fractal geometry. Applied to complex patterns like Fibonacci labyrinth Kolams, emphasizing scalability.</p>
+
+                <h4>4. Scalability Analysis Model</h4>
+                <p>Decomposes patterns into sub-components using mathematical sequences. Focuses on how designs scale while maintaining structural integrity, applied to specific Kolams like Hridaya and Aishwarya Kolam.</p>
+
+                <h4>5. Array Grammar and P System</h4>
+                <p>Uses array grammars and contextual Array P Systems to generate and analyze patterns. Formalizes Kolam as a two-dimensional language, enabling computational generation of complex designs.</p>
+            </div>
+
+            <div class="content-box">
+                <h3>Mathematical Concepts in Kolam</h3>
+                <ul>
+                    <li><strong>Graph Theory:</strong> Eulerian graphs, Hamiltonian paths, planar graphs</li>
+                    <li><strong>L-Systems:</strong> Rewriting rules for recursive pattern generation</li>
+                    <li><strong>Fractals & Self-Similarity:</strong> Nested loops resembling Koch curves and Sierpiński triangles</li>
+                    <li><strong>Fibonacci Sequences:</strong> Spiral-based Kolams following Fibonacci proportions</li>
+                    <li><strong>Golden Ratio:</strong> Proportions exhibiting 1.618 ratio</li>
+                    <li><strong>Symmetry & Group Theory:</strong> Dihedral groups describing two-dimensional symmetry</li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- External Resources -->
+        <section class="section-white">
+            <div style="max-width: 1400px; margin: 0 auto;">
+                <h2>📖 Resources & References</h2>
+                
+                <div class="researcher-grid">
+                    <div class="researcher-card">
+                        <h3>📚 Academic Papers</h3>
+                        <p><a href="https://www.exoticindiaart.com/book/details/kolam-tradition-in-south-india-rangoli-in-indian-threshold-design-nav088/" target="_blank" style="color: #667eea;">Kolam Tradition in South India</a></p>
+                        <p><a href="https://arxiv.org/abs/2307.02144" target="_blank" style="color: #667eea;">Kolam Simulation (arXiv)</a></p>
+                    </div>
+
+                    <div class="researcher-card">
+                        <h3>🔬 Institutions</h3>
+                        <p><a href="https://www.iitm.ac.in/" target="_blank" style="color: #667eea;">IIT Madras</a></p>
+                        <p>NIAS, IISc Bangalore</p>
+                        <p><a href="https://www.sastra.edu/" target="_blank" style="color: #667eea;">SASTRA University</a></p>
+                        <p><a href="https://vit.ac.in/" target="_blank" style="color: #667eea;">VIT University</a></p>
+                    </div>
+
+                    <div class="researcher-card">
+                        <h3>📖 Key Publications</h3>
+                        <p style="font-size: 0.95rem; color: #666;">Siromoney et al. (1974). Array grammars and kolam.</p>
+                        <p style="font-size: 0.95rem; color: #666;">Ascher, M. (2002). Mathematics Elsewhere.</p>
+                        <p style="font-size: 0.95rem; color: #666;">Gerdes, P. (2007). African Basketry and Mathematics.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- TEAM PAGE -->
+    <div id="team" class="page">
+        <section class="hero" style="padding: 4rem 2rem;">
+            <div class="hero-content">
+                <h1>👥 Our Team</h1>
+                <p>Meet the pioneer researchers who connected Kolam art with computer science</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Pioneer Researchers in Kolam & Computer Science</h2>
+            
+            <div class="researcher-grid">
+                <div class="researcher-card">
+                    <h3>Dr. Gift Siromoney</h3>
+                    <p class="subtitle">The Pioneer of Kolam Research (1932-1988)</p>
+                    <p>Dr. Gift Siromoney was a renowned mathematician and computer scientist from Tamil Nadu. He was one of the first researchers to apply formal grammar and automata theory to Kolam patterns.</p>
+                    <h4>Key Contributions</h4>
+                    <ul>
+                        <li><strong>Mathematical Modeling:</strong> First to analyze Kolam using symmetry, recursion, and geometry</li>
+                        <li><strong>Automata Theory:</strong> Proposed Kolam designs follow rules similar to formal grammars</li>
+                        <li><strong>Algorithmic Representation:</strong> Developed computational techniques to generate Kolam digitally</li>
+                        <li><strong>AI Foundation:</strong> Provided groundwork for machine learning and pattern recognition</li>
+                    </ul>
+                </div>
+
+                <div class="researcher-card">
+                    <h3>Dr. R. N. Lakshminarayanan</h3>
+                    <p class="subtitle">Kolam in AI & Pattern Recognition</p>
+                    <p>Leading researcher in AI-based pattern recognition, contributing to digitizing Kolam designs for computational analysis.</p>
+                    <h4>Key Contributions</h4>
+                    <ul>
+                        <li><strong>Pattern Recognition Model:</strong> Used Kolam for AI-based image processing</li>
+                        <li><strong>Machine Learning:</strong> Trained ML models using Kolam's mathematical rules</li>
+                        <li><strong>Digitization:</strong> Converted traditional Kolam into digital datasets for AI training</li>
+                    </ul>
+                </div>
+
+                <div class="researcher-card">
+                    <h3>Dr. Anand Mahendran & Ramya Govindaraj</h3>
+                    <p class="subtitle">Algorithmic Kolam Studies</p>
+                    <p>Researchers from VIT University focusing on Kolam's recursive structure and AI applications.</p>
+                    <h4>Key Contributions</h4>
+                    <ul>
+                        <li><strong>Algorithmic Generation:</strong> Computer algorithms to generate Kolam designs</li>
+                        <li><strong>Fractal Geometry:</strong> Explored Kolam's fractal-like properties</li>
+                        <li><strong>Design Applications:</strong> Applied Kolam-inspired AI to digital art and UI/UX</li>
+                    </ul>
+                </div>
+
+                <div class="researcher-card">
+                    <h3>Dr. Kamala Krithivasan</h3>
+                    <p class="subtitle">Kolam & Formal Grammar</p>
+                    <p>Professor at IIT Madras specializing in formal language theory and computational models.</p>
+                    <h4>Key Contributions</h4>
+                    <ul>
+                        <li><strong>Structured Grammar:</strong> Analyzed Kolam using formal grammar rules</li>
+                        <li><strong>Computational Algorithms:</strong> Translated hand-drawn Kolam into structured designs</li>
+                        <li><strong>AI Applications:</strong> Applied pattern recognition and AI techniques to Kolam</li>
+                    </ul>
+                </div>
+
+                <div class="researcher-card">
+                    <h3>Dr. Gopinaath Kannabiran & Dr. Anuradha Reddy</h3>
+                    <p class="subtitle">Kolam & Ecofeminist Computational Art</p>
+                    <p>Researchers at IT University of Copenhagen and Malmö University, specializing in digital humanities and feminist technology studies.</p>
+                    <h4>Key Contributions</h4>
+                    <ul>
+                        <li><strong>Ecofeminist Art:</strong> Examined Kolam's representation of women's cultural identity</li>
+                        <li><strong>Digital Creativity:</strong> Aligned Kolam with computational models</li>
+                        <li><strong>Gendered Design:</strong> Challenged traditional gender norms in technology through Kolam</li>
+                    </ul>
+                </div>
+
+                <div class="researcher-card">
+                    <h3>Dr. Tulasi Bharathi, Dr. Shailaja D Sharma & Dr. Nithin Nagaraj</h3>
+                    <p class="subtitle">Kolam Simulation Using Lattice Points</p>
+                    <p>Researchers from NIAS, IISc Campus, Bangalore, focusing on mathematical modeling and computational pattern generation.</p>
+                    <h4>Key Contributions</h4>
+                    <ul>
+                        <li><strong>Lattice-Based Structure:</strong> Analyzed Kolam using lattice points with angular transformations</li>
+                        <li><strong>Algorithmic Simulation:</strong> Developed models using angles at lattice points</li>
+                        <li><strong>Computational Geometry:</strong> Applied to AI and computer vision</li>
+                    </ul>
+                </div>
+
+                <div class="researcher-card">
+                    <h3>Dr. Rengarajan Amirtharajan & Dr. John Bosco Balaguru R</h3>
+                    <p class="subtitle">Data Embedding System (US Patent)</p>
+                    <p>Researchers from SASTRA University specializing in cryptography and steganography.</p>
+                    <h4>Key Contributions</h4>
+                    <ul>
+                        <li><strong>US Patent US8971531B2:</strong> Secure data embedding using Kolam-inspired patterns</li>
+                        <li><strong>Steganography:</strong> Concealing information within digital media</li>
+                        <li><strong>Cryptography:</strong> Encryption techniques for network security</li>
+                        <li><strong>AI in Cybersecurity:</strong> Identifying security vulnerabilities using AI</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- BLOGS PAGE -->
+    <div id="blogs" class="page">
+        <section class="hero" style="padding: 4rem 2rem;">
+            <div class="hero-content">
+                <h1>📝 Blogs & Articles</h1>
+                <p>Insights, research, and stories from the world of Kolam and computer science</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Latest Articles</h2>
+            
+            <div class="researcher-grid" id="articles-grid">
+                <!-- Admin Add Article Button -->
+                <div class="researcher-card admin-only" style="display: flex; justify-content: center; align-items: center; min-height: 200px; border: 2px dashed #ccc; cursor: pointer;" onclick="window.openAddArticle()">
+                    <div style="text-align: center;">
+                        <span style="font-size: 3rem; color: #2ecc71;">+</span>
+                        <p>Add New Article</p>
+                    </div>
+                </div>
+                <div class="researcher-card">
+                    <h3>The Mathematics Behind Kolam Patterns</h3>
+                    <p class="subtitle">March 15, 2025 • Research Insights</p>
+                    <p>Discover how ancient Kolam art embodies complex mathematical principles including graph theory, fractals, and the golden ratio. This article explores the intersection of traditional art and modern mathematics, revealing how centuries-old patterns contain sophisticated geometric concepts.</p>
+                    <p style="color: #667eea; font-weight: 600; margin-top: 1rem; cursor: pointer;">Read More →</p>
+                </div>
+
+                <div class="researcher-card">
+                    <h3>Dr. Gift Siromoney: Pioneer of Computational Kolam</h3>
+                    <p class="subtitle">March 10, 2025 • Biography</p>
+                    <p>An in-depth look at the life and groundbreaking work of Dr. Gift Siromoney, who first connected Kolam patterns with formal grammar and automata theory. His pioneering research laid the foundation for decades of AI and pattern recognition studies in traditional art forms.</p>
+                    <p style="color: #667eea; font-weight: 600; margin-top: 1rem; cursor: pointer;">Read More →</p>
+                </div>
+
+                <div class="researcher-card">
+                    <h3>AI-Powered Kolam Generation: Future of Traditional Art</h3>
+                    <p class="subtitle">March 5, 2025 • Technology</p>
+                    <p>Explore how Generative Adversarial Networks (GANs) and machine learning models are being used to create new Kolam designs while preserving cultural authenticity. We examine the balance between technological innovation and traditional aesthetics in generative art.</p>
+                    <p style="color: #667eea; font-weight: 600; margin-top: 1rem; cursor: pointer;">Read More →</p>
+                </div>
+
+                <div class="researcher-card">
+                    <h3>Kolam in Cybersecurity: Steganography Applications</h3>
+                    <p class="subtitle">February 28, 2025 • Innovation</p>
+                    <p>Learn about the groundbreaking US Patent that uses Kolam-inspired patterns for secure data embedding and transmission. This article showcases how traditional art informs modern cybersecurity solutions, with real-world applications in secure communication.</p>
+                    <p style="color: #667eea; font-weight: 600; margin-top: 1rem; cursor: pointer;">Read More →</p>
+                </div>
+
+                <div class="researcher-card">
+                    <h3>Teaching Coding Through Kolam: Educational Innovation</h3>
+                    <p class="subtitle">February 20, 2025 • Education</p>
+                    <p>How educators are using Kolam patterns and turtle graphics to teach programming concepts to students. This innovative approach connects cultural heritage with STEM education, making coding more accessible and culturally relevant for Indian students.</p>
+                    <p style="color: #667eea; font-weight: 600; margin-top: 1rem; cursor: pointer;">Read More →</p>
+                </div>
+
+                <div class="researcher-card">
+                    <h3>Regional Variations: Kolam Across Indian States</h3>
+                    <p class="subtitle">February 15, 2025 • Cultural Studies</p>
+                    <p>A comprehensive exploration of how Kolam manifests differently across Indian regions - from Tamil Nadu's intricate designs to Bengal's Alpana and Rajasthan's Mandana patterns. Understanding regional diversity enriches our appreciation of this pan-Indian tradition.</p>
+                    <p style="color: #667eea; font-weight: 600; margin-top: 1rem; cursor: pointer;">Read More →</p>
+                </div>
+            </div>
+
+            <div class="content-box" style="margin-top: 3rem; text-align: center;">
+                <h3>Want to Contribute?</h3>
+                <p>We welcome research articles, cultural insights, and technical explorations related to Kolam art and computer science. If you'd like to contribute to our blog, please reach out to us.</p>
+                <p style="margin-top: 1rem;"><strong>Email:</strong> itmuseum@christuniversity.in</p>
+            </div>
+        </section>
+    </div>
+
+    <!-- CONTACT PAGE -->
+    <div id="contact" class="page">
+        <section class="hero" style="padding: 4rem 2rem;">
+            <div class="hero-content">
+                <h1>📞 Contact Us</h1>
+                <p>Visit us or get in touch with the IT Museum at Christ University</p>
+            </div>
+        </section>
+
+        <section class="section">
+            <h2>Visit the Museum</h2>
+            
+            <div class="mission-grid">
+                <div class="mission-card">
+                    <h3>📍 Location</h3>
+                    <p><strong>Christ University</strong></p>
+                    <p>IT Museum</p>
+                    <p>Yeshwanthpur Campus</p>
+                    <p>Bangalore, Karnataka 560022</p>
+                    <p>India</p>
+                </div>
+
+                <div class="mission-card">
+                    <h3>🕐 Visiting Hours</h3>
+                    <p><strong>Monday - Friday</strong></p>
+                    <p>9:00 AM - 5:00 PM</p>
+                    <p><strong>Saturday</strong></p>
+                    <p>10:00 AM - 4:00 PM</p>
+                    <p><strong>Sunday:</strong> Closed</p>
+                </div>
+
+                <div class="mission-card">
+                    <h3>📞 Contact Information</h3>
+                    <p><strong>Phone:</strong></p>
+                    <p>+91-80-4012-9100</p>
+                    <p><strong>Email:</strong></p>
+                    <p>itmuseum@christuniversity.in</p>
+                    <p><strong>Website:</strong></p>
+                    <p>christuniversity.in</p>
+                </div>
+            </div>
+
+            <div class="content-box">
+                <h3>🎟️ Admission & Tours</h3>
+                <div class="mission-grid" style="margin-top: 2rem;">
+                    <div class="mission-card">
+                        <h3>Free Admission</h3>
+                        <p>Students with valid ID</p>
+                    </div>
+                    <div class="mission-card">
+                        <h3>₹100</h3>
+                        <p>General Public</p>
+                    </div>
+                    <div class="mission-card">
+                        <h3>Guided Tours</h3>
+                        <p>Available on request</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-box">
+                <h3>🤝 Collaboration</h3>
+                <p>This museum is a collaborative project between:</p>
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 2rem;">
+                    <div style="text-align: center;">
+                        <h4 style="color: #667eea; font-size: 1.5rem; margin-bottom: 0.5rem;">CHRIST</h4>
+                        <p style="color: #666;">(Deemed to be University)</p>
+                        <p style="margin-top: 1rem;">Yeshwanthpur Campus, Bangalore</p>
+                    </div>
+                    <div style="text-align: center;">
+                        <h4 style="color: #667eea; font-size: 1.5rem; margin-bottom: 0.5rem;">DataArt</h4>
+                        <p style="color: #666;">IT Museum</p>
+                        <p style="margin-top: 1rem;"><a href="https://museum.dataart.com" target="_blank" style="color: #3498db;">museum.dataart.com</a></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="content-box">
+                <h3>📧 Get in Touch</h3>
+                <p>For research inquiries, collaboration opportunities, or general questions about the museum, please contact us:</p>
+                <ul style="margin-top: 1.5rem;">
+                    <li><strong>Research Collaborations:</strong> itmuseum@christuniversity.in</li>
+                    <li><strong>Student Visits:</strong> Schedule group tours for educational purposes</li>
+                    <li><strong>Blog Contributions:</strong> Submit articles on Kolam art and computer science</li>
+                    <li><strong>Media Inquiries:</strong> Press and media relations</li>
+                </ul>
+            </div>
+        </section>
+
+        <section class="section-white">
+            <div style="max-width: 1400px; margin: 0 auto;">
+                <h2>How to Reach Us</h2>
+                <div class="content-box">
+                    <h4>By Metro</h4>
+                    <p>Yeshwanthpur Metro Station (Purple Line) - 10 minutes walk</p>
+                    
+                    <h4>By Bus</h4>
+                    <p>Multiple BMTC buses connect to Yeshwanthpur. Get down at Christ University stop.</p>
+                    
+                    <h4>By Car</h4>
+                    <p>Ample parking available on campus. Use GPS coordinates or search for "Christ University Yeshwanthpur Campus"</p>
+                    
+                    <h4>From City Center</h4>
+                    <p>Approximately 10 km from MG Road, 30-40 minutes by car depending on traffic</p>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Christ University</h3>
+                    <p>IT Museum</p>
+                    <p>Yeshwanthpur Campus</p>
+                    <p>Bangalore, Karnataka 560022</p>
+                    <p>India</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Information</h3>
+                    <p>📞 Phone: +91-80-4012-9100</p>
+                    <p>📧 Email: itmuseum@christuniversity.in</p>
+                    <p>🌐 Web: christuniversity.in</p>
+                    <p>🕐 Mon-Fri: 9:00 AM - 5:00 PM</p>
+                    <p>🕐 Saturday: 10:00 AM - 4:00 PM</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Quick Links</h3>
+                    <a onclick="showPage('home')" style="cursor: pointer;">Home</a>
+                    <a onclick="showPage('collection')" style="cursor: pointer;">Collection</a>
+                    <a onclick="showPage('team')" style="cursor: pointer;">Our Team</a>
+                    <a onclick="showPage('blogs')" style="cursor: pointer;">Blogs</a>
+                    <a href="https://christuniversity.in" target="_blank">Christ University Website</a>
+                    <a href="https://museum.dataart.com" target="_blank">DataArt Museum</a>
+                    <a onclick="document.getElementById('admin-login-modal').style.display='flex'" style="cursor: pointer; color: #e74c3c; font-size: 0.9em; margin-top: 10px;">Admin Login</a>
+                    <a onclick="document.getElementById('admin-login-modal').style.display='flex'" style="cursor: pointer; color: #e74c3c; font-size: 0.9em; margin-top: 10px;">Admin Login</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Collaboration</h3>
+                    <p>A joint project between:</p>
+                    <p><strong>CHRIST (Deemed to be University)</strong></p>
+                    <p>&</p>
+                    <p><strong>DataArt IT Museum</strong></p>
+                    <p style="margin-top: 1rem;">Exploring the intersection of traditional Indian art and modern computer science.</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2024 IT Museum | Christ University & DataArt. Yeshwanthpur Campus, Bangalore. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Page Navigation
+        function showPage(pageId) {
+            // Hide all pages
+            const pages = document.querySelectorAll('.page');
+            pages.forEach(page => page.classList.remove('active'));
+            
+            // Show selected page
+            const selectedPage = document.getElementById(pageId);
+            if (selectedPage) {
+                selectedPage.classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+        }
+
+        // Scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        // Initialize animations after page load
+        window.addEventListener('load', () => {
+            document.querySelectorAll('.researcher-card, .mission-card, .stat-card, .variation-item').forEach(el => {
+                el.style.opacity = '0';
+                el.style.transform = 'translateY(30px)';
+                el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                observer.observe(el);
+            });
+        });
+    </script>
+    <!-- Admin Modals -->
+    <div id="admin-login-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="document.getElementById('admin-login-modal').style.display='none'">&times;</span>
+            <h2 style="margin-bottom: 1rem; color: #2c3e50;">Admin Login</h2>
+            <form onsubmit="event.preventDefault(); window.handleLogin(this)">
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="email" required placeholder="admin@example.com">
+                </div>
+                <div class="form-group">
+                    <label>Password</label>
+                    <input type="password" name="password" required placeholder="••••••">
+                </div>
+                <button type="submit" class="cta-button" style="width: 100%; border: none; margin: 0;">Login</button>
+            </form>
+        </div>
+    </div>
+
+    <div id="editor-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-modal" onclick="document.getElementById('editor-modal').style.display='none'">&times;</span>
+            <h2 id="editor-title" style="margin-bottom: 1rem; color: #2c3e50;">Add Content</h2>
+            <form onsubmit="event.preventDefault(); window.handleSaveContent(this)">
+                <div class="form-group">
+                    <label>Title</label>
+                    <input type="text" name="title" id="editor-title-input" required>
+                </div>
+                <div class="form-group" id="editor-subtitle-group">
+                    <label>Subtitle / Date</label>
+                    <input type="text" name="subtitle" id="editor-subtitle-input">
+                </div>
+                <div class="form-group">
+                    <label>Content (HTML supported)</label>
+                    <textarea name="content" id="editor-content-input" required placeholder="<p>Enter your content here...</p>"></textarea>
+                </div>
+                <button type="submit" class="cta-button" style="width: 100%; border: none; margin: 0;">Save Content</button>
+            </form>
+        </div>
+    </div>
+
+    <script type="module">
+        import { checkAuthState, loginAdmin, logoutAdmin, subscribeToSections, subscribeToArticles, addSection, deleteDocument } from './admin.js';
+        import { addDoc, collection } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { db } from './firebase-config.js';
+
+        // Initialize Auth State Listener
+        checkAuthState();
+        
+        // Subscribe to Data
+        subscribeToSections('dynamic-home-sections');
+        subscribeToArticles('articles-grid');
+
+        // Expose functions to window for onclick handlers
+        window.handleLogin = async (form) => {
+            const email = form.email.value;
+            const password = form.password.value;
+            await loginAdmin(email, password);
+            form.reset();
+        };
+
+        window.logout = async () => {
+            await logoutAdmin();
+        };
+
+        window.openAddSection = () => {
+            const modal = document.getElementById('editor-modal');
+            document.getElementById('editor-title').innerText = 'Add New Section';
+            modal.dataset.mode = 'add';
+            modal.dataset.type = 'section';
+            modal.style.display = 'flex';
+            document.getElementById('editor-subtitle-group').style.display = 'none';
+            modal.querySelector('form').reset();
+        };
+
+        window.openAddArticle = () => {
+            const modal = document.getElementById('editor-modal');
+            document.getElementById('editor-title').innerText = 'Add New Article';
+            modal.dataset.mode = 'add';
+            modal.dataset.type = 'article';
+            modal.style.display = 'flex';
+            document.getElementById('editor-subtitle-group').style.display = 'block';
+            modal.querySelector('form').reset();
+        };
+        
+        window.editSection = (id) => {
+             alert("Edit functionality not fully implemented in this demo.");
+        };
+
+        window.deleteSection = async (id) => {
+            await deleteDocument('sections', id);
+        };
+        
+        window.editArticle = (id) => {
+             alert("Edit functionality not fully implemented in this demo.");
+        };
+
+        window.deleteArticle = async (id) => {
+            await deleteDocument('articles', id);
+        };
+
+        window.handleSaveContent = async (form) => {
+            const modal = document.getElementById('editor-modal');
+            const type = modal.dataset.type;
+            const title = form.title.value;
+            const content = form.content.value;
+            const subtitle = form.subtitle.value;
+            
+            const data = { title, content, date: new Date().toISOString() };
+            if (type === 'article') {
+                data.subtitle = subtitle;
+                data.summary = content.substring(0, 100) + '...';
+            }
+            
+            if (modal.dataset.mode === 'add') {
+                try {
+                    if (type === 'section') {
+                        await addSection({ ...data, page: 'home' });
+                    } else {
+                        await addDoc(collection(db, "articles"), data);
+                        alert("Article added!");
+                    }
+                    modal.style.display = 'none';
+                } catch(e) {
+                    console.error(e);
+                    alert("Error saving: " + e.message);
+                }
+            }
+        };
+    </script>
+</body>
+</html>
