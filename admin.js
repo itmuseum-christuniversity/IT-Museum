@@ -123,12 +123,21 @@ function createSectionElement(id, data) {
     let contentHTML = data.content || '';
     
     const imageHTML = data.imageUrl ? `<img src="${data.imageUrl}" alt="${data.title}" style="max-width: 100%; height: auto; margin-bottom: 1rem; border-radius: 8px;">` : '';
+    
+    const pdfHTML = data.pdfUrl ? `
+        <div style="margin-top: 1rem;">
+            <a href="${data.pdfUrl}" target="_blank" style="display: inline-flex; align-items: center; padding: 0.5rem 1rem; background-color: #e74c3c; color: white; text-decoration: none; border-radius: 5px; font-weight: 500;">
+                <span style="margin-right: 8px;">📄</span> View PDF Document
+            </a>
+        </div>
+    ` : '';
 
     section.innerHTML = `
         <div class="content-wrapper">
             ${data.title ? `<h2>${data.title}</h2>` : ''}
             ${imageHTML}
             ${contentHTML}
+            ${pdfHTML}
         </div>
     `;
     return section;
@@ -140,11 +149,20 @@ function createArticleElement(id, data) {
     card.className = 'researcher-card';
     
     const imageHTML = data.imageUrl ? `<img src="${data.imageUrl}" alt="${data.title}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px 8px 0 0; margin-bottom: 1rem;">` : '';
+    
+    const pdfHTML = data.pdfUrl ? `
+        <div style="margin-top: 0.5rem; margin-bottom: 0.5rem;">
+            <a href="${data.pdfUrl}" target="_blank" style="color: #e74c3c; font-size: 0.9em; text-decoration: none; display: flex; align-items: center;">
+                <span style="margin-right: 5px;">📄</span> View Attached PDF
+            </a>
+        </div>
+    ` : '';
 
     card.innerHTML = `
         ${imageHTML}
         <h3>${data.title}</h3>
         ${data.subtitle ? `<p class="subtitle">${data.subtitle}</p>` : ''}
+        ${pdfHTML}
         <p>${data.summary || data.content.substring(0, 150) + '...'}</p>
         <p style="color: #667eea; font-weight: 600; margin-top: 1rem; cursor: pointer;">Read More →</p>
     `;

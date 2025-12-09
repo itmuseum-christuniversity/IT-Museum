@@ -256,6 +256,10 @@
                     <input type="file" id="input-image" accept="image/*">
                 </div>
                 <div class="form-group">
+                    <label>PDF Attachment (Optional)</label>
+                    <input type="file" id="input-pdf" accept=".pdf">
+                </div>
+                <div class="form-group">
                     <label>Content (HTML)</label>
                     <textarea id="input-content" rows="6" required></textarea>
                 </div>
@@ -363,11 +367,19 @@
             const content = document.getElementById('input-content').value;
             const subtitle = document.getElementById('input-subtitle').value;
             const imageFile = document.getElementById('input-image').files[0];
+            const pdfFile = document.getElementById('input-pdf').files[0];
 
             try {
                 let imageUrl = null;
+                let pdfUrl = null;
+
                 if (imageFile) {
                     imageUrl = await uploadImage(imageFile, currentMode === 'section' ? 'sections' : 'articles');
+                }
+                
+                if (pdfFile) {
+                    // Reuse uploadImage logic for PDF (it handles generic file upload)
+                    pdfUrl = await uploadImage(pdfFile, (currentMode === 'section' ? 'sections' : 'articles') + '/pdfs');
                 }
 
                 if (currentMode === 'section') {
@@ -375,6 +387,7 @@
                         title, 
                         content,
                         imageUrl,
+                        pdfUrl,
                         order: Date.now()
                     });
                 } else {
@@ -383,6 +396,7 @@
                         subtitle,
                         content,
                         imageUrl,
+                        pdfUrl,
                         date: new Date().toISOString().split('T')[0]
                     });
                 }
