@@ -242,7 +242,7 @@
     <div id="admin-modal" class="modal">
         <div class="modal-content">
             <h2 id="modal-title" style="margin-bottom: 1rem;">Add Content</h2>
-            <form onsubmit="event.preventDefault(); saveContent()">
+            <form onsubmit="event.preventDefault(); window.saveContent()">
                 <div class="form-group">
                     <label>Title</label>
                     <input type="text" id="input-title" required>
@@ -263,8 +263,8 @@
                     <label>Content (HTML)</label>
                     <textarea id="input-content" rows="6" required></textarea>
                 </div>
-                <button type="submit" class="btn btn-primary">Save</button>
-                <button type="button" class="btn btn-danger" onclick="closeModal()">Cancel</button>
+                <button type="button" class="btn btn-primary" onclick="window.saveContent()">Save</button>
+                <button type="button" class="btn btn-danger" onclick="window.closeModal()">Cancel</button>
             </form>
         </div>
     </div>
@@ -345,6 +345,7 @@
         };
 
         window.openAddModal = (type) => {
+            console.log("openAddModal called with type:", type);
             currentMode = type;
             document.getElementById('admin-modal').style.display = 'flex';
             document.getElementById('modal-title').innerText = type === 'section' ? 'Add Section' : 'Add Article';
@@ -363,6 +364,15 @@
         };
 
         window.saveContent = async () => {
+            console.log("Starting saveContent...");
+            
+            // Manual form validation
+            const form = document.querySelector('#admin-modal form');
+            if (!form.reportValidity()) {
+                console.log("Form validation failed");
+                return;
+            }
+
             const title = document.getElementById('input-title').value;
             const content = document.getElementById('input-content').value;
             const subtitle = document.getElementById('input-subtitle').value;
@@ -374,24 +384,30 @@
                 let pdfUrl = null;
 
                 if (imageFile) {
+                    console.log("Uploading image...");
                     imageUrl = await uploadImage(imageFile, currentMode === 'section' ? 'sections' : 'articles');
+                    console.log("Image uploaded:", imageUrl);
                 }
                 
                 if (pdfFile) {
+                    console.log("Uploading PDF...");
                     // Reuse uploadImage logic for PDF (it handles generic file upload)
                     pdfUrl = await uploadImage(pdfFile, (currentMode === 'section' ? 'sections' : 'articles') + '/pdfs');
+                    console.log("PDF uploaded:", pdfUrl);
                 }
 
+                console.log("Saving to Firestore...", { title, currentMode, imageUrl, pdfUrl });
                 if (currentMode === 'section') {
-                    await addDoc(collection(db, "sections"), {
+                    const docRef = await addDoc(collection(db, "sections"), {
                         title, 
                         content,
                         imageUrl,
                         pdfUrl,
                         order: Date.now()
                     });
+                    console.log("Section saved with ID:", docRef.id);
                 } else {
-                    await addDoc(collection(db, "articles"), {
+                    const docRef = await addDoc(collection(db, "articles"), {
                         title,
                         subtitle,
                         content,
@@ -399,12 +415,17 @@
                         pdfUrl,
                         date: new Date().toISOString().split('T')[0]
                     });
+                     console.log("Article saved with ID:", docRef.id);
                 }
                 alert("Saved successfully!");
                 closeModal();
             } catch (error) {
                 console.error("Error saving:", error);
                 alert("Error saving: " + error.message);
+                // Also check if it's a permission error
+                if (error.code === 'permission-denied') {
+                    alert("Permission denied. You might not be logged in as an admin or rules are incorrect.");
+                }
             }
         };
 
