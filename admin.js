@@ -1,4 +1,4 @@
-import { db, auth } from './firebase-config.js';
+import { db, auth, storage } from './firebase-config.js';
 import { 
     collection, 
     addDoc, 
@@ -15,6 +15,11 @@ import {
     onAuthStateChanged, 
     signOut 
 } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
+import { 
+    ref, 
+    uploadBytes, 
+    getDownloadURL 
+} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-storage.js";
 
 // --- State Management ---
 let isAdmin = false;
@@ -38,7 +43,6 @@ export function checkAuthState() {
             isAdmin = false;
             document.body.classList.remove('admin-mode');
         }
-        renderAdminControls(); // Re-render controls based on state
     });
 }
 
@@ -60,6 +64,21 @@ export async function logoutAdmin() {
         alert("Logged out!");
     } catch (error) {
         console.error("Logout failed", error);
+    }
+}
+
+// --- Storage Operations ---
+
+export async function uploadImage(file, path) {
+    if (!file) return null;
+    try {
+        const storageRef = ref(storage, path + '/' + Date.now() + '_' + file.name);
+        const snapshot = await uploadBytes(storageRef, file);
+        const downloadURL = await getDownloadURL(snapshot.ref);
+        return downloadURL;
+    } catch (error) {
+        console.error("Error uploading image:", error);
+        throw error;
     }
 }
 
@@ -103,18 +122,12 @@ function createSectionElement(id, data) {
     
     let contentHTML = data.content || '';
     
-    // Admin Overlay
-    const adminOverlay = isAdmin ? `
-        <div class="admin-overlay">
-            <button onclick="window.editSection('${id}')">Edit</button>
-            <button onclick="window.deleteSection('${id}')" class="delete-btn">Delete</button>
-        </div>
-    ` : '';
+    const imageHTML = data.imageUrl ? `<img src="${data.imageUrl}" alt="${data.title}" style="max-width: 100%; height: auto; margin-bottom: 1rem; border-radius: 8px;">` : '';
 
     section.innerHTML = `
-        ${adminOverlay}
         <div class="content-wrapper">
             ${data.title ? `<h2>${data.title}</h2>` : ''}
+            ${imageHTML}
             ${contentHTML}
         </div>
     `;
@@ -126,16 +139,10 @@ function createArticleElement(id, data) {
     const card = document.createElement('div');
     card.className = 'researcher-card';
     
-    // Admin Overlay
-    const adminOverlay = isAdmin ? `
-        <div class="admin-overlay">
-            <button onclick="window.editArticle('${id}')">Edit</button>
-            <button onclick="window.deleteArticle('${id}')" class="delete-btn">Delete</button>
-        </div>
-    ` : '';
+    const imageHTML = data.imageUrl ? `<img src="${data.imageUrl}" alt="${data.title}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px 8px 0 0; margin-bottom: 1rem;">` : '';
 
     card.innerHTML = `
-        ${adminOverlay}
+        ${imageHTML}
         <h3>${data.title}</h3>
         ${data.subtitle ? `<p class="subtitle">${data.subtitle}</p>` : ''}
         <p>${data.summary || data.content.substring(0, 150) + '...'}</p>
@@ -189,27 +196,7 @@ export async function updateDocument(collectionName, id, data) {
 
 // --- UI Helpers ---
 
-function renderAdminControls() {
-    // Show/Hide global admin buttons (like "Add New Section")
-    const adminBtns = document.querySelectorAll('.admin-only');
-    adminBtns.forEach(btn => {
-        btn.style.display = isAdmin ? 'block' : 'none';
-    });
-    
-    // Re-render lists to show/hide per-item controls
-    // In a real app we might update in place, but here we can just trigger a refresh if needed
-    // or rely on the fact that subscribe calls will re-render if we tweak the DOM generation logic.
-    // For simplicity, we just reload the page or let the user refresh, 
-    // BUT better: let's re-run the render logic if we could. 
-    // Actually, onAuthStateChanged fires initially. 
-    // We might need to manually trigger a re-render of the lists if auth changes without reload.
-    // For now, let's assume page reload on login/logout or dynamic updates via CSS toggling 
-    // is easiest for the "admin-overlay" class.
-    
-    // CSS-based toggling:
-    // .admin-overlay { display: none; }
-    // body.admin-mode .admin-overlay { display: flex; }
-}
+
 
 export function openEditor(type, id = null) {
     // TODO: Implement a generic modal for editing content

@@ -252,6 +252,10 @@
                     <input type="text" id="input-subtitle">
                 </div>
                 <div class="form-group">
+                    <label>Image (Optional)</label>
+                    <input type="file" id="input-image" accept="image/*">
+                </div>
+                <div class="form-group">
                     <label>Content (HTML)</label>
                     <textarea id="input-content" rows="6" required></textarea>
                 </div>
@@ -263,6 +267,7 @@
 
     <script type="module">
         import { db, auth } from './firebase-config.js';
+        import { uploadImage } from './admin.js';
         import { 
             collection, 
             getDocs, 
@@ -357,12 +362,19 @@
             const title = document.getElementById('input-title').value;
             const content = document.getElementById('input-content').value;
             const subtitle = document.getElementById('input-subtitle').value;
+            const imageFile = document.getElementById('input-image').files[0];
 
             try {
+                let imageUrl = null;
+                if (imageFile) {
+                    imageUrl = await uploadImage(imageFile, currentMode === 'section' ? 'sections' : 'articles');
+                }
+
                 if (currentMode === 'section') {
                     await addDoc(collection(db, "sections"), {
                         title, 
                         content,
+                        imageUrl,
                         order: Date.now()
                     });
                 } else {
@@ -370,6 +382,7 @@
                         title,
                         subtitle,
                         content,
+                        imageUrl,
                         date: new Date().toISOString().split('T')[0]
                     });
                 }
