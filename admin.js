@@ -9,12 +9,12 @@ import {
     query, 
     orderBy, 
     onSnapshot 
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
 import { 
     signInWithEmailAndPassword, 
     onAuthStateChanged, 
     signOut 
-} from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/12.6.0/firebase-auth.js";
 
 // --- State Management ---
 let isAdmin = false;
