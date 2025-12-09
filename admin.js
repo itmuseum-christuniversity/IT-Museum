@@ -46,6 +46,7 @@ export async function loginAdmin(email, password) {
     try {
         await signInWithEmailAndPassword(auth, email, password);
         alert("Logged in successfully!");
+        window.location.href = 'admin.html';
         closeModal('admin-login-modal');
     } catch (error) {
         console.error("Login failed", error);
