@@ -25,9 +25,7 @@ import {
 let isAdmin = false;
 
 // --- DOM Elements ---
-const adminControls = document.getElementById('admin-controls');
 const loginModal = document.getElementById('admin-login-modal');
-const contentEditorModal = document.getElementById('content-editor-modal');
 
 // --- Authentication ---
 
@@ -50,8 +48,7 @@ export async function loginAdmin(email, password) {
     try {
         await signInWithEmailAndPassword(auth, email, password);
         alert("Logged in successfully!");
-        window.location.href = 'admin.html';
-        closeModal('admin-login-modal');
+        window.location.href = 'admin.html'; // Redirect to admin panel
     } catch (error) {
         console.error("Login failed", error);
         alert("Login failed: " + error.message);
@@ -62,6 +59,7 @@ export async function logoutAdmin() {
     try {
         await signOut(auth);
         alert("Logged out!");
+        window.location.href = 'index.html';
     } catch (error) {
         console.error("Logout failed", error);
     }
@@ -89,6 +87,8 @@ export function subscribeToSections(containerId) {
     const q = query(collection(db, "sections"), orderBy("order", "asc"));
     const container = document.getElementById(containerId);
     
+    if(!container) return;
+
     onSnapshot(q, (snapshot) => {
         container.innerHTML = '';
         snapshot.forEach((doc) => {
@@ -99,17 +99,22 @@ export function subscribeToSections(containerId) {
     });
 }
 
-// Render Articles (Blogs Page)
-export function subscribeToArticles(containerId) {
-    const q = query(collection(db, "articles"), orderBy("date", "desc"));
+// Render Collections (Was Articles)
+export function subscribeToCollections(containerId) {
+    const q = query(collection(db, "collections"), orderBy("date", "desc"));
     const container = document.getElementById(containerId);
+
+    if(!container) return;
 
     onSnapshot(q, (snapshot) => {
         container.innerHTML = '';
+        if (snapshot.empty) {
+            container.innerHTML = '<p style="text-align: center; grid-column: 1/-1; color: #666; padding: 2rem;">No collections added yet.</p>';
+        }
         snapshot.forEach((doc) => {
             const data = doc.data();
-            const articleEl = createArticleElement(doc.id, data);
-            container.appendChild(articleEl);
+            const el = createCollectionElement(doc.id, data);
+            container.appendChild(el);
         });
     });
 }
@@ -126,7 +131,7 @@ function createSectionElement(id, data) {
     
     const pdfHTML = data.pdfUrl ? `
         <div style="margin-top: 1rem;">
-            <a href="${data.pdfUrl}" target="_blank" style="display: inline-flex; align-items: center; padding: 0.5rem 1rem; background-color: #e74c3c; color: white; text-decoration: none; border-radius: 5px; font-weight: 500;">
+            <a href="${data.pdfUrl}" target="_blank" style="display: inline-flex; align-items: center; padding: 0.5rem 1rem; background-color: #8E24AA; color: white; text-decoration: none; border-radius: 5px; font-weight: 500;">
                 <span style="margin-right: 8px;">📄</span> View PDF Document
             </a>
         </div>
@@ -143,28 +148,32 @@ function createSectionElement(id, data) {
     return section;
 }
 
-// Helper: Create Article HTML
-function createArticleElement(id, data) {
+// Helper: Create Collection Element
+function createCollectionElement(id, data) {
     const card = document.createElement('div');
     card.className = 'researcher-card';
+    card.onclick = () => {
+         // Optional: expand or show details
+    };
     
-    const imageHTML = data.imageUrl ? `<img src="${data.imageUrl}" alt="${data.title}" style="width: 100%; height: 200px; object-fit: cover; border-radius: 8px 8px 0 0; margin-bottom: 1rem;">` : '';
+    const imageHTML = data.imageUrl ? `<img src="${data.imageUrl}" alt="${data.title}">` : '';
     
     const pdfHTML = data.pdfUrl ? `
         <div style="margin-top: 0.5rem; margin-bottom: 0.5rem;">
-            <a href="${data.pdfUrl}" target="_blank" style="color: #e74c3c; font-size: 0.9em; text-decoration: none; display: flex; align-items: center;">
-                <span style="margin-right: 5px;">📄</span> View Attached PDF
+            <a href="${data.pdfUrl}" target="_blank" style="color: #8E24AA; font-size: 0.9em; text-decoration: none; display: flex; align-items: center; font-weight: 600;">
+                <span style="margin-right: 5px;">📄</span> View PDF
             </a>
         </div>
     ` : '';
 
     card.innerHTML = `
         ${imageHTML}
-        <h3>${data.title}</h3>
-        ${data.subtitle ? `<p class="subtitle">${data.subtitle}</p>` : ''}
-        ${pdfHTML}
-        <p>${data.summary || data.content.substring(0, 150) + '...'}</p>
-        <p style="color: #667eea; font-weight: 600; margin-top: 1rem; cursor: pointer;">Read More →</p>
+        <div class="card-content">
+            <h3>${data.title}</h3>
+            ${data.subtitle ? `<p class="subtitle">${data.subtitle}</p>` : ''}
+            ${pdfHTML}
+            <p>${data.summary || (data.content ? data.content.substring(0, 150) + '...' : '')}</p>
+        </div>
     `;
     return card;
 }
@@ -209,25 +218,4 @@ export async function updateDocument(collectionName, id, data) {
         console.error("Error updating: ", e);
         alert("Error updating");
     }
-}
-
-
-// --- UI Helpers ---
-
-
-
-export function openEditor(type, id = null) {
-    // TODO: Implement a generic modal for editing content
-    // Populates form fields and handles save
-    console.log(`Opening editor for ${type} ${id}`);
-    const modal = document.getElementById('editor-modal');
-    if(modal) {
-        modal.dataset.type = type;
-        modal.dataset.id = id || '';
-        modal.style.display = 'block';
-    }
-}
-
-export function closeModal(modalId) {
-    document.getElementById(modalId).style.display = 'none';
 }

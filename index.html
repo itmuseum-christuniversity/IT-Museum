@@ -5,19 +5,36 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IT Museum | Christ University</title>
     <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+    </style>
 </head>
 <body>
     <!-- Header -->
     <header>
         <nav>
-            <a href="#" class="logo" onclick="showPage('home')">IT Museum <span>| CHRIST</span></a>
+            <div class="logo-container" onclick="showPage('home')" style="cursor: pointer;">
+                <!-- Logos -->
+                <div class="logo-text">
+                    <span style="font-size: 1.2rem; color: #2c3e50;">CHRIST</span>
+                    <span style="font-size: 0.8rem; font-weight: 500; color: #666;">(Deemed to be University)</span>
+                </div>
+                <!-- Vertical Divider -->
+                <div style="height: 40px; width: 1px; background: #ddd;"></div>
+                <div class="logo-text">
+                    <span style="font-size: 1.2rem; color: #D32F2F;">DataArt</span>
+                    <span style="font-size: 0.8rem; font-weight: 500; color: #666;">IT Museum</span>
+                </div>
+            </div>
+            
             <ul class="nav-links">
                 <li><a onclick="showPage('home')">Home</a></li>
                 <li><a onclick="showPage('collection')">Collection</a></li>
                 <li><a onclick="showPage('team')">Our Team</a></li>
-                <li><a onclick="showPage('blogs')">Blogs</a></li>
                 <li><a onclick="showPage('contact')">Contact</a></li>
-                <!-- Admin Login (Visible) -->
+                <!-- Admin Login -->
                 <li><a onclick="document.getElementById('admin-login-modal').style.display='flex'" style="color: #e74c3c; border: 1px solid #e74c3c; padding: 5px 15px; border-radius: 20px;">Admin</a></li>
             </ul>
         </nav>
@@ -28,181 +45,93 @@
         <!-- Hero Section -->
         <section class="hero">
             <div class="hero-content">
-                <h1>IT Museum | Christ University</h1>
-                <p>Bridging Traditional Indian Art and Modern Computer Science through Kolam Patterns</p>
-                <a class="cta-button" onclick="showPage('collection')">Explore Collection</a>
-                <a class="cta-button" onclick="showPage('team')">Meet Our Team</a>
+                <h1 class="fade-in">IT Museum | Christ University</h1>
+                <p class="fade-in" style="animation-delay: 0.2s;">Bridging Traditional Indian Art and Modern Computer Science</p>
+                <div class="fade-in" style="margin-top: 2rem; animation-delay: 0.4s;">
+                    <a class="cta-button" onclick="showPage('collection')">Explore Collection</a>
+                    <a class="cta-button" onclick="showPage('team')" style="background: transparent; border: 2px solid #FFD700; color: #FFD700;">Meet Our Team</a>
+                </div>
             </div>
         </section>
 
         <!-- About the Museum -->
         <section class="section">
-            <h2>About the IT Museum</h2>
+            <h2>About the Museum</h2>
             <div class="content-box">
-                <p>The IT Museum at Christ University, in collaboration with DataArt, is a groundbreaking multimedia project dedicated to exploring and preserving the fascinating relationship between traditional Indian art forms and modern computer science. Our primary focus is on Kolam Art - an ancient South Indian geometric tradition that has profound connections to pattern recognition, computer vision, automata theory, and artificial intelligence.</p>
-                
-                <p>This unique museum showcases how traditional Kolam patterns, drawn with mathematical precision and involving symmetry, recursion, and fractals, serve as valuable case studies for computational applications. Inspired by pioneering researchers like Dr. Gift Siromoney, we document Kolam's cultural heritage and mathematical foundations while integrating cutting-edge computational techniques.</p>
-
-                <p>Located at the prestigious Yeshwanthpur campus in Bangalore - India's Silicon Valley - our museum serves as a bridge between India's rich cultural heritage and cutting-edge technological innovation, inspiring the next generation of technologists to find inspiration in tradition.</p>
-            </div>
-
-            <!-- Stats -->
-            <div class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-number">50+</div>
-                    <div class="stat-label">Years of Research</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">7</div>
-                    <div class="stat-label">Pioneer Researchers</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">100+</div>
-                    <div class="stat-label">Kolam Patterns Documented</div>
-                </div>
-                <div class="stat-card">
-                    <div class="stat-number">8</div>
-                    <div class="stat-label">Regional Variations</div>
-                </div>
+                <p>The IT Museum at Christ University, in collaboration with DataArt, explores the fascinating relationship between traditional Indian art forms and modern computer science. We document and analyze Kolam patterns, demonstrating their profound connections to pattern recognition, automata theory, and artificial intelligence.</p>
+                <p>Located at the Yeshwanthpur campus in Bangalore, our museum serves as a bridge for interdisciplinary research, inspiring the next generation of technologists.</p>
             </div>
         </section>
 
-        <!-- Christ University Mission & Vision -->
-        <section class="section-white">
-            <div style="max-width: 1400px; margin: 0 auto;">
-                <h2>Christ University: Excellence in Education</h2>
-                
-                <div class="content-box">
-                    <h3>About Christ University</h3>
-                    <p>Christ University, a Deemed to be University under Section 3 of the UGC Act 1956, is an institution of higher education that stands as a beacon of academic excellence, research, and holistic development. Established in 1969, Christ University has evolved into one of India's premier educational institutions, known for its commitment to academic rigor, research innovation, and value-based education.</p>
-                    
-                    <p>The Yeshwanthpur Campus in Bangalore houses cutting-edge facilities and research centers, fostering an environment where traditional knowledge meets modern innovation. The IT Museum project exemplifies this philosophy by connecting ancient Indian art forms with contemporary computer science.</p>
-                </div>
-
-                <div class="mission-grid">
-                    <div class="mission-card">
-                        <h3>🎯 Our Mission</h3>
-                        <p>To empower individuals through holistic education that upholds universal human values, fosters critical thinking, and promotes social responsibility. We strive to create leaders who are intellectually competent, morally upright, and socially committed.</p>
-                    </div>
-
-                    <div class="mission-card">
-                        <h3>👁️ Our Vision</h3>
-                        <p>Excellence and service. Christ University aims to be a premier educational institution globally, committed to forming leaders who are intellectually competent, morally upright, psychologically integrated, and socially committed.</p>
-                    </div>
-
-                    <div class="mission-card">
-                        <h3>💡 Core Values</h3>
-                        <p>Faith in God, Moral Uprightness, Love of Fellow Beings, Social Responsibility, Pursuit of Excellence. These values guide every aspect of our educational philosophy and research endeavors, including this IT Museum project.</p>
-                    </div>
-                </div>
-
-                <div class="content-box">
-                    <h3>Why This Museum Matters</h3>
-                    <p>The IT Museum represents Christ University's commitment to:</p>
-                    <ul>
-                        <li><strong>Preserving Cultural Heritage:</strong> Documenting and digitizing traditional Kolam art forms before they fade from collective memory</li>
-                        <li><strong>Interdisciplinary Research:</strong> Bridging the gap between humanities, mathematics, and computer science</li>
-                        <li><strong>Innovation Through Tradition:</strong> Showing how ancient wisdom can inspire modern technological solutions</li>
-                        <li><strong>Global Recognition:</strong> Highlighting India's contributions to computer science and artificial intelligence through traditional art</li>
-                        <li><strong>Educational Excellence:</strong> Providing students and researchers with unique perspectives on pattern recognition, AI, and computational design</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- What is Kolam - Quick Introduction -->
+        <!-- Vision, Mission & Values -->
         <section class="section">
-            <h2>What is Kolam Art?</h2>
-            <div class="content-box">
-                <p>Kolam is an ancient Indian folk art extensively practiced in Southern India, particularly in Tamil Nadu. These intricate geometric patterns are drawn at the thresholds of homes using rice flour or colored powders, representing prosperity, positivity, and welcome.</p>
-
-                <div class="highlight-box">
-                    <p><strong>The Word "Kolam"</strong> in Tamil means "form and beauty" - a symbol of auspiciousness and divinity that has been practiced for thousands of years.</p>
+            <h2 class="fade-in">Our Core Philosophy</h2>
+            <div class="mission-grid fade-in" style= "animation-delay: 0.2s;">
+                <div class="mission-card">
+                    <h3 style="color: #4A148C;">👁️ Vision</h3>
+                    <p>To stand as a global beacon for the digital preservation of intangible cultural heritage, pioneering the intersection of ethnomathematics and computer science. We envision a world where ancient artistic traditions are not only preserved but revitalized through the lens of modern technology, inspiring future generations to see the mathematical beauty in cultural expression.</p>
                 </div>
-
-                <h4>Why Kolam Matters to Computer Science</h4>
-                <p>Kolam patterns are not just beautiful - they embody complex mathematical principles:</p>
-                <ul>
-                    <li><strong>Pattern Recognition:</strong> The structured, repetitive nature makes them ideal for AI training</li>
-                    <li><strong>Graph Theory:</strong> Many Kolams are Eulerian graphs drawn in a single continuous line</li>
-                    <li><strong>Automata Theory:</strong> Kolam follows rule-based generation similar to formal grammars</li>
-                    <li><strong>Fractals & Recursion:</strong> Nested patterns exhibit self-similarity across scales</li>
-                    <li><strong>Computational Geometry:</strong> Grid-based designs perfect for algorithmic modeling</li>
-                </ul>
-            </div>
-
-            <div class="variations-grid">
-                <div class="variation-item">
-                    <h4>Kolam</h4>
-                    <p>Tamil Nadu</p>
+                <div class="mission-card">
+                    <h3 style="color: #D32F2F;">🎯 Mission</h3>
+                    <p>To meticulously archive, analyze, and digitize the rich traditions of Kolam art using advanced computational modeling and array grammars. Our mission is to foster a new era of interdisciplinary research where art informs algorithms and algorithms preserve art, ensuring this ephemeral practice is immortalized for posterity.</p>
                 </div>
-                <div class="variation-item">
-                    <h4>Rangoli</h4>
-                    <p>Maharashtra</p>
-                </div>
-                <div class="variation-item">
-                    <h4>Muggulu</h4>
-                    <p>Andhra Pradesh</p>
-                </div>
-                <div class="variation-item">
-                    <h4>Alpana</h4>
-                    <p>West Bengal</p>
+                <div class="mission-card">
+                    <h3 style="color: #FFD700;">💎 Values</h3>
+                    <p><strong>Integrity</strong> in preservation, ensuring authenticity in every digitized pattern. <strong>Innovation</strong> in technology, pushing the boundaries of what computer science can achieve in the arts. <strong>Inclusivity</strong>, bridging the gap between rural artistic communities and the global academic stage.</p>
                 </div>
             </div>
         </section>
 
-        <!-- Project Overview -->
-        <section class="section-white">
-            <div style="max-width: 1400px; margin: 0 auto;">
-                <h2>Project Structure</h2>
-                <div class="content-box">
-                    <p>This research project is structured into four key blocks, each focusing on a distinct aspect of Kolam art and its computational applications:</p>
-                </div>
-
-                <div class="mission-grid">
-                    <div class="mission-card">
-                        <h3>📚 Cultural Studies</h3>
-                        <p>Exploring the historical, social, and cultural significance of Kolam art in Indian society. Understanding regional variations, traditional practices, and the art's evolution through generations.</p>
-                    </div>
-
-                    <div class="mission-card">
-                        <h3>🔢 Mathematics & Computer Science</h3>
-                        <p>Analyzing the mathematical foundations of Kolam patterns including graph theory, fractals, symmetry, and their applications in AI, machine learning, and computational design.</p>
-                    </div>
-
-                    <div class="mission-card">
-                        <h3>👥 Pioneer Biographies</h3>
-                        <p>Documenting the groundbreaking contributions of researchers like Dr. Gift Siromoney who first connected Kolam with formal grammars, automata theory, and computer science.</p>
-                    </div>
-
-                    <div class="mission-card">
-                        <h3>🚀 Indian IT Innovation</h3>
-                        <p>Highlighting how traditional Indian art forms inspire modern technological innovation, including patents in steganography, AI-based pattern generation, and educational tools.</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- Call to Action -->
+        <!-- Timeline Section -->
         <section class="section">
-            <h2>Explore the Museum</h2>
-            <div class="content-box" style="text-align: center;">
-                <p>Dive deep into the fascinating world where ancient tradition meets modern innovation. Discover how Kolam patterns have influenced computer science, artificial intelligence, and cybersecurity.</p>
-                <div style="margin-top: 2rem;">
-                    <a class="cta-button" onclick="showPage('collection')">View Full Collection</a>
-                    <a class="cta-button" onclick="showPage('team')">Meet the Researchers</a>
-                    <a class="cta-button" onclick="showPage('blogs')">Read Our Blogs</a>
+            <h2>Kolam Art Journey</h2>
+            <div class="timeline-section">
+                <!-- 1954 -->
+                <div class="timeline-event">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-year">1954</span>
+                        <h3><a href="https://docs.google.com/document/d/12EBrAfDTXmltnxPd1zJEwA_YCUKnUWDEni1_IUAip_w/edit?tab=t.fm7b785fkdlo" target="_blank" style="text-decoration: none; color: inherit;">Foundations</a></h3>
+                        <p>Dr. Gift Siromoney begins his journey at Madras Christian College, sparking the initial academic interest in traditional forms.</p>
+                    </div>
+                </div>
+
+                <!-- 1974 -->
+                <div class="timeline-event">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-year">1974</span>
+                        <h3><a href="https://docs.google.com/document/d/12EBrAfDTXmltnxPd1zJEwA_YCUKnUWDEni1_IUAip_w/edit?tab=t.fm7b785fkdlo" target="_blank" style="text-decoration: none; color: inherit;">Formal Grammar</a></h3>
+                        <p>The pivotal publication connecting Kolam art with **Array Grammars**, defining the syntax of this visual language.</p>
+                    </div>
+                </div>
+
+                <!-- 1980s -->
+                <div class="timeline-event">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-year">1980s</span>
+                        <h3><a href="https://docs.google.com/document/d/12EBrAfDTXmltnxPd1zJEwA_YCUKnUWDEni1_IUAip_w/edit?tab=t.fm7b785fkdlo" target="_blank" style="text-decoration: none; color: inherit;">Digital Expansion</a></h3>
+                        <p>Exploration of **Cycle Grammars** and **Fractals**, revealing the recursive mathematical depth of simple floor patterns.</p>
+                    </div>
+                </div>
+
+                <!-- 2024 -->
+                <div class="timeline-event">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-year">2024</span>
+                        <h3><a href="https://docs.google.com/document/d/12EBrAfDTXmltnxPd1zJEwA_YCUKnUWDEni1_IUAip_w/edit?tab=t.fm7b785fkdlo" target="_blank" style="text-decoration: none; color: inherit;">New Era</a></h3>
+                        <p>Christ University and DataArt partner to create this museum, a digital home for the future of Kolam research.</p>
+                    </div>
                 </div>
             </div>
         </section>
-        
+
         <!-- Dynamic Sections Container -->
         <div id="dynamic-home-sections"></div>
-        
-
     </div>
 
-    <!-- COLLECTION PAGE -->
     <div id="collection" class="page">
         <section class="hero" style="padding: 4rem 2rem;">
             <div class="hero-content">
@@ -391,23 +320,29 @@
                 <div class="researcher-grid">
                     <div class="researcher-card">
                         <h3>📚 Academic Papers</h3>
-                        <p><a href="https://www.exoticindiaart.com/book/details/kolam-tradition-in-south-india-rangoli-in-indian-threshold-design-nav088/" target="_blank" style="color: #667eea;">Kolam Tradition in South India</a></p>
-                        <p><a href="https://arxiv.org/abs/2307.02144" target="_blank" style="color: #667eea;">Kolam Simulation (arXiv)</a></p>
+                        <div class="card-content">
+                            <p><a href="https://www.exoticindiaart.com/book/details/kolam-tradition-in-south-india-rangoli-in-indian-threshold-design-nav088/" target="_blank" style="color: #667eea; text-decoration: underline;">Kolam Tradition in South India</a></p>
+                            <p><a href="https://arxiv.org/abs/2307.02144" target="_blank" style="color: #667eea; text-decoration: underline;">Kolam Simulation (arXiv)</a></p>
+                        </div>
                     </div>
 
                     <div class="researcher-card">
                         <h3>🔬 Institutions</h3>
-                        <p><a href="https://www.iitm.ac.in/" target="_blank" style="color: #667eea;">IIT Madras</a></p>
-                        <p>NIAS, IISc Bangalore</p>
-                        <p><a href="https://www.sastra.edu/" target="_blank" style="color: #667eea;">SASTRA University</a></p>
-                        <p><a href="https://vit.ac.in/" target="_blank" style="color: #667eea;">VIT University</a></p>
+                         <div class="card-content">
+                            <p><a href="https://www.iitm.ac.in/" target="_blank" style="color: #667eea; text-decoration: underline;">IIT Madras</a></p>
+                            <p>NIAS, IISc Bangalore</p>
+                            <p><a href="https://www.sastra.edu/" target="_blank" style="color: #667eea; text-decoration: underline;">SASTRA University</a></p>
+                            <p><a href="https://vit.ac.in/" target="_blank" style="color: #667eea; text-decoration: underline;">VIT University</a></p>
+                        </div>
                     </div>
 
                     <div class="researcher-card">
                         <h3>📖 Key Publications</h3>
-                        <p style="font-size: 0.95rem; color: #666;">Siromoney et al. (1974). Array grammars and kolam.</p>
-                        <p style="font-size: 0.95rem; color: #666;">Ascher, M. (2002). Mathematics Elsewhere.</p>
-                        <p style="font-size: 0.95rem; color: #666;">Gerdes, P. (2007). African Basketry and Mathematics.</p>
+                         <div class="card-content">
+                            <p style="font-size: 0.95rem; color: #666;">Siromoney et al. (1974). Array grammars and kolam.</p>
+                            <p style="font-size: 0.95rem; color: #666;">Ascher, M. (2002). Mathematics Elsewhere.</p>
+                            <p style="font-size: 0.95rem; color: #666;">Gerdes, P. (2007). African Basketry and Mathematics.</p>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -418,165 +353,36 @@
     <div id="team" class="page">
         <section class="hero" style="padding: 4rem 2rem;">
             <div class="hero-content">
-                <h1>👥 Our Team</h1>
-                <p>Meet the pioneer researchers who connected Kolam art with computer science</p>
+                <h1>Our Team</h1>
+                <p>The Minds Behind the Museum</p>
             </div>
         </section>
 
         <section class="section">
-            <h2>Pioneer Researchers in Kolam & Computer Science</h2>
-            
             <div class="researcher-grid">
                 <div class="researcher-card">
-                    <h3>Dr. Gift Siromoney</h3>
-                    <p class="subtitle">The Pioneer of Kolam Research (1932-1988)</p>
-                    <p>Dr. Gift Siromoney was a renowned mathematician and computer scientist from Tamil Nadu. He was one of the first researchers to apply formal grammar and automata theory to Kolam patterns.</p>
-                    <h4>Key Contributions</h4>
-                    <ul>
-                        <li><strong>Mathematical Modeling:</strong> First to analyze Kolam using symmetry, recursion, and geometry</li>
-                        <li><strong>Automata Theory:</strong> Proposed Kolam designs follow rules similar to formal grammars</li>
-                        <li><strong>Algorithmic Representation:</strong> Developed computational techniques to generate Kolam digitally</li>
-                        <li><strong>AI Foundation:</strong> Provided groundwork for machine learning and pattern recognition</li>
-                    </ul>
+                     <div class="card-content">
+                        <h3>Mr. A</h3>
+                        <p class="subtitle">The Pioneer</p>
+                        <p>Renowned mathematician who first applied formal grammar and automata theory to Kolam patterns.</p>
+                    </div>
                 </div>
 
                 <div class="researcher-card">
-                    <h3>Dr. R. N. Lakshminarayanan</h3>
-                    <p class="subtitle">Kolam in AI & Pattern Recognition</p>
-                    <p>Leading researcher in AI-based pattern recognition, contributing to digitizing Kolam designs for computational analysis.</p>
-                    <h4>Key Contributions</h4>
-                    <ul>
-                        <li><strong>Pattern Recognition Model:</strong> Used Kolam for AI-based image processing</li>
-                        <li><strong>Machine Learning:</strong> Trained ML models using Kolam's mathematical rules</li>
-                        <li><strong>Digitization:</strong> Converted traditional Kolam into digital datasets for AI training</li>
-                    </ul>
+                     <div class="card-content">
+                        <h3>Mr. B</h3>
+                        <p class="subtitle">AI & Pattern Recognition</p>
+                        <p>Leading researcher in AI-based pattern recognition and digitization of Kolam designs.</p>
+                     </div>
                 </div>
 
                 <div class="researcher-card">
-                    <h3>Dr. Anand Mahendran & Ramya Govindaraj</h3>
-                    <p class="subtitle">Algorithmic Kolam Studies</p>
-                    <p>Researchers from VIT University focusing on Kolam's recursive structure and AI applications.</p>
-                    <h4>Key Contributions</h4>
-                    <ul>
-                        <li><strong>Algorithmic Generation:</strong> Computer algorithms to generate Kolam designs</li>
-                        <li><strong>Fractal Geometry:</strong> Explored Kolam's fractal-like properties</li>
-                        <li><strong>Design Applications:</strong> Applied Kolam-inspired AI to digital art and UI/UX</li>
-                    </ul>
+                     <div class="card-content">
+                        <h3>Mr. C</h3>
+                        <p class="subtitle">Algorithmic Studies</p>
+                        <p>Focusing on recursive structures and AI applications at VIT University.</p>
+                    </div>
                 </div>
-
-                <div class="researcher-card">
-                    <h3>Dr. Kamala Krithivasan</h3>
-                    <p class="subtitle">Kolam & Formal Grammar</p>
-                    <p>Professor at IIT Madras specializing in formal language theory and computational models.</p>
-                    <h4>Key Contributions</h4>
-                    <ul>
-                        <li><strong>Structured Grammar:</strong> Analyzed Kolam using formal grammar rules</li>
-                        <li><strong>Computational Algorithms:</strong> Translated hand-drawn Kolam into structured designs</li>
-                        <li><strong>AI Applications:</strong> Applied pattern recognition and AI techniques to Kolam</li>
-                    </ul>
-                </div>
-
-                <div class="researcher-card">
-                    <h3>Dr. Gopinaath Kannabiran & Dr. Anuradha Reddy</h3>
-                    <p class="subtitle">Kolam & Ecofeminist Computational Art</p>
-                    <p>Researchers at IT University of Copenhagen and Malmö University, specializing in digital humanities and feminist technology studies.</p>
-                    <h4>Key Contributions</h4>
-                    <ul>
-                        <li><strong>Ecofeminist Art:</strong> Examined Kolam's representation of women's cultural identity</li>
-                        <li><strong>Digital Creativity:</strong> Aligned Kolam with computational models</li>
-                        <li><strong>Gendered Design:</strong> Challenged traditional gender norms in technology through Kolam</li>
-                    </ul>
-                </div>
-
-                <div class="researcher-card">
-                    <h3>Dr. Tulasi Bharathi, Dr. Shailaja D Sharma & Dr. Nithin Nagaraj</h3>
-                    <p class="subtitle">Kolam Simulation Using Lattice Points</p>
-                    <p>Researchers from NIAS, IISc Campus, Bangalore, focusing on mathematical modeling and computational pattern generation.</p>
-                    <h4>Key Contributions</h4>
-                    <ul>
-                        <li><strong>Lattice-Based Structure:</strong> Analyzed Kolam using lattice points with angular transformations</li>
-                        <li><strong>Algorithmic Simulation:</strong> Developed models using angles at lattice points</li>
-                        <li><strong>Computational Geometry:</strong> Applied to AI and computer vision</li>
-                    </ul>
-                </div>
-
-                <div class="researcher-card">
-                    <h3>Dr. Rengarajan Amirtharajan & Dr. John Bosco Balaguru R</h3>
-                    <p class="subtitle">Data Embedding System (US Patent)</p>
-                    <p>Researchers from SASTRA University specializing in cryptography and steganography.</p>
-                    <h4>Key Contributions</h4>
-                    <ul>
-                        <li><strong>US Patent US8971531B2:</strong> Secure data embedding using Kolam-inspired patterns</li>
-                        <li><strong>Steganography:</strong> Concealing information within digital media</li>
-                        <li><strong>Cryptography:</strong> Encryption techniques for network security</li>
-                        <li><strong>AI in Cybersecurity:</strong> Identifying security vulnerabilities using AI</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-    </div>
-
-    <!-- BLOGS PAGE -->
-    <div id="blogs" class="page">
-        <section class="hero" style="padding: 4rem 2rem;">
-            <div class="hero-content">
-                <h1>📝 Blogs & Articles</h1>
-                <p>Insights, research, and stories from the world of Kolam and computer science</p>
-            </div>
-        </section>
-
-        <section class="section">
-            <h2>Latest Articles</h2>
-            
-            <div class="researcher-grid" id="articles-grid">
-
-                <div class="researcher-card">
-                    <h3>The Mathematics Behind Kolam Patterns</h3>
-                    <p class="subtitle">March 15, 2025 • Research Insights</p>
-                    <p>Discover how ancient Kolam art embodies complex mathematical principles including graph theory, fractals, and the golden ratio. This article explores the intersection of traditional art and modern mathematics, revealing how centuries-old patterns contain sophisticated geometric concepts.</p>
-                    <p style="color: #667eea; font-weight: 600; margin-top: 1rem; cursor: pointer;">Read More →</p>
-                </div>
-
-                <div class="researcher-card">
-                    <h3>Dr. Gift Siromoney: Pioneer of Computational Kolam</h3>
-                    <p class="subtitle">March 10, 2025 • Biography</p>
-                    <p>An in-depth look at the life and groundbreaking work of Dr. Gift Siromoney, who first connected Kolam patterns with formal grammar and automata theory. His pioneering research laid the foundation for decades of AI and pattern recognition studies in traditional art forms.</p>
-                    <p style="color: #667eea; font-weight: 600; margin-top: 1rem; cursor: pointer;">Read More →</p>
-                </div>
-
-                <div class="researcher-card">
-                    <h3>AI-Powered Kolam Generation: Future of Traditional Art</h3>
-                    <p class="subtitle">March 5, 2025 • Technology</p>
-                    <p>Explore how Generative Adversarial Networks (GANs) and machine learning models are being used to create new Kolam designs while preserving cultural authenticity. We examine the balance between technological innovation and traditional aesthetics in generative art.</p>
-                    <p style="color: #667eea; font-weight: 600; margin-top: 1rem; cursor: pointer;">Read More →</p>
-                </div>
-
-                <div class="researcher-card">
-                    <h3>Kolam in Cybersecurity: Steganography Applications</h3>
-                    <p class="subtitle">February 28, 2025 • Innovation</p>
-                    <p>Learn about the groundbreaking US Patent that uses Kolam-inspired patterns for secure data embedding and transmission. This article showcases how traditional art informs modern cybersecurity solutions, with real-world applications in secure communication.</p>
-                    <p style="color: #667eea; font-weight: 600; margin-top: 1rem; cursor: pointer;">Read More →</p>
-                </div>
-
-                <div class="researcher-card">
-                    <h3>Teaching Coding Through Kolam: Educational Innovation</h3>
-                    <p class="subtitle">February 20, 2025 • Education</p>
-                    <p>How educators are using Kolam patterns and turtle graphics to teach programming concepts to students. This innovative approach connects cultural heritage with STEM education, making coding more accessible and culturally relevant for Indian students.</p>
-                    <p style="color: #667eea; font-weight: 600; margin-top: 1rem; cursor: pointer;">Read More →</p>
-                </div>
-
-                <div class="researcher-card">
-                    <h3>Regional Variations: Kolam Across Indian States</h3>
-                    <p class="subtitle">February 15, 2025 • Cultural Studies</p>
-                    <p>A comprehensive exploration of how Kolam manifests differently across Indian regions - from Tamil Nadu's intricate designs to Bengal's Alpana and Rajasthan's Mandana patterns. Understanding regional diversity enriches our appreciation of this pan-Indian tradition.</p>
-                    <p style="color: #667eea; font-weight: 600; margin-top: 1rem; cursor: pointer;">Read More →</p>
-                </div>
-            </div>
-
-            <div class="content-box" style="margin-top: 3rem; text-align: center;">
-                <h3>Want to Contribute?</h3>
-                <p>We welcome research articles, cultural insights, and technical explorations related to Kolam art and computer science. If you'd like to contribute to our blog, please reach out to us.</p>
-                <p style="margin-top: 1rem;"><strong>Email:</strong> itmuseum@christuniversity.in</p>
             </div>
         </section>
     </div>
@@ -585,106 +391,23 @@
     <div id="contact" class="page">
         <section class="hero" style="padding: 4rem 2rem;">
             <div class="hero-content">
-                <h1>📞 Contact Us</h1>
-                <p>Visit us or get in touch with the IT Museum at Christ University</p>
+                <h1>Contact Us</h1>
             </div>
         </section>
 
         <section class="section">
-            <h2>Visit the Museum</h2>
-            
             <div class="mission-grid">
                 <div class="mission-card">
                     <h3>📍 Location</h3>
                     <p><strong>Christ University</strong></p>
-                    <p>IT Museum</p>
-                    <p>Yeshwanthpur Campus</p>
+                    <p>IT Museum, Yeshwanthpur Campus</p>
                     <p>Bangalore, Karnataka 560022</p>
-                    <p>India</p>
                 </div>
 
                 <div class="mission-card">
-                    <h3>🕐 Visiting Hours</h3>
-                    <p><strong>Monday - Friday</strong></p>
-                    <p>9:00 AM - 5:00 PM</p>
-                    <p><strong>Saturday</strong></p>
-                    <p>10:00 AM - 4:00 PM</p>
-                    <p><strong>Sunday:</strong> Closed</p>
-                </div>
-
-                <div class="mission-card">
-                    <h3>📞 Contact Information</h3>
-                    <p><strong>Phone:</strong></p>
-                    <p>+91-80-4012-9100</p>
-                    <p><strong>Email:</strong></p>
-                    <p>itmuseum@christuniversity.in</p>
-                    <p><strong>Website:</strong></p>
-                    <p>christuniversity.in</p>
-                </div>
-            </div>
-
-            <div class="content-box">
-                <h3>🎟️ Admission & Tours</h3>
-                <div class="mission-grid" style="margin-top: 2rem;">
-                    <div class="mission-card">
-                        <h3>Free Admission</h3>
-                        <p>Students with valid ID</p>
-                    </div>
-                    <div class="mission-card">
-                        <h3>₹100</h3>
-                        <p>General Public</p>
-                    </div>
-                    <div class="mission-card">
-                        <h3>Guided Tours</h3>
-                        <p>Available on request</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="content-box">
-                <h3>🤝 Collaboration</h3>
-                <p>This museum is a collaborative project between:</p>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 2rem; margin-top: 2rem;">
-                    <div style="text-align: center;">
-                        <h4 style="color: #667eea; font-size: 1.5rem; margin-bottom: 0.5rem;">CHRIST</h4>
-                        <p style="color: #666;">(Deemed to be University)</p>
-                        <p style="margin-top: 1rem;">Yeshwanthpur Campus, Bangalore</p>
-                    </div>
-                    <div style="text-align: center;">
-                        <h4 style="color: #667eea; font-size: 1.5rem; margin-bottom: 0.5rem;">DataArt</h4>
-                        <p style="color: #666;">IT Museum</p>
-                        <p style="margin-top: 1rem;"><a href="https://museum.dataart.com" target="_blank" style="color: #3498db;">museum.dataart.com</a></p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="content-box">
-                <h3>📧 Get in Touch</h3>
-                <p>For research inquiries, collaboration opportunities, or general questions about the museum, please contact us:</p>
-                <ul style="margin-top: 1.5rem;">
-                    <li><strong>Research Collaborations:</strong> itmuseum@christuniversity.in</li>
-                    <li><strong>Student Visits:</strong> Schedule group tours for educational purposes</li>
-                    <li><strong>Blog Contributions:</strong> Submit articles on Kolam art and computer science</li>
-                    <li><strong>Media Inquiries:</strong> Press and media relations</li>
-                </ul>
-            </div>
-        </section>
-
-        <section class="section-white">
-            <div style="max-width: 1400px; margin: 0 auto;">
-                <h2>How to Reach Us</h2>
-                <div class="content-box">
-                    <h4>By Metro</h4>
-                    <p>Yeshwanthpur Metro Station (Purple Line) - 10 minutes walk</p>
-                    
-                    <h4>By Bus</h4>
-                    <p>Multiple BMTC buses connect to Yeshwanthpur. Get down at Christ University stop.</p>
-                    
-                    <h4>By Car</h4>
-                    <p>Ample parking available on campus. Use GPS coordinates or search for "Christ University Yeshwanthpur Campus"</p>
-                    
-                    <h4>From City Center</h4>
-                    <p>Approximately 10 km from MG Road, 30-40 minutes by car depending on traffic</p>
+                    <h3>📞 Contact</h3>
+                    <p><strong>Phone:</strong> +91-80-4012-9100</p>
+                    <p><strong>Email:</strong> itmuseum@christuniversity.in</p>
                 </div>
             </div>
         </section>
@@ -696,45 +419,27 @@
             <div class="footer-content">
                 <div class="footer-section">
                     <h3>Christ University</h3>
-                    <p>IT Museum</p>
-                    <p>Yeshwanthpur Campus</p>
-                    <p>Bangalore, Karnataka 560022</p>
-                    <p>India</p>
+                    <p>Yeshwanthpur Campus, Bangalore</p>
                 </div>
                 <div class="footer-section">
-                    <h3>Contact Information</h3>
-                    <p>📞 Phone: +91-80-4012-9100</p>
-                    <p>📧 Email: itmuseum@christuniversity.in</p>
-                    <p>🌐 Web: christuniversity.in</p>
-                    <p>🕐 Mon-Fri: 9:00 AM - 5:00 PM</p>
-                    <p>🕐 Saturday: 10:00 AM - 4:00 PM</p>
+                    <h3>Contact</h3>
+                    <p>itmuseum@christuniversity.in</p>
                 </div>
                 <div class="footer-section">
-                    <h3>Quick Links</h3>
+                    <h3>Links</h3>
                     <a onclick="showPage('home')" style="cursor: pointer;">Home</a>
                     <a onclick="showPage('collection')" style="cursor: pointer;">Collection</a>
-                    <a onclick="showPage('team')" style="cursor: pointer;">Our Team</a>
-                    <a onclick="showPage('blogs')" style="cursor: pointer;">Blogs</a>
-                    <a href="https://christuniversity.in" target="_blank">Christ University Website</a>
-                    <a href="https://museum.dataart.com" target="_blank">DataArt Museum</a>
-                    <a onclick="document.getElementById('admin-login-modal').style.display='flex'" style="cursor: pointer; color: #e74c3c; font-size: 0.9em; margin-top: 10px;">Admin Login</a>
-                    <a onclick="document.getElementById('admin-login-modal').style.display='flex'" style="cursor: pointer; color: #e74c3c; font-size: 0.9em; margin-top: 10px;">Admin Login</a>
-                </div>
-                <div class="footer-section">
-                    <h3>Collaboration</h3>
-                    <p>A joint project between:</p>
-                    <p><strong>CHRIST (Deemed to be University)</strong></p>
-                    <p>&</p>
-                    <p><strong>DataArt IT Museum</strong></p>
-                    <p style="margin-top: 1rem;">Exploring the intersection of traditional Indian art and modern computer science.</p>
+                    <a onclick="showPage('team')" style="cursor: pointer;">Team</a>
+                    <a onclick="document.getElementById('admin-login-modal').style.display='flex'" style="cursor: pointer; color: #e74c3c;">Admin</a>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2024 IT Museum | Christ University & DataArt. Yeshwanthpur Campus, Bangalore. All rights reserved.</p>
+                <p>&copy; 2025 IT Museum | Christ University & DataArt. All rights reserved.</p>
             </div>
         </div>
     </footer>
     <script src="script.js"></script>
+    
     <!-- Admin Modals -->
     <div id="admin-login-modal" class="modal">
         <div class="modal-content">
@@ -743,42 +448,28 @@
             <form onsubmit="event.preventDefault(); window.handleLogin(this)">
                 <div class="form-group">
                     <label>Email</label>
-                    <input type="email" name="email" required placeholder="admin@example.com">
+                    <input type="email" name="email" required>
                 </div>
                 <div class="form-group">
                     <label>Password</label>
-                    <input type="password" name="password" required placeholder="••••••">
+                    <input type="password" name="password" required>
                 </div>
-                <button type="submit" class="cta-button" style="width: 100%; border: none; margin: 0;">Login</button>
+                <button type="submit" class="cta-button" style="width: 100%; margin: 0;">Login</button>
             </form>
         </div>
     </div>
 
-
-
     <script type="module">
-        import { checkAuthState, loginAdmin, logoutAdmin, subscribeToSections, subscribeToArticles, addSection, deleteDocument, uploadImage } from './admin.js';
-        import { addDoc, collection } from "https://www.gstatic.com/firebasejs/12.6.0/firebase-firestore.js";
-        import { db } from './firebase-config.js';
-
-        // Initialize Auth State Listener
+        import { checkAuthState, loginAdmin, logoutAdmin, subscribeToSections, subscribeToCollections } from './admin.js';
         checkAuthState();
-        
-        // Subscribe to Data
         subscribeToSections('dynamic-home-sections');
-        subscribeToArticles('articles-grid');
+        subscribeToCollections('dynamic-collections-grid');
 
-        // Expose functions to window for onclick handlers
         window.handleLogin = async (form) => {
-            const email = form.email.value;
-            const password = form.password.value;
-            await loginAdmin(email, password);
+            await loginAdmin(form.email.value, form.password.value);
             form.reset();
         };
-
-        window.logout = async () => {
-            await logoutAdmin();
-        };
+        window.logout = async () => logoutAdmin();
     </script>
 </body>
 </html>
