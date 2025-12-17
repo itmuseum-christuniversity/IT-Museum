@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Submit Article | IT Museum</title>
+    <link rel="stylesheet" href="style.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        
+        /* Form Specific Styles */
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #2c3e50;
+            font-weight: 600;
+        }
+        
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            width: 100%;
+            padding: 0.8rem 1rem;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: inherit;
+            font-size: 1rem;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #8E24AA;
+            box-shadow: 0 0 0 3px rgba(142, 36, 170, 0.1);
+        }
+
+        /* File Upload Styling */
+        .file-upload-wrapper {
+            position: relative;
+            padding: 2rem;
+            border: 2px dashed #ccc;
+            border-radius: 12px;
+            text-align: center;
+            background: #fafafa;
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+        
+        .file-upload-wrapper:hover {
+            border-color: #8E24AA;
+            background: #fdfafa;
+        }
+        
+        input[type="file"] {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <nav>
+            <div class="logo-container" onclick="window.location.href='index.html'" style="cursor: pointer;">
+                <!-- Logos -->
+                <div class="logo-text">
+                    <span style="font-size: 1.2rem; color: #2c3e50;">CHRIST</span>
+                    <span style="font-size: 0.8rem; font-weight: 500; color: #666;">(Deemed to be University)</span>
+                </div>
+                <!-- Vertical Divider -->
+                <div style="height: 40px; width: 1px; background: #ddd;"></div>
+                <div class="logo-text">
+                    <span style="font-size: 1.2rem; color: #D32F2F;">DataArt</span>
+                    <span style="font-size: 0.8rem; font-weight: 500; color: #666;">IT Museum</span>
+                </div>
+            </div>
+            
+            <ul class="nav-links">
+                <!-- Using href to navigate back to index.html sections -->
+                <li><a href="index.html">Home</a></li>
+                <li><a href="index.html#collection">Collection</a></li>
+                <li><a href="index.html#team">Our Team</a></li>
+                <li><a href="index.html#contact">Contact</a></li>
+                <li><a href="submission.html" style="color: #8E24AA;">Submit Article</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1 class="fade-in">Submit Your Article</h1>
+            <p class="fade-in" style="animation-delay: 0.2s;">Contribute to the growing body of knowledge on Kolam and Computational Art</p>
+        </div>
+    </section>
+
+    <!-- Submission Form Section -->
+    <section class="section">
+        <div style="max-width: 800px; margin: 0 auto;">
+            <div class="content-box fade-in">
+                <h3>Article Details</h3>
+                <p>Please fill out the form below to submit your research or article for review.</p>
+                
+                <form id="submission-form" onsubmit="event.preventDefault(); alert('Thank you for your submission! Our team will review it shortly.');">
+                    <div class="form-group">
+                        <label for="title">Article Title</label>
+                        <input type="text" id="title" name="title" required placeholder="e.g., Array Grammars in Contextual Kolam Patterns">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="author">Author Name(s)</label>
+                        <input type="text" id="author" name="author" required placeholder="e.g., Jane Doe, John Smith">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="email">Contact Email</label>
+                        <input type="email" id="email" name="email" required placeholder="your.email@university.edu">
+                    </div>
+
+                    <div class="form-group">
+                        <label for="abstract">Abstract</label>
+                        <textarea id="abstract" name="abstract" rows="5" required placeholder="Provide a brief summary of your article..."></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="file">Upload Article (PDF/DOCX)</label>
+                        <div class="file-upload-wrapper">
+                            <input type="file" id="file" name="file" accept=".pdf,.doc,.docx" required>
+                            <span style="font-size: 2rem; color: #8E24AA;">📄</span>
+                            <p style="margin-bottom: 0;"><strong>Click or Drag to Upload</strong></p>
+                            <p style="font-size: 0.85rem; color: #888;">Max file size: 10MB</p>
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 2rem;">
+                        <button type="submit" class="cta-button" style="width: 100%; border: none;">Submit Article</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- IEEE Template Section -->
+    <section class="section-white">
+        <div style="max-width: 1000px; margin: 0 auto; text-align: center;">
+            <h2 style="margin-bottom: 2rem;">Submission Guidelines</h2>
+            <p style="font-size: 1.15rem; color: #555; max-width: 700px; margin: 0 auto 3rem;">
+                To ensure high quality and consistency, we request that all submissions adhere to the standard IEEE conference format.
+            </p>
+
+            <div class="content-box" style="display: inline-block; text-align: left; max-width: 600px;">
+                <div style="display: flex; gap: 2rem; align-items: center; flex-wrap: wrap;">
+                    <div style="flex: 1; min-width: 250px;">
+                        <h3 style="margin-bottom: 0.5rem;">IEEE Format Template</h3>
+                        <p>Download the official template to format your article correctly before submission.</p>
+                        <ul style="margin-bottom: 0;">
+                            <li>Standard Two-Column Format</li>
+                            <li>Font: Times New Roman</li>
+                            <li>Size: 10pt</li>
+                        </ul>
+                    </div>
+                    <div style="text-align: center;">
+                        <a href="https://www.ieee.org/content/dam/ieee-org/ieee/web/org/conferences/conference-template-a4.docx" target="_blank" rel="noopener noreferrer" class="cta-button" style="background: white; border: 2px solid #8E24AA; color: #8E24AA; padding: 0.8rem 2rem;">
+                            Download Template <br>
+                            <span style="font-size: 0.8rem; font-weight: 400;">(DOCX Format)</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="footer-container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>Christ University</h3>
+                    <p>Yeshwanthpur Campus, Bangalore</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact</h3>
+                    <p>itmuseum@christuniversity.in</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Links</h3>
+                    <a href="index.html">Home</a>
+                    <a href="index.html#collection">Collection</a>
+                    <a href="index.html#team">Team</a>
+                    <a href="submission.html" style="color: #FFD700;">Submit Article</a>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 IT Museum | Christ University & DataArt. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
