@@ -5,39 +5,32 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>IT Museum | Christ University</title>
     <link rel="stylesheet" href="style.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-    <style>
-        body { font-family: 'Inter', sans-serif; }
-    </style>
+    <!-- Google Fonts: Outfit for Headings, Inter for Body -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;500;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
 </head>
 <body>
     <!-- Header -->
     <header>
         <nav>
             <div class="logo-container" onclick="showPage('home')" style="cursor: pointer;">
-                <!-- Logos -->
                 <div class="logo-text">
-                    <span style="font-size: 1.2rem; color: #2c3e50;">CHRIST</span>
-                    <span style="font-size: 0.8rem; font-weight: 500; color: #666;">(Deemed to be University)</span>
+                    <span style="font-size: 1.2rem; font-weight: 700; color: #1a1a1a;">CHRIST</span>
+                    <span style="font-size: 0.8rem; font-weight: 500; color: #546e7a;">(Deemed to be University)</span>
                 </div>
-                <!-- Vertical Divider -->
-                <div style="height: 40px; width: 1px; background: #ddd;"></div>
+                <div style="height: 35px; width: 1px; background: #e0e0e0;"></div>
                 <div class="logo-text">
-                    <span style="font-size: 1.2rem; color: #D32F2F;">DataArt</span>
-                    <span style="font-size: 0.8rem; font-weight: 500; color: #666;">IT Museum</span>
+                    <span style="font-size: 1.2rem; font-weight: 700; color: #D32F2F;">DataArt</span>
+                    <span style="font-size: 0.8rem; font-weight: 500; color: #546e7a;">IT Museum</span>
                 </div>
             </div>
             
             <ul class="nav-links">
-                <li><a onclick="showPage('home')">Home</a></li>
-                <li><a onclick="showPage('collection')">Collection</a></li>
-                <li><a onclick="showPage('team')">Our Team</a></li>
-                <li><a onclick="showPage('contact')">Contact</a></li>
-                <!-- Submit Article Link -->
-                <li><a href="submission.html" style="color: #8E24AA; font-weight: 600;">Submit Article</a></li>
-                <!-- Admin Login -->
-                <li><a onclick="document.getElementById('admin-login-modal').style.display='flex'" style="color: #e74c3c; border: 1px solid #e74c3c; padding: 5px 15px; border-radius: 20px;">Admin</a></li>
+                <li><a onclick="showPage('home')" id="nav-home" class="active">Home</a></li>
+                <li><a onclick="showPage('collection')" id="nav-collection">Collection</a></li>
+                <li><a onclick="showPage('team')" id="nav-team">Team</a></li>
+                <li><a onclick="showPage('contact')" id="nav-contact">Contact</a></li>
+                <li><a href="submission.html" style="color: var(--primary); font-weight: 600;">Submit Article</a></li>
+                <li><a onclick="document.getElementById('admin-login-modal').style.display='flex'" style="border: 1px solid var(--primary); padding: 5px 15px; border-radius: 20px; color: var(--primary);">Admin</a></li>
             </ul>
         </nav>
     </header>
@@ -46,344 +39,207 @@
     <div id="home" class="page active">
         <!-- Hero Section -->
         <section class="hero">
+            <div class="hero-bg"></div>
             <div class="hero-content">
-                <h1 class="fade-in">IT Museum | Christ University</h1>
-                <p class="fade-in" style="animation-delay: 0.2s;">Bridging Traditional Indian Art and Modern Computer Science</p>
-                <div class="fade-in" style="margin-top: 2rem; animation-delay: 0.4s;">
-                    <a class="cta-button" onclick="showPage('collection')">Explore Collection</a>
-                    <a class="cta-button" onclick="showPage('team')" style="background: transparent; border: 2px solid #FFD700; color: #FFD700;">Meet Our Team</a>
+                <h1 class="fade-in">Converging Tradition <br> & Computation.</h1>
+                <p class="fade-in" style="animation-delay: 0.2s;">
+                    Discover the mathematical elegance of active Indian art forms and their profound connection to modern computer science.
+                </p>
+                <div class="btn-group fade-in" style="animation-delay: 0.4s;">
+                    <a class="cta-button" onclick="showPage('collection')">Explore the Archive</a>
+                    <a class="cta-button secondary" onclick="showPage('team')">Meet the Curators</a>
                 </div>
             </div>
         </section>
 
-        <!-- About the Museum -->
+        <!-- Core Philosophy -->
         <section class="section">
-            <h2>About the Museum</h2>
-            <div class="content-box">
-                <p>The IT Museum at Christ University, in collaboration with DataArt, explores the fascinating relationship between traditional Indian art forms and modern computer science. We document and analyze Kolam patterns, demonstrating their profound connections to pattern recognition, automata theory, and artificial intelligence.</p>
-                <p>Located at the Yeshwanthpur campus in Bangalore, our museum serves as a bridge for interdisciplinary research, inspiring the next generation of technologists.</p>
+            <h2>Our Core Mission</h2>
+            <div class="team-grid"> <!-- Reusing Grid -->
+                <div class="profile-card">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">👁️</div>
+                    <h3>Vision</h3>
+                    <p style="color: var(--text-muted); margin-top: 1rem;">To digitally preserve intangible cultural heritage through the lens of ethnomathematics and array grammars.</p>
+                </div>
+                <div class="profile-card">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">🎯</div>
+                    <h3>Mission</h3>
+                    <p style="color: var(--text-muted); margin-top: 1rem;">Archiving and modeling Kolam art to foster interdisciplinary research between art, culture, and algorithms.</p>
+                </div>
+                <div class="profile-card">
+                    <div style="font-size: 3rem; margin-bottom: 1rem;">💎</div>
+                    <h3>Values</h3>
+                    <p style="color: var(--text-muted); margin-top: 1rem;">Integrity in preservation, innovation in technology, and inclusivity in bringing rural arts to the global stage.</p>
+                </div>
             </div>
         </section>
 
-        <!-- Vision, Mission & Values -->
+        <!-- Timeline Journey -->
         <section class="section">
-            <h2 class="fade-in">Our Core Philosophy</h2>
-            <div class="mission-grid fade-in" style= "animation-delay: 0.2s;">
-                <div class="mission-card">
-                    <h3 style="color: #4A148C;">👁️ Vision</h3>
-                    <p>To stand as a global beacon for the digital preservation of intangible cultural heritage, pioneering the intersection of ethnomathematics and computer science. We envision a world where ancient artistic traditions are not only preserved but revitalized through the lens of modern technology, inspiring future generations to see the mathematical beauty in cultural expression.</p>
-                </div>
-                <div class="mission-card">
-                    <h3 style="color: #D32F2F;">🎯 Mission</h3>
-                    <p>To meticulously archive, analyze, and digitize the rich traditions of Kolam art using advanced computational modeling and array grammars. Our mission is to foster a new era of interdisciplinary research where art informs algorithms and algorithms preserve art, ensuring this ephemeral practice is immortalized for posterity.</p>
-                </div>
-                <div class="mission-card">
-                    <h3 style="color: #FFD700;">💎 Values</h3>
-                    <p><strong>Integrity</strong> in preservation, ensuring authenticity in every digitized pattern. <strong>Innovation</strong> in technology, pushing the boundaries of what computer science can achieve in the arts. <strong>Inclusivity</strong>, bridging the gap between rural artistic communities and the global academic stage.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Timeline Section -->
-        <section class="section">
-            <h2>Kolam Art Journey</h2>
-            <div class="timeline-section">
-                <!-- 1954 -->
-                <div class="timeline-event">
+            <h2>The Journey of Kolam Research</h2>
+            <div class="timeline-modern">
+                <div class="timeline-track"></div>
+                
+                <div class="timeline-item">
                     <div class="timeline-dot"></div>
                     <div class="timeline-content">
-                        <span class="timeline-year">1954</span>
-                        <h3><a href="https://docs.google.com/document/d/12EBrAfDTXmltnxPd1zJEwA_YCUKnUWDEni1_IUAip_w/edit?tab=t.fm7b785fkdlo" target="_blank" style="text-decoration: none; color: inherit;">Foundations</a></h3>
-                        <p>Dr. Gift Siromoney begins his journey at Madras Christian College, sparking the initial academic interest in traditional forms.</p>
+                        <span class="profile-badge">1954</span>
+                        <h3>Foundations at MCC</h3>
+                        <p>Dr. Gift Siromoney initiates academic interest in traditional Tamil art forms.</p>
                     </div>
                 </div>
 
-                <!-- 1974 -->
-                <div class="timeline-event">
+                <div class="timeline-item">
                     <div class="timeline-dot"></div>
                     <div class="timeline-content">
-                        <span class="timeline-year">1974</span>
-                        <h3><a href="https://docs.google.com/document/d/12EBrAfDTXmltnxPd1zJEwA_YCUKnUWDEni1_IUAip_w/edit?tab=t.fm7b785fkdlo" target="_blank" style="text-decoration: none; color: inherit;">Formal Grammar</a></h3>
-                        <p>The pivotal publication connecting Kolam art with **Array Grammars**, defining the syntax of this visual language.</p>
+                        <span class="profile-badge">1974</span>
+                        <h3>Formal Grammar Defined</h3>
+                        <p>Publication connecting Kolam art with Array Grammars, establishing the syntax.</p>
                     </div>
                 </div>
 
-                <!-- 1980s -->
-                <div class="timeline-event">
+                <div class="timeline-item">
                     <div class="timeline-dot"></div>
                     <div class="timeline-content">
-                        <span class="timeline-year">1980s</span>
-                        <h3><a href="https://docs.google.com/document/d/12EBrAfDTXmltnxPd1zJEwA_YCUKnUWDEni1_IUAip_w/edit?tab=t.fm7b785fkdlo" target="_blank" style="text-decoration: none; color: inherit;">Digital Expansion</a></h3>
-                        <p>Exploration of **Cycle Grammars** and **Fractals**, revealing the recursive mathematical depth of simple floor patterns.</p>
-                    </div>
-                </div>
-
-                <!-- 2024 -->
-                <div class="timeline-event">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-content">
-                        <span class="timeline-year">2024</span>
-                        <h3><a href="https://docs.google.com/document/d/12EBrAfDTXmltnxPd1zJEwA_YCUKnUWDEni1_IUAip_w/edit?tab=t.fm7b785fkdlo" target="_blank" style="text-decoration: none; color: inherit;">New Era</a></h3>
-                        <p>Christ University and DataArt partner to create this museum, a digital home for the future of Kolam research.</p>
+                        <span class="profile-badge">2024</span>
+                        <h3>Digital IT Museum</h3>
+                        <p>Christ University & DataArt launch this digital museum to future-proof the research.</p>
                     </div>
                 </div>
             </div>
         </section>
-
-        <!-- Dynamic Sections Container -->
+        
         <div id="dynamic-home-sections"></div>
     </div>
 
+    <!-- COLLECTION PAGE (GALLERY VIEW) -->
     <div id="collection" class="page">
-        <section class="hero" style="padding: 4rem 2rem;">
+        <section class="hero" style="min-height: 40vh;">
             <div class="hero-content">
-                <h1>📚 Kolam Art Collection</h1>
-                <p>Explore the comprehensive documentation of Kolam patterns, computational models, and mathematical frameworks</p>
+                <h1>Digital Archive</h1>
+                <p>Select an exhibit to explore detailed research and artifacts.</p>
             </div>
         </section>
 
-        <!-- Kolam Introduction -->
-        <section class="section">
-            <h2>Understanding Kolam Art</h2>
+        <section class="section" style="margin-top: 2rem;">
+            <div class="gallery-grid">
+                <!-- Exhibit 1: Kolam Art (The Main One) -->
+                <a onclick="showArticle('art-kolam')" class="gallery-item">
+                    <div class="gallery-thumb">
+                        <!-- Placeholder Gradient for visuals -->
+                        <div style="width: 100%; height: 100%; background: linear-gradient(45deg, #4A148C, #7B1FA2); display:flex; align-items:center; justify-content:center; color:white; font-size:3rem;">🥨</div>
+                    </div>
+                    <div class="gallery-content">
+                        <span class="gallery-tag">Ethnomathematics</span>
+                        <h3>The Art of Kolam</h3>
+                        <p style="color: var(--text-muted); margin-top: 0.5rem;">Exploring the recursive geometry and array grammars hidden within traditional threshold patterns.</p>
+                        <span style="color: var(--primary); font-weight: 600; font-size: 0.9rem; margin-top: 1rem; display: block;">Read Article &rarr;</span>
+                    </div>
+                </a>
+
+                <!-- Exhibit 2: Placeholder -->
+                <a class="gallery-item">
+                    <div class="gallery-thumb">
+                        <div style="width: 100%; height: 100%; background: linear-gradient(45deg, #263238, #546e7a); display:flex; align-items:center; justify-content:center; color:white; font-size:3rem;">💾</div>
+                    </div>
+                    <div class="gallery-content">
+                        <span class="gallery-tag">Hardware History</span>
+                        <h3>Evolution of Storage</h3>
+                        <p style="color: var(--text-muted); margin-top: 0.5rem;">(Coming Soon) From punch cards to DNA storage, a journey through data persistence.</p>
+                    </div>
+                </a>
+             
+                 <!-- Exhibit 3: Placeholder -->
+                <a class="gallery-item">
+                    <div class="gallery-thumb">
+                        <div style="width: 100%; height: 100%; background: linear-gradient(45deg, #006064, #0097A7); display:flex; align-items:center; justify-content:center; color:white; font-size:3rem;">🕸️</div>
+                    </div>
+                    <div class="gallery-content">
+                        <span class="gallery-tag">AI & Networks</span>
+                        <h3>Neural Origins</h3>
+                        <p style="color: var(--text-muted); margin-top: 0.5rem;">(Coming Soon) Tracing the early mathematical models that paved the way for modern AI.</p>
+                    </div>
+                </a>
+            </div>
             
-            <div class="content-box">
+            <div id="dynamic-collections-grid" style="margin-top: 3rem;"></div>
+        </section>
+    </div>
+
+    <!-- ARTICLE VIEW: KOLAM ART (Relocated Content) -->
+    <div id="art-kolam" class="page">
+        <div class="article-container">
+            <a onclick="showPage('collection')" class="article-back-btn">&larr; Back to Collection</a>
+            
+            <header class="article-header">
+                <span class="profile-badge">Exhibit #001</span>
+                <h1>The Art of Kolam: Symmetry & Computation</h1>
+                <p style="font-size: 1.2rem; color: var(--text-muted);">An in-depth analysis of South Indian threshold designs.</p>
+            </header>
+
+            <!-- Reusing Content Boxes with Premium Style -->
+            <div class="card-premium" style="margin-bottom: 3rem;">
                 <h3>Introduction to Kolam</h3>
-                <p>Kolam is an ancient Indian folk art extensively used to beautifully adorn the thresholds and open courtyards in front of houses, particularly in Southern India. This ornamentation and visually appealing art has been an essential and valuable part of Indian society for thousands of years, representing concepts of prosperity, positivity, and the welcome reception of guests and gods alike into the sacred space of the home.</p>
-                
-                <p>The word "Kolam" in the Tamil language means form and beauty. A symbol of auspiciousness and divinity, it is made with rice flour, finely ground rice powder (called kola-podi in Tamil), or at times vegetable and mineral-based colored powders on carefully swept and water-sprinkled cleaned grounds.</p>
-
-                <h4>The Art of Creating Kolam</h4>
-                <p>Women take this powder in a pinching-like manner at the tips of their fingers and start gently drawing the pattern by letting the powder fall in a controlled way to obtain the desired design. The process involves concentration, memory, and a series of disciplined hand and body movements. The designs can vary from simple to complex depending on the event, occasion, or season.</p>
-
-                <p>For special occasions, to make the design last longer, the rice flour is made wet by adding water. These semi-permanent patterns are called Makolam, created almost as if the fingers were acting as an ink pen.</p>
+                 <p style="color: var(--text-muted); margin-top: 1rem;">Kolam is an ancient Indian folk art extensively used to beautifully adorn the thresholds and open courtyards in front of houses... (Content Preserved)</p>
+                 <br>
+                 <p style="color: var(--text-muted);">The word "Kolam" in the Tamil language means form and beauty. A symbol of auspiciousness and divinity.</p>
             </div>
 
-            <div class="content-box">
-                <h3>Regional Variations Across India</h3>
-                <p>Although Kolam is practiced across the country, the geometric patterns and construction methods vary significantly from region to region:</p>
-                
-                <div class="variations-grid">
-                    <div class="variation-item">
-                        <h4>Kolam</h4>
-                        <p>Tamil Nadu</p>
+            <div class="card-premium" style="margin-bottom: 3rem;">
+                <h3>Mathematical Frameworks</h3>
+                <div style="margin-top: 1.5rem; display: grid; gap: 1.5rem;">
+                    <div>
+                        <h4 style="color: var(--primary);">1. Angular Encoding Model</h4>
+                        <p style="color: var(--text-muted);">Maps angular movements in Kolam drawing to symbol sequences representing directions.</p>
                     </div>
-                    <div class="variation-item">
-                        <h4>Puvidal</h4>
-                        <p>Kerala</p>
-                    </div>
-                    <div class="variation-item">
-                        <h4>Rangoli</h4>
-                        <p>Maharashtra, Karnataka</p>
-                    </div>
-                    <div class="variation-item">
-                        <h4>Muggulu</h4>
-                        <p>Andhra Pradesh</p>
-                    </div>
-                    <div class="variation-item">
-                        <h4>Alpana</h4>
-                        <p>West Bengal</p>
-                    </div>
-                    <div class="variation-item">
-                        <h4>Chowkpurna</h4>
-                        <p>Madhya Pradesh</p>
-                    </div>
-                    <div class="variation-item">
-                        <h4>Mandana</h4>
-                        <p>Rajasthan</p>
-                    </div>
-                    <div class="variation-item">
-                        <h4>Sanjhi</h4>
-                        <p>Uttar Pradesh</p>
+                    <div>
+                         <h4 style="color: var(--primary);">2. Array Grammar</h4>
+                        <p style="color: var(--text-muted);">Uses array grammars and contextual Array P Systems to generate and analyze patterns.</p>
                     </div>
                 </div>
             </div>
 
-            <div class="content-box">
-                <h3>Cultural and Social Significance</h3>
-                <p>Kolam drawing is an ancient and widespread practice in South India, practiced by women of all ages. Young girls start their initiation into the art at a very young age, learning by observing their mothers and grandmothers.</p>
-
-                <p>This ancient tradition is not just a way of adorning houses; it is also a meditative and social practice that challenges creativity, patience, and a sense of cultural continuity over generations. Colorful kolam competitions are held during festive celebrations, bringing neighbors and relatives together to exchange ideas and techniques.</p>
-            </div>
-
-            <div class="content-box">
-                <h3>Modern Adaptations and Innovations</h3>
-                <p>As times have progressed, the art of drawing kolams has undergone remarkable change, including the use of modern materials like contemporary colored powders, chalk, and even digital art. Some artists now employ innovative methods to draw kolams on large canvases for showcasing.</p>
-
-                <p>The digital revolution has provided designers with opportunities to experiment with intricate mathematical patterns and design computer-generated kolams. In urban settings, individuals use stencils to quickly draw intricate patterns, keeping the tradition alive despite time constraints.</p>
-
-                <div class="highlight-box">
-                    <p><strong>Research Connection:</strong> Researchers and mathematicians have been enthusiastic about kolam patterns due to their complex geometric nature. Studies in mathematics and computer science have explored how kolam patterns relate to algorithmic patterns, symmetry, and artificial intelligence.</p>
-                </div>
-            </div>
-        </section>
-
-        <!-- Computational Models -->
-        <section class="section-white">
-            <div style="max-width: 1400px; margin: 0 auto;">
-                <h2>💻 Computational Models</h2>
-                
-                <div class="content-box">
-                    <h3>Modeling Kolam Patterns</h3>
-                    <p>Kolam patterns, drawn on a grid of dots (pulli), feature intricate designs that can be single-threaded (kambi) or multi-threaded, offering great opportunities for computational modeling.</p>
-
-                    <h4>L-Systems (Lindenmayer Systems)</h4>
-                    <p>L-systems use a set of rules to iteratively generate complex patterns, ideal for mimicking the step-by-step drawing process of Kolam:</p>
-                    <ul>
-                        <li><strong>Starting Command:</strong> "F" (move forward and draw)</li>
-                        <li><strong>Rules:</strong> Replace "F" with "F+F-F-F+F" (where "+" and "−" indicate 90° turns)</li>
-                        <li><strong>Example:</strong> "Square Loop Kolam" generated through iterative rule application</li>
-                    </ul>
-
-                    <h4>Fractals</h4>
-                    <p>Fractals create self-repeating patterns seen in many Kolam designs:</p>
-                    <ul>
-                        <li>Tools like Processing or OpenGL simulate fractal-based Kolams</li>
-                        <li>Example: "Star Kolam" with smaller stars appearing recursively</li>
-                        <li>Mirrors the layered creation of festival Kolams</li>
-                    </ul>
-
-                    <h4>Shape Grammars</h4>
-                    <p>Rule-based systems that transform initial shapes into complex designs:</p>
-                    <ul>
-                        <li><strong>Initial State:</strong> A grid of dots (e.g., 5x5)</li>
-                        <li><strong>Rules:</strong> Draw lines between adjacent dots, loop around unconnected dots</li>
-                        <li>Treats Kolam as a two-dimensional language</li>
-                    </ul>
-                </div>
-
-                <div class="content-box">
-                    <h3>AI & Machine Learning Applications</h3>
-                    
-                    <h4>Image Processing</h4>
-                    <ul>
-                        <li><strong>Edge Detection:</strong> OpenCV's Canny edge detector isolates Kolam lines from backgrounds</li>
-                        <li><strong>Pattern Segmentation:</strong> Watershed algorithms separate designs into components</li>
-                    </ul>
-
-                    <h4>Pattern Recognition</h4>
-                    <ul>
-                        <li><strong>CNNs:</strong> Classify Kolam types by analyzing line continuity and grid alignment</li>
-                        <li><strong>GANs:</strong> Generate new Kolam designs by learning from traditional patterns</li>
-                        <li><strong>Behavioral Simulation:</strong> ML models simulate human drawing strategies</li>
-                    </ul>
-
-                    <h4>Kolam-Inspired Algorithms</h4>
-                    <ul>
-                        <li><strong>Steganography:</strong> Embed data in Kolam designs through line orientations</li>
-                        <li><strong>Pathfinding:</strong> Single-thread Kolam influences path traversal algorithms</li>
-                        <li><strong>Educational Tools:</strong> Turtle graphics teach coding through Kolam generation</li>
-                        <li><strong>Design Automation:</strong> Algorithms for symmetrical pattern creation</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- Mathematical Models -->
-        <section class="section">
-            <h2>🔢 Mathematical Models</h2>
-            
-            <div class="content-box">
-                <h3>Five Key Mathematical Frameworks</h3>
-                
-                <h4>1. Angular Encoding Model</h4>
-                <p>Maps angular movements in Kolam drawing to symbol sequences representing directions. Applied to single-loop Kolams (unicursal patterns), emphasizing symmetry and recursion.</p>
-
-                <h4>2. Descriptive Framework</h4>
-                <p>Uses geometric principles focusing on symmetry, fractals, and infinity. Analyzes geometric, freehand, and pulli-based Kolams, identifying universal properties like balance and harmony.</p>
-
-                <h4>3. Point Lattice System</h4>
-                <p>Organizes patterns on a grid integrating Fibonacci sequences and fractal geometry. Applied to complex patterns like Fibonacci labyrinth Kolams, emphasizing scalability.</p>
-
-                <h4>4. Scalability Analysis Model</h4>
-                <p>Decomposes patterns into sub-components using mathematical sequences. Focuses on how designs scale while maintaining structural integrity, applied to specific Kolams like Hridaya and Aishwarya Kolam.</p>
-
-                <h4>5. Array Grammar and P System</h4>
-                <p>Uses array grammars and contextual Array P Systems to generate and analyze patterns. Formalizes Kolam as a two-dimensional language, enabling computational generation of complex designs.</p>
-            </div>
-
-            <div class="content-box">
-                <h3>Mathematical Concepts in Kolam</h3>
-                <ul>
-                    <li><strong>Graph Theory:</strong> Eulerian graphs, Hamiltonian paths, planar graphs</li>
-                    <li><strong>L-Systems:</strong> Rewriting rules for recursive pattern generation</li>
-                    <li><strong>Fractals & Self-Similarity:</strong> Nested loops resembling Koch curves and Sierpiński triangles</li>
-                    <li><strong>Fibonacci Sequences:</strong> Spiral-based Kolams following Fibonacci proportions</li>
-                    <li><strong>Golden Ratio:</strong> Proportions exhibiting 1.618 ratio</li>
-                    <li><strong>Symmetry & Group Theory:</strong> Dihedral groups describing two-dimensional symmetry</li>
+            <!-- External Resources Block -->
+            <div class="card-premium" style="background: linear-gradient(135deg, #f3e5f5, white);">
+                <h3>📚 Further Reading</h3>
+                <ul style="margin-top: 1rem; margin-left: 1.5rem; color: var(--text-muted);">
+                    <li><a href="https://arxiv.org/abs/2307.02144" target="_blank" style="color: var(--primary);">Kolam Simulation (arXiv)</a></li>
+                    <li><a href="https://www.iitm.ac.in/" target="_blank" style="color: var(--primary);">IIT Madras Research Archive</a></li>
                 </ul>
             </div>
-        </section>
-
-        <!-- External Resources -->
-        <section class="section-white">
-            <div style="max-width: 1400px; margin: 0 auto;">
-                <h2>📖 Resources & References</h2>
-                
-                <div class="researcher-grid">
-                    <div class="researcher-card">
-                        <h3>📚 Academic Papers</h3>
-                        <div class="card-content">
-                            <p><a href="https://www.exoticindiaart.com/book/details/kolam-tradition-in-south-india-rangoli-in-indian-threshold-design-nav088/" target="_blank" style="color: #667eea; text-decoration: underline;">Kolam Tradition in South India</a></p>
-                            <p><a href="https://arxiv.org/abs/2307.02144" target="_blank" style="color: #667eea; text-decoration: underline;">Kolam Simulation (arXiv)</a></p>
-                        </div>
-                    </div>
-
-                    <div class="researcher-card">
-                        <h3>🔬 Institutions</h3>
-                         <div class="card-content">
-                            <p><a href="https://www.iitm.ac.in/" target="_blank" style="color: #667eea; text-decoration: underline;">IIT Madras</a></p>
-                            <p>NIAS, IISc Bangalore</p>
-                            <p><a href="https://www.sastra.edu/" target="_blank" style="color: #667eea; text-decoration: underline;">SASTRA University</a></p>
-                            <p><a href="https://vit.ac.in/" target="_blank" style="color: #667eea; text-decoration: underline;">VIT University</a></p>
-                        </div>
-                    </div>
-
-                    <div class="researcher-card">
-                        <h3>📖 Key Publications</h3>
-                         <div class="card-content">
-                            <p style="font-size: 0.95rem; color: #666;">Siromoney et al. (1974). Array grammars and kolam.</p>
-                            <p style="font-size: 0.95rem; color: #666;">Ascher, M. (2002). Mathematics Elsewhere.</p>
-                            <p style="font-size: 0.95rem; color: #666;">Gerdes, P. (2007). African Basketry and Mathematics.</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
+        </div>
     </div>
 
     <!-- TEAM PAGE -->
     <div id="team" class="page">
-        <section class="hero" style="padding: 4rem 2rem;">
+        <section class="hero" style="min-height: 40vh;">
             <div class="hero-content">
-                <h1>Our Team</h1>
-                <p>The Minds Behind the Museum</p>
+                <h1>The Curators</h1>
+                <p>Meet the researchers bridging the gap between art and algorithms.</p>
             </div>
         </section>
 
         <section class="section">
-            <div class="researcher-grid">
-                <div class="researcher-card">
-                     <div class="card-content">
-                        <h3>Mr. A</h3>
-                        <p class="subtitle">The Pioneer</p>
-                        <p>Renowned mathematician who first applied formal grammar and automata theory to Kolam patterns.</p>
-                    </div>
+            <div class="team-grid">
+                <div class="profile-card">
+                    <img src="" alt="" class="profile-img"> <!-- Placeholder if no image -->
+                    <span class="profile-badge">The Pioneer</span>
+                    <h3>Mr. A</h3>
+                    <p style="color: var(--text-muted); margin-top: 1rem;">Renowned mathematician who first applied formal grammar and automata theory to Kolam patterns.</p>
                 </div>
 
-                <div class="researcher-card">
-                     <div class="card-content">
-                        <h3>Mr. B</h3>
-                        <p class="subtitle">AI & Pattern Recognition</p>
-                        <p>Leading researcher in AI-based pattern recognition and digitization of Kolam designs.</p>
-                     </div>
+                <div class="profile-card">
+                   <img src="" alt="" class="profile-img">
+                   <span class="profile-badge">AI Research</span>
+                    <h3>Mr. B</h3>
+                    <p style="color: var(--text-muted); margin-top: 1rem;">Leading researcher in AI-based pattern recognition and digitization of Kolam designs.</p>
                 </div>
 
-                <div class="researcher-card">
-                     <div class="card-content">
-                        <h3>Mr. C</h3>
-                        <p class="subtitle">Algorithmic Studies</p>
-                        <p>Focusing on recursive structures and AI applications at VIT University.</p>
-                    </div>
+                <div class="profile-card">
+                    <img src="" alt="" class="profile-img">
+                    <span class="profile-badge">Algorithms</span>
+                    <h3>Mr. C</h3>
+                    <p style="color: var(--text-muted); margin-top: 1rem;">Focusing on recursive structures and AI applications at VIT University.</p>
                 </div>
             </div>
         </section>
@@ -391,25 +247,33 @@
 
     <!-- CONTACT PAGE -->
     <div id="contact" class="page">
-        <section class="hero" style="padding: 4rem 2rem;">
-            <div class="hero-content">
-                <h1>Contact Us</h1>
+        <section class="hero" style="min-height: 40vh;">
+             <div class="hero-content">
+                <h1>Get in Touch</h1>
+                <p>Visit us at the Yeshwanthpur Campus or reach out online.</p>
             </div>
         </section>
 
         <section class="section">
-            <div class="mission-grid">
-                <div class="mission-card">
-                    <h3>📍 Location</h3>
-                    <p><strong>Christ University</strong></p>
-                    <p>IT Museum, Yeshwanthpur Campus</p>
-                    <p>Bangalore, Karnataka 560022</p>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;">
+                <div class="card-premium">
+                    <h3 style="margin-bottom: 2rem;">Contact Information</h3>
+                    
+                    <div style="margin-bottom: 2rem;">
+                        <h4 style="font-size: 1.1rem; color: var(--primary);">📍 Location</h4>
+                        <p style="color: var(--text-muted);">Christ University, Yeshwanthpur Campus<br>Bangalore, Karnataka 560022</p>
+                    </div>
+
+                    <div>
+                        <h4 style="font-size: 1.1rem; color: var(--primary);">📞 Contact</h4>
+                        <p style="color: var(--text-muted);">+91-80-4012-9100<br>itmuseum@christuniversity.in</p>
+                    </div>
                 </div>
 
-                <div class="mission-card">
-                    <h3>📞 Contact</h3>
-                    <p><strong>Phone:</strong> +91-80-4012-9100</p>
-                    <p><strong>Email:</strong> itmuseum@christuniversity.in</p>
+                <!-- Abstract Visual for Map -->
+                <div style="background: var(--primary-light); border-radius: 24px; min-height: 400px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden;">
+                    <div style="opacity: 0.2; font-size: 15rem; color: white;">🗺️</div>
+                    <div style="position: absolute; bottom: 2rem; left: 2rem; background: white; padding: 1rem 2rem; border-radius: 50px; font-weight: 700;">Find us on Maps &nearr;</div>
                 </div>
             </div>
         </section>
@@ -417,50 +281,74 @@
 
     <!-- Footer -->
     <footer>
-        <div class="footer-container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>Christ University</h3>
-                    <p>Yeshwanthpur Campus, Bangalore</p>
-                </div>
-                <div class="footer-section">
-                    <h3>Contact</h3>
-                    <p>itmuseum@christuniversity.in</p>
-                </div>
-                <div class="footer-section">
-                    <h3>Links</h3>
-                    <a onclick="showPage('home')" style="cursor: pointer;">Home</a>
-                    <a onclick="showPage('collection')" style="cursor: pointer;">Collection</a>
-                    <a onclick="showPage('team')" style="cursor: pointer;">Team</a>
-                    <a onclick="document.getElementById('admin-login-modal').style.display='flex'" style="cursor: pointer; color: #e74c3c;">Admin</a>
-                </div>
+        <div class="footer-content">
+            <div class="footer-col">
+                <h3>Christ University</h3>
+                <p style="color: #90a4ae;">Pioneering interdisciplinary research in Bangalore.</p>
             </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 IT Museum | Christ University & DataArt. All rights reserved.</p>
+            <div class="footer-col">
+                <h3>Quick Links</h3>
+                <a onclick="showPage('home')">Home</a>
+                <a onclick="showPage('collection')">Archive</a>
+                <a onclick="showPage('team')">Team</a>
+                <a href="submission.html">Submit Research</a>
+            </div>
+            <div class="footer-col">
+                <h3>Admin</h3>
+                <a onclick="document.getElementById('admin-login-modal').style.display='flex'" style="cursor: pointer;">Authorized Login</a>
             </div>
         </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 IT Museum. Preserving Heritage with Code.</p>
+        </div>
     </footer>
-    <script src="script.js"></script>
-    
-    <!-- Admin Modals -->
-    <div id="admin-login-modal" class="modal">
-        <div class="modal-content">
-            <span class="close-modal" onclick="document.getElementById('admin-login-modal').style.display='none'">&times;</span>
-            <h2 style="margin-bottom: 1rem; color: #2c3e50;">Admin Login</h2>
+
+    <!-- Admin Login Modal -->
+    <div id="admin-login-modal" class="modal" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); align-items:center; justify-content:center; z-index:2000; backdrop-filter:blur(5px);">
+        <div class="card-premium" style="width: 90%; max-width: 450px; padding: 3rem;">
+            <span onclick="document.getElementById('admin-login-modal').style.display='none'" style="position: absolute; top: 20px; right: 20px; font-size: 1.5rem; cursor: pointer;">&times;</span>
+            <h2 style="text-align: center; margin-bottom: 2rem;">Admin Portal</h2>
             <form onsubmit="event.preventDefault(); window.handleLogin(this)">
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" name="email" required>
+                <div style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted);">Email</label>
+                    <input type="email" name="email" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
                 </div>
-                <div class="form-group">
-                    <label>Password</label>
-                    <input type="password" name="password" required>
+                <div style="margin-bottom: 2rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; color: var(--text-muted);">Password</label>
+                    <input type="password" name="password" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 8px;">
                 </div>
-                <button type="submit" class="cta-button" style="width: 100%; margin: 0;">Login</button>
+                <button type="submit" class="cta-button" style="width: 100%; border: none;">Login</button>
             </form>
         </div>
     </div>
 
+    <!-- Scripts -->
+    <script>
+        // Simple Page Router
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            // Remove active class from nav links
+            document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+            
+            // Show target page
+            document.getElementById(pageId).classList.add('active');
+            
+            // Highlight nav link (if exists)
+            const navLink = document.getElementById('nav-' + pageId);
+            if (navLink) navLink.classList.add('active');
+            
+            window.scrollTo(0,0);
+        }
+
+        function showArticle(articleId) {
+             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+             const article = document.getElementById(articleId);
+             if(article) article.classList.add('active');
+             window.scrollTo(0,0);
+        }
+    </script>
+    <script src="script.js"></script>
     <script type="module">
         import { checkAuthState, loginAdmin, logoutAdmin, subscribeToSections, subscribeToCollections } from './admin.js';
         checkAuthState();
