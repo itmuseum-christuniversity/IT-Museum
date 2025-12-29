@@ -1,0 +1,33 @@
+{
+  "dependencies": {
+    "firebase": "^12.7.0",
+    "framer-motion": "^12.23.26",
+    "lucide-react": "^0.562.0",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "react-router-dom": "^7.11.0"
+  },
+  "name": "it-museum",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview"
+  },
+  "bugs": {
+    "url": "https://github.com/itmuseum-christuniversity/IT-Museum/issues"
+  },
+  "homepage": "https://github.com/itmuseum-christuniversity/IT-Museum#readme",
+  "devDependencies": {
+    "@types/node": "^25.0.3",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^5.1.2",
+    "typescript": "^5.9.3",
+    "vite": "^7.3.0"
+  }
+}
