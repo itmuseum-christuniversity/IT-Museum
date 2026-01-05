@@ -2,6 +2,7 @@
 import { Link } from 'react-router-dom';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
 import DynamicHomeSections from '../components/DynamicHomeSections';
+import HeroSlideshow from '../components/HeroSlideshow';
 
 export default function Home() {
     useScrollAnimation();
@@ -10,7 +11,7 @@ export default function Home() {
         <div className="page active" style={{ display: 'block' }}>
             {/* Hero Section */}
             <section className="hero">
-                <div className="hero-bg"></div>
+                <HeroSlideshow />
                 <div className="hero-content">
                     <h1 className="fade-in">Converging Tradition <br /> & Computation.</h1>
                     <p className="fade-in" style={{ animationDelay: '0.2s' }}>
