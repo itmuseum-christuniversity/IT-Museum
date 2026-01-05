@@ -1,12 +1,59 @@
-import { FormEvent } from 'react';
+import { FormEvent, useState } from 'react';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
+import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { db } from '../firebase-config';
 
 export default function Submission() {
     useScrollAnimation();
+    const [loading, setLoading] = useState(false);
+    const [file, setFile] = useState<File | null>(null);
+    const [formData, setFormData] = useState({
+        title: '',
+        author: '',
+        email: '',
+        abstract: ''
+    });
 
-    const handleSubmit = (e: FormEvent) => {
+    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.files && e.target.files[0]) {
+            setFile(e.target.files[0]);
+        }
+    };
+
+    const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        alert('Thank you for your submission! Our academic panel will review it shortly.');
+        setLoading(true);
+
+        try {
+            // Note: mixing Firestore and hypothetical storage upload
+            // In a real app, upload file to Storage, get URL, then save to Firestore.
+            // For now, we simulate the file URL.
+
+            await addDoc(collection(db, "articles"), {
+                ...formData,
+                status: 'submitted',
+                submittedAt: serverTimestamp(),
+                originalFilename: file ? file.name : 'unknown',
+                fileUrl: '#', // Placeholder for actual storage URL
+                history: [
+                    {
+                        stage: 'submission',
+                        action: 'submit',
+                        timestamp: new Date().toISOString(),
+                        user: formData.email
+                    }
+                ]
+            });
+
+            alert('Thank you for your submission! Our academic panel will review it shortly.');
+            setFormData({ title: '', author: '', email: '', abstract: '' });
+            setFile(null);
+        } catch (error: any) {
+            console.error("Error submitting document: ", error);
+            alert('Submission failed: ' + error.message);
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -93,28 +140,52 @@ export default function Submission() {
                         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '1.5rem' }}>
                             <div style={{ gridColumn: '1 / -1' }}>
                                 <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Article Title</label>
-                                <input type="text" required placeholder="Enter the full title of your research paper"
-                                    style={{ width: '100%', padding: '1rem', border: '1px solid #ddd', borderRadius: '8px' }} />
+                                <input
+                                    type="text"
+                                    required
+                                    placeholder="Enter the full title of your research paper"
+                                    value={formData.title}
+                                    onChange={e => setFormData({ ...formData, title: e.target.value })}
+                                    style={{ width: '100%', padding: '1rem', border: '1px solid #ddd', borderRadius: '8px' }}
+                                />
                             </div>
 
                             <div>
                                 <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Primary Author</label>
-                                <input type="text" required placeholder="Full Name"
-                                    style={{ width: '100%', padding: '1rem', border: '1px solid #ddd', borderRadius: '8px' }} />
+                                <input
+                                    type="text"
+                                    required
+                                    placeholder="Full Name"
+                                    value={formData.author}
+                                    onChange={e => setFormData({ ...formData, author: e.target.value })}
+                                    style={{ width: '100%', padding: '1rem', border: '1px solid #ddd', borderRadius: '8px' }}
+                                />
                             </div>
 
                             <div>
                                 <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Institutional Email</label>
-                                <input type="email" required placeholder="name@university.edu"
-                                    style={{ width: '100%', padding: '1rem', border: '1px solid #ddd', borderRadius: '8px' }} />
+                                <input
+                                    type="email"
+                                    required
+                                    placeholder="name@university.edu"
+                                    value={formData.email}
+                                    onChange={e => setFormData({ ...formData, email: e.target.value })}
+                                    style={{ width: '100%', padding: '1rem', border: '1px solid #ddd', borderRadius: '8px' }}
+                                />
                             </div>
                         </div>
 
                         <div style={{ marginBottom: '1.5rem' }}>
                             <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Abstract</label>
-                            <textarea rows={6} required placeholder="Paste your abstract here (approx. 200-250 words)..."
-                                style={{ width: '100%', padding: '1rem', border: '1px solid #ddd', borderRadius: '8px' }}></textarea>
-                            <p style={{ textAlign: 'right', color: '#999', fontSize: '0.8rem', marginTop: '0.5rem' }}>0 / 250 words</p>
+                            <textarea
+                                rows={6}
+                                required
+                                placeholder="Paste your abstract here (approx. 200-250 words)..."
+                                value={formData.abstract}
+                                onChange={e => setFormData({ ...formData, abstract: e.target.value })}
+                                style={{ width: '100%', padding: '1rem', border: '1px solid #ddd', borderRadius: '8px' }}
+                            ></textarea>
+                            <p style={{ textAlign: 'right', color: '#999', fontSize: '0.8rem', marginTop: '0.5rem' }}>{formData.abstract.split(' ').filter(x => x).length} / 250 words</p>
                         </div>
 
                         <div style={{ marginBottom: '2rem' }}>
@@ -123,16 +194,23 @@ export default function Submission() {
                                 padding: '3rem', border: '2px dashed #b0bec5', borderRadius: '12px', textAlign: 'center',
                                 background: '#fbfbfb', cursor: 'pointer', position: 'relative'
                             }}>
-                                <input type="file" required accept=".pdf,.doc,.docx"
-                                    style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer' }} />
+                                <input
+                                    type="file"
+                                    required
+                                    accept=".pdf,.doc,.docx"
+                                    onChange={handleFileChange}
+                                    style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer' }}
+                                />
                                 <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📄</div>
-                                <h4 style={{ marginBottom: '0.5rem' }}>Drag & drop your file here</h4>
+                                <h4 style={{ marginBottom: '0.5rem' }}>{file ? file.name : "Drag & drop your file here"}</h4>
                                 <p style={{ color: '#78909c' }}>or click to browse</p>
                             </div>
                         </div>
 
                         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
-                            <button type="submit" className="cta-button">Submit Research</button>
+                            <button type="submit" className="cta-button" disabled={loading}>
+                                {loading ? 'Submitting...' : 'Submit Research'}
+                            </button>
                         </div>
                     </form>
                 </div>
