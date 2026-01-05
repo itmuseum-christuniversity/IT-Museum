@@ -1,6 +1,5 @@
 import { useEffect, useState } from 'react';
-import { collection, query, orderBy, onSnapshot } from "firebase/firestore";
-import { db } from '../firebase-config';
+import { contentService } from '../services/contentService';
 
 interface SectionData {
     id: string;
@@ -14,16 +13,15 @@ export default function DynamicHomeSections() {
     const [sections, setSections] = useState<SectionData[]>([]);
 
     useEffect(() => {
-        const q = query(collection(db, "sections"), orderBy("order", "asc"));
-        const unsubscribe = onSnapshot(q, (snapshot) => {
-            const secs: SectionData[] = [];
-            snapshot.forEach((doc) => {
-                secs.push({ id: doc.id, ...doc.data() } as SectionData);
-            });
-            setSections(secs);
-        });
-
-        return () => unsubscribe();
+        const loadSections = async () => {
+            try {
+                const data = await contentService.getSections();
+                setSections(data as SectionData[]);
+            } catch (error) {
+                console.error("Error loading sections:", error);
+            }
+        };
+        loadSections();
     }, []);
 
     return (

@@ -1,23 +1,17 @@
 import { useState, useEffect } from 'react';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, User } from "firebase/auth";
-import { collection, addDoc, deleteDoc, doc, query, orderBy, onSnapshot } from "firebase/firestore";
-import { auth, db } from '../firebase-config';
+import { auth } from '../firebase-config';
 import ReviewPanel from '../components/admin/ReviewPanel';
+import { contentService, Section } from '../services/contentService';
 
 // Define types for Section data
-interface Section {
-    id: string;
-    title: string;
-    content: string;
-    order: number;
-}
+
 
 type UserRole = 'admin' | 'reviewer_first' | 'reviewer_technical' | 'reviewer_literature';
 
 export default function Admin() {
     const [user, setUser] = useState<User | null>(null);
     const [role, setRole] = useState<UserRole>('admin');
-    const [activeTab, setActiveTab] = useState<'content' | 'reviews'>('content');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(true);
@@ -44,17 +38,22 @@ export default function Admin() {
     }, []);
 
     // Subscribe to sections for list view (Admin only)
+    // Subscribe to sections for list view (Admin only)
     useEffect(() => {
         if (!user || role !== 'admin') return;
-        const q = query(collection(db, "sections"), orderBy("order", "asc"));
-        const unsubscribe = onSnapshot(q, (snapshot) => {
-            const secs: Section[] = [];
-            snapshot.forEach((doc) => {
-                secs.push({ id: doc.id, ...doc.data() } as Section);
-            });
-            setSections(secs);
-        });
-        return () => unsubscribe();
+
+        const loadSections = async () => {
+            try {
+                const data = await contentService.getSections();
+                setSections(data as Section[]);
+            } catch (error) {
+                console.error("Error loading sections:", error);
+            }
+        };
+
+        loadSections();
+        // Set up an interval or real-time subscription here if needed. 
+        // For now, simple fetch on load is robust.
     }, [user, role]);
 
     const handleLogin = async (e: React.FormEvent) => {
@@ -98,7 +97,7 @@ export default function Admin() {
         if (role !== 'admin') return;
         e.preventDefault();
         try {
-            await addDoc(collection(db, "sections"), {
+            await contentService.addSection({
                 title,
                 content,
                 order: Date.now()
@@ -106,6 +105,9 @@ export default function Admin() {
             alert("Section Added");
             setTitle('');
             setContent('');
+            // Refresh list
+            const data = await contentService.getSections();
+            setSections(data as Section[]);
         } catch (error: any) {
             alert("Error: " + error.message);
         }
@@ -114,7 +116,9 @@ export default function Admin() {
     const handleDelete = async (id: string) => {
         if (!window.confirm("Delete this section?")) return;
         try {
-            await deleteDoc(doc(db, "sections", id));
+            await contentService.deleteSection(id);
+            // Refresh list
+            setSections(sections.filter(s => s.id !== id));
         } catch (error: any) {
             alert("Error: " + error.message);
         }
@@ -240,7 +244,7 @@ export default function Admin() {
                             {sections.map(sec => (
                                 <div key={sec.id} style={{ background: 'white', padding: '1rem', borderRadius: '8px', boxShadow: '0 2px 5px rgba(0,0,0,0.1)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                                     <span>{sec.title || 'Untitled Section'}</span>
-                                    <button onClick={() => handleDelete(sec.id)} style={{ color: 'red', border: 'none', background: 'none', cursor: 'pointer' }}>Delete</button>
+                                    <button onClick={() => sec.id && handleDelete(sec.id)} style={{ color: 'red', border: 'none', background: 'none', cursor: 'pointer' }}>Delete</button>
                                 </div>
                             ))}
                         </div>

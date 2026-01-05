@@ -3,9 +3,28 @@ import { useNavigate } from 'react-router-dom';
 import DynamicCollections from '../components/DynamicCollections';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
 
+import { useState, useEffect } from 'react';
+import { articleService, Article } from '../services/articleService';
+
 export default function Collection() {
     useScrollAnimation();
     const navigate = useNavigate();
+    const [articles, setArticles] = useState<Article[]>([]);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const loadArticles = async () => {
+            try {
+                const data = await articleService.getAcceptedArticles();
+                setArticles(data);
+            } catch (error) {
+                console.error("Failed to load articles", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        loadArticles();
+    }, []);
 
     return (
         <div className="page active" style={{ display: 'block' }}>
@@ -31,29 +50,24 @@ export default function Collection() {
                         </div>
                     </a>
 
-                    {/* Exhibit 2: Placeholder */}
-                    <a className="gallery-item">
-                        <div className="gallery-thumb">
-                            <div style={{ width: '100%', height: '100%', background: 'linear-gradient(45deg, #263238, #546e7a)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '3rem' }}>💾</div>
-                        </div>
-                        <div className="gallery-content">
-                            <span className="gallery-tag">Hardware History</span>
-                            <h3>Evolution of Storage</h3>
-                            <p style={{ color: 'var(--text-muted)', marginTop: '0.5rem' }}>(Coming Soon) From punch cards to DNA storage, a journey through data persistence.</p>
-                        </div>
-                    </a>
-
-                    {/* Exhibit 3: Placeholder */}
-                    <a className="gallery-item">
-                        <div className="gallery-thumb">
-                            <div style={{ width: '100%', height: '100%', background: 'linear-gradient(45deg, #006064, #0097A7)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '3rem' }}>🕸️</div>
-                        </div>
-                        <div className="gallery-content">
-                            <span className="gallery-tag">AI & Networks</span>
-                            <h3>Neural Origins</h3>
-                            <p style={{ color: 'var(--text-muted)', marginTop: '0.5rem' }}>(Coming Soon) Tracing the early mathematical models that paved the way for modern AI.</p>
-                        </div>
-                    </a>
+                    {/* Dynamic Articles from Supabase */}
+                    {loading ? (
+                        <p>Loading archive...</p>
+                    ) : (
+                        articles.map((article) => (
+                            <a key={article.id} href={article.file_url} target="_blank" rel="noopener noreferrer" className="gallery-item">
+                                <div className="gallery-thumb">
+                                    <div style={{ width: '100%', height: '100%', background: 'linear-gradient(45deg, #006064, #0097A7)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '3rem' }}>📄</div>
+                                </div>
+                                <div className="gallery-content">
+                                    <span className="gallery-tag">Research Paper</span>
+                                    <h3>{article.title}</h3>
+                                    <p style={{ color: 'var(--text-muted)', marginTop: '0.5rem' }}>By {article.author_name}</p>
+                                    <p style={{ fontSize: '0.9rem', marginTop: '0.5rem', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{article.abstract}</p>
+                                </div>
+                            </a>
+                        ))
+                    )}
                 </div>
 
                 <div style={{ marginTop: '3rem' }} className="gallery-grid">

@@ -28,7 +28,7 @@ export default function Header() {
                     <li><Link to="/team" className={isActive('/team')}>Team</Link></li>
                     <li><Link to="/contact" className={isActive('/contact')}>Contact</Link></li>
                     <li><Link to="/submission" style={{ color: 'var(--primary)', fontWeight: 600 }}>Submit Article</Link></li>
-                    <li><Link to="/admin" style={{ border: '1px solid var(--primary)', padding: '5px 15px', borderRadius: '20px', color: 'var(--primary)' }}>Admin</Link></li>
+                    <li><Link to="/admin" className="admin-btn">Admin</Link></li>
                 </ul>
             </nav>
         </header>

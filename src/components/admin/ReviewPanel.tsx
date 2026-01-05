@@ -1,24 +1,10 @@
 import { useState, useEffect } from 'react';
-import { collection, query, where, onSnapshot, doc, updateDoc, arrayUnion } from 'firebase/firestore';
-import { db } from '../../firebase-config';
-
-interface Article {
-    id: string;
-    title: string;
-    author: string;
-    email: string;
-    abstract: string;
-    status: string;
-    submittedAt: any;
-    originalFilename: string;
-    fileUrl: string;
-    history?: any[];
-}
+import { articleService, Article } from '../../services/articleService';
 
 interface ReviewPanelProps {
     title: string;
-    currentStageStatus: string; // e.g., 'submitted'
-    nextStageStatus: string;    // e.g., 'approved_first'
+    currentStageStatus: Article['status'];
+    nextStageStatus: Article['status'];
     reviewerName: string;
 }
 
@@ -32,55 +18,44 @@ export default function ReviewPanel({ title, currentStageStatus, nextStageStatus
     const [notifications, setNotifications] = useState<any[]>([]);
 
     useEffect(() => {
-        const q = query(
-            collection(db, "articles"),
-            where("status", "==", currentStageStatus)
-        );
-
-        const unsubscribe = onSnapshot(q, (snapshot) => {
-            const arts: Article[] = [];
-            snapshot.forEach((doc) => {
-                arts.push({ id: doc.id, ...doc.data() } as Article);
-            });
-            setArticles(arts);
-            setLoading(false);
-        });
-
-        return () => unsubscribe();
+        const loadArticles = async () => {
+            try {
+                // Always fetch pending articles based on the current stage status
+                // The service now handles filtering by the status passed
+                let data = await articleService.getPendingArticles(currentStageStatus);
+                setArticles(data);
+            } catch (error) {
+                console.error("Error loading articles:", error);
+            } finally {
+                setLoading(false);
+            }
+        };
+        loadArticles();
     }, [currentStageStatus]);
 
     // Derived notifications from article history
     useEffect(() => {
-        if (articles.length > 0) {
-            // Flatten history of all visible articles to find recent activity
-            const recent = articles.flatMap(a => a.history || [])
-                .filter((h: any) => h)
-                .sort((a: any, b: any) => new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime())
-                .slice(0, 3);
-            setNotifications(recent);
-        }
+        // Mock notifications or implement history later if needed
+        setNotifications([]);
     }, [articles]);
 
     const handleEditStart = (article: Article) => {
-        setEditingId(article.id);
+        setEditingId(article.id || null);
         setEditForm({ title: article.title, abstract: article.abstract });
     };
 
     const handleEditSave = async (id: string) => {
         try {
-            const articleRef = doc(db, "articles", id);
-            await updateDoc(articleRef, {
-                title: editForm.title,
-                abstract: editForm.abstract,
-                history: arrayUnion({
-                    stage: title,
-                    action: 'edited',
-                    timestamp: new Date().toISOString(),
-                    reviewed_by: reviewerName
-                })
-            });
-            setEditingId(null);
-            alert("Changes saved successfully!");
+            if (id) {
+                await articleService.updateArticleDetails(id, {
+                    title: editForm.title,
+                    abstract: editForm.abstract
+                });
+                // Update local state
+                setArticles(articles.map(a => a.id === id ? { ...a, ...editForm } : a));
+                setEditingId(null);
+                alert("Changes saved successfully!");
+            }
         } catch (error: any) {
             alert("Error saving: " + error.message);
         }
@@ -89,16 +64,11 @@ export default function ReviewPanel({ title, currentStageStatus, nextStageStatus
     const handleApprove = async (articleId: string) => {
         if (!window.confirm("Approve this article for the next stage?")) return;
         try {
-            const articleRef = doc(db, "articles", articleId);
-            await updateDoc(articleRef, {
-                status: nextStageStatus,
-                history: arrayUnion({
-                    stage: title,
-                    action: 'approved',
-                    timestamp: new Date().toISOString(),
-                    reviewed_by: reviewerName
-                })
-            });
+            if (articleId) {
+                await articleService.updateStatus(articleId, nextStageStatus);
+                // Refresh list locally
+                setArticles(articles.filter(a => a.id !== articleId));
+            }
         } catch (error: any) {
             alert("Error approving: " + error.message);
         }
@@ -109,17 +79,10 @@ export default function ReviewPanel({ title, currentStageStatus, nextStageStatus
         if (!reason) return;
 
         try {
-            const articleRef = doc(db, "articles", articleId);
-            await updateDoc(articleRef, {
-                status: 'rejected',
-                history: arrayUnion({
-                    stage: title,
-                    action: 'rejected',
-                    reason: reason,
-                    timestamp: new Date().toISOString(),
-                    reviewed_by: reviewerName
-                })
-            });
+            if (articleId) {
+                await articleService.updateStatus(articleId, 'rejected');
+                setArticles(articles.filter(a => a.id !== articleId));
+            }
         } catch (error: any) {
             alert("Error rejecting: " + error.message);
         }
@@ -187,7 +150,7 @@ export default function ReviewPanel({ title, currentStageStatus, nextStageStatus
                                         <h3 style={{ margin: 0, color: 'var(--primary)' }}>{article.title}</h3>
                                     )}
 
-                                    <p style={{ margin: '0.5rem 0', color: '#666' }}>By {article.author} ({article.email})</p>
+                                    <p style={{ margin: '0.5rem 0', color: '#666' }}>By {article.author_name} ({article.institution_email})</p>
                                 </div>
                                 <span style={{
                                     padding: '0.25rem 0.75rem',
@@ -219,8 +182,8 @@ export default function ReviewPanel({ title, currentStageStatus, nextStageStatus
 
                             <div style={{ marginBottom: '1.5rem' }}>
                                 <strong>Attachment: </strong>
-                                <a href={article.fileUrl} target="_blank" rel="noreferrer" style={{ color: 'var(--secondary)', fontWeight: 500 }}>
-                                    {article.originalFilename}
+                                <a href={article.file_url} target="_blank" rel="noreferrer" style={{ color: 'var(--secondary)', fontWeight: 500 }}>
+                                    View File
                                 </a>
                             </div>
 
@@ -228,7 +191,7 @@ export default function ReviewPanel({ title, currentStageStatus, nextStageStatus
                                 {editingId === article.id ? (
                                     <>
                                         <button
-                                            onClick={() => handleEditSave(article.id)}
+                                            onClick={() => article.id && handleEditSave(article.id)}
                                             className="cta-button"
                                             style={{ flex: 1, background: '#1976d2', boxShadow: 'none' }}
                                         >
@@ -245,7 +208,7 @@ export default function ReviewPanel({ title, currentStageStatus, nextStageStatus
                                 ) : (
                                     <>
                                         <button
-                                            onClick={() => handleEditStart(article)}
+                                            onClick={() => article.id && handleEditStart(article)}
                                             className="cta-button secondary"
                                             style={{ flex: 0.5, border: '1px solid #90a4ae', color: '#546e7a' }}
                                             title="Edit Article Details"
@@ -253,14 +216,14 @@ export default function ReviewPanel({ title, currentStageStatus, nextStageStatus
                                             ✏️ Edit
                                         </button>
                                         <button
-                                            onClick={() => handleApprove(article.id)}
+                                            onClick={() => article.id && handleApprove(article.id)}
                                             className="cta-button"
                                             style={{ flex: 1, background: '#2e7d32' }}
                                         >
                                             ✅ Approve
                                         </button>
                                         <button
-                                            onClick={() => handleReject(article.id)}
+                                            onClick={() => article.id && handleReject(article.id)}
                                             className="cta-button"
                                             style={{ flex: 1, background: '#c62828' }}
                                         >

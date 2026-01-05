@@ -1,7 +1,6 @@
 import { FormEvent, useState } from 'react';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
-import { collection, addDoc, serverTimestamp } from 'firebase/firestore';
-import { db } from '../firebase-config';
+import { articleService } from '../services/articleService';
 
 export default function Submission() {
     useScrollAnimation();
@@ -29,21 +28,20 @@ export default function Submission() {
             // In a real app, upload file to Storage, get URL, then save to Firestore.
             // For now, we simulate the file URL.
 
-            await addDoc(collection(db, "articles"), {
-                ...formData,
-                status: 'submitted',
-                submittedAt: serverTimestamp(),
-                originalFilename: file ? file.name : 'unknown',
-                fileUrl: '#', // Placeholder for actual storage URL
-                history: [
-                    {
-                        stage: 'submission',
-                        action: 'submit',
-                        timestamp: new Date().toISOString(),
-                        user: formData.email
-                    }
-                ]
-            });
+            if (!file) {
+                alert('Please select a file to upload.');
+                setLoading(false);
+                return;
+            }
+
+            // Submit using Supabase service
+            await articleService.submitArticle({
+                title: formData.title,
+                author_name: formData.author,
+                institution_email: formData.email,
+                abstract: formData.abstract,
+                status: 'submitted'
+            }, file);
 
             alert('Thank you for your submission! Our academic panel will review it shortly.');
             setFormData({ title: '', author: '', email: '', abstract: '' });
