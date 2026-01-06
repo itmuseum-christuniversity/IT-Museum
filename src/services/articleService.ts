@@ -16,9 +16,8 @@ export interface Article {
 
 export const articleService = {
     // Submit a new article
-    // Submit a new article
     async submitArticle(data: Article, googleDocUrl: string) {
-        // Direct Insert Record with the URL
+        // 1. Insert Record directly with the URL
         const { data: article, error: dbError } = await supabase
             .from('articles')
             .insert([

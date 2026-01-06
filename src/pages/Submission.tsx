@@ -13,13 +13,30 @@ export default function Submission() {
         abstract: ''
     });
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> a4a7950 (made the changes to google docs)
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         setLoading(true);
 
         try {
+<<<<<<< HEAD
             if (!googleDocUrl.includes('docs.google.com')) {
                 alert('Please provide a valid Google Docs URL (docs.google.com).');
+=======
+            if (!googleDocUrl) {
+                alert('Please provide the Google Docs URL.');
+                setLoading(false);
+                return;
+            }
+
+            // Basic validation for Google Docs URL
+            if (!googleDocUrl.includes('docs.google.com')) {
+                alert('Please enter a valid Google Docs URL (e.g., https://docs.google.com/document/d/...)');
+>>>>>>> a4a7950 (made the changes to google docs)
                 setLoading(false);
                 return;
             }
@@ -66,8 +83,8 @@ export default function Submission() {
                             width: '40px', height: '40px', borderRadius: '50%', display: 'flex',
                             alignItems: 'center', justifyContent: 'center', fontWeight: 700, margin: '0 auto 1rem'
                         }}>1</div>
-                        <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>Download Template</h3>
-                        <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Use the official IEEE format to ensure your article meets our publication standards.</p>
+                        <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>View Template</h3>
+                        <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>View our Google Doc template to see the required format and structure.</p>
                     </div>
 
                     <div className="card-premium" style={{ flex: '1', minWidth: '250px', maxWidth: '300px', textAlign: 'center', padding: '2rem' }}>
@@ -109,12 +126,12 @@ export default function Submission() {
                                 </ul>
                             </div>
                             <div>
-                                <a href="https://www.ieee.org/content/dam/ieee-org/ieee/web/org/conferences/conference-template-a4.docx"
+                                <a href="https://docs.google.com/document/d/1K7n8O0YxF9ywZ-2pG_y5jX5uPq4l3-2/edit" // Replace with actual template link
                                     target="_blank" rel="noopener noreferrer" className="cta-button"
                                     style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
-                                    <span>Download IEEE Template</span>
+                                    <span>View Google Doc Template</span>
                                 </a>
-                                <p style={{ textAlign: 'center', color: 'rgba(255,255,255,0.7)', marginTop: '0.5rem', fontSize: '0.85rem' }}>.DOCX Format</p>
+                                <p style={{ textAlign: 'center', color: 'rgba(255,255,255,0.7)', marginTop: '0.5rem', fontSize: '0.85rem' }}>View-only access</p>
                             </div>
                         </div>
                     </div>
@@ -177,17 +194,30 @@ export default function Submission() {
                         </div>
 
                         <div style={{ marginBottom: '2rem' }}>
+<<<<<<< HEAD
                             <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Google Document Link</label>
                             <input
                                 type="url"
                                 required
                                 placeholder="https://docs.google.com/document/d/..."
+=======
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Google Docs Link</label>
+                            <input
+                                type="url"
+                                required
+                                placeholder="Paste your Google Docs URL here (e.g. https://docs.google.com/document/d/...)"
+>>>>>>> a4a7950 (made the changes to google docs)
                                 value={googleDocUrl}
                                 onChange={e => setGoogleDocUrl(e.target.value)}
                                 style={{ width: '100%', padding: '1rem', border: '1px solid #ddd', borderRadius: '8px' }}
                             />
+<<<<<<< HEAD
                             <p style={{ color: '#666', fontSize: '0.85rem', marginTop: '0.5rem' }}>
                                 Please ensure share settings are set to <strong>"Anyone with the link can comment"</strong>.
+=======
+                            <p style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666' }}>
+                                * Please ensure your document Link Sharing is set to "Anyone with the link can comment" so our reviewers can provide feedback.
+>>>>>>> a4a7950 (made the changes to google docs)
                             </p>
                         </div>
 

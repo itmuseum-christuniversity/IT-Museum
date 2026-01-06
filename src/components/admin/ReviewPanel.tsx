@@ -183,9 +183,9 @@ export default function ReviewPanel({ title, currentStageStatus, nextStageStatus
                             </div>
 
                             <div style={{ marginBottom: '1.5rem' }}>
-                                <strong>Attachment: </strong>
+                                <strong>Submission: </strong>
                                 <a href={article.file_url} target="_blank" rel="noreferrer" style={{ color: 'var(--secondary)', fontWeight: 500 }}>
-                                    View File
+                                    Open Google Doc 🔗
                                 </a>
                             </div>
 
