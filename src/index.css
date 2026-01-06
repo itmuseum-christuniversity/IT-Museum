@@ -138,8 +138,6 @@ nav {
 .logo-museum {
     height: 35px;
     object-fit: contain;
-    /* Crop the right side to remove the embedded pipe symbol */
-    clip-path: inset(0 15px 0 0); 
 }
 
 .logo-separator {

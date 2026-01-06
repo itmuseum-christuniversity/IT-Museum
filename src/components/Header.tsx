@@ -1,7 +1,7 @@
 
 import { Link, useLocation } from 'react-router-dom';
 import christLogo from '../assets/christ-logo.png';
-import museumLogo from '../assets/museum-logo.png';
+import museumLogo from '../assets/dataart-museum-logo.jpg';
 
 export default function Header() {
     const location = useLocation();
