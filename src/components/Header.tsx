@@ -1,5 +1,7 @@
 
 import { Link, useLocation } from 'react-router-dom';
+import christLogo from '../assets/christ-logo.png';
+import museumLogo from '../assets/museum-logo.png';
 
 export default function Header() {
     const location = useLocation();
@@ -10,16 +12,10 @@ export default function Header() {
     return (
         <header>
             <nav>
-                <div className="logo-container" style={{ cursor: 'pointer' }}>
-                    <div className="logo-text">
-                        <span style={{ fontSize: '1.2rem', fontWeight: 700, color: '#1a1a1a' }}>CHRIST</span>
-                        <span style={{ fontSize: '0.8rem', fontWeight: 500, color: '#546e7a', marginLeft: '5px' }}>(Deemed to be University)</span>
-                    </div>
-                    <div style={{ height: '35px', width: '1px', background: '#e0e0e0' }}></div>
-                    <div className="logo-text">
-                        <span style={{ fontSize: '1.2rem', fontWeight: 700, color: '#D32F2F' }}>DataArt</span>
-                        <span style={{ fontSize: '0.8rem', fontWeight: 500, color: '#546e7a', marginLeft: '5px' }}>IT Museum</span>
-                    </div>
+                <div className="logo-container">
+                    <img src={christLogo} alt="Christ University Logo" className="logo-christ" />
+                    <div className="logo-separator"></div>
+                    <img src={museumLogo} alt="IT Museum Logo" className="logo-museum" />
                 </div>
 
                 <ul className="nav-links">
