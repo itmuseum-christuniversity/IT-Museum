@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, User } from "firebase/auth";
 import { auth } from '../firebase-config';
 import ReviewPanel from '../components/admin/ReviewPanel';
+import KeywordExtractor from '../components/admin/KeywordExtractor';
 import { contentService, Section } from '../services/contentService';
 
 // Define types for Section data
@@ -207,9 +208,13 @@ export default function Admin() {
                         <ReviewPanel
                             title="Final Publisher Approval"
                             currentStageStatus="approved_literature"
-                            nextStageStatus="published"
+                            nextStageStatus="ready_for_publishing"
                             reviewerName={user.email || 'Admin'}
                         />
+
+                        <div style={{ borderTop: '2px solid #eee', margin: '4rem 0' }}></div>
+
+                        <KeywordExtractor />
 
                         <div style={{ borderTop: '2px solid #eee', margin: '4rem 0' }}></div>
 

@@ -9,7 +9,7 @@ export interface Article {
     institution_email: string;
     abstract: string;
     file_url?: string;
-    status: 'submitted' | 'under_review' | 'accepted' | 'rejected' | 'approved_first' | 'approved_technical' | 'approved_literature' | 'published';
+    status: 'submitted' | 'under_review' | 'accepted' | 'rejected' | 'approved_first' | 'approved_technical' | 'approved_literature' | 'ready_for_publishing' | 'published';
     created_at?: string;
     tags?: string[];
 }

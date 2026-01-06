@@ -8,7 +8,7 @@ interface ReviewPanelProps {
     reviewerName: string;
 }
 
-export default function ReviewPanel({ title, currentStageStatus, nextStageStatus, reviewerName }: ReviewPanelProps) {
+export default function ReviewPanel({ title, currentStageStatus, nextStageStatus, reviewerName: _reviewerName }: ReviewPanelProps) {
     const [articles, setArticles] = useState<Article[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -220,7 +220,7 @@ export default function ReviewPanel({ title, currentStageStatus, nextStageStatus
                                             className="cta-button"
                                             style={{ flex: 1, background: '#2e7d32' }}
                                         >
-                                            ✅ Approve
+                                            ✅ {nextStageStatus === 'ready_for_publishing' ? 'Move to Analysis' : 'Approve'}
                                         </button>
                                         <button
                                             onClick={() => article.id && handleReject(article.id)}
