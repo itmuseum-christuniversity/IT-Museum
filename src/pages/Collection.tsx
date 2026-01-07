@@ -122,9 +122,6 @@ export default function Collection() {
                                     <div className="gallery-content">
                                         <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '0.5rem' }}>
                                             <span className="gallery-tag">Research Paper</span>
-                                            {article.tags?.slice(0, 2).map((t, i) => (
-                                                <span key={i} style={{ fontSize: '0.7rem', padding: '2px 8px', background: '#eee', borderRadius: '4px', color: '#666' }}>{t}</span>
-                                            ))}
                                         </div>
                                         <h3>{article.title}</h3>
                                         <p style={{ color: 'var(--text-muted)', marginTop: '0.5rem' }}>By {article.author_name}</p>

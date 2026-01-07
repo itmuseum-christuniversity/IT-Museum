@@ -16,30 +16,15 @@ export interface Article {
 
 export const articleService = {
     // Submit a new article
-    async submitArticle(data: Article, file: File) {
-        // 1. Upload File
-        const fileExt = file.name.split('.').pop();
-        const fileName = `${Math.random().toString(36).substring(2)}_${Date.now()}.${fileExt}`;
-        const filePath = `${fileName}`;
-
-        const { error: uploadError } = await supabase.storage
-            .from('research-papers')
-            .upload(filePath, file);
-
-        if (uploadError) throw uploadError;
-
-        // 2. Get Public URL
-        const { data: { publicUrl } } = supabase.storage
-            .from('research-papers')
-            .getPublicUrl(filePath);
-
-        // 3. Insert Record
+    // Submit a new article
+    async submitArticle(data: Article, googleDocUrl: string) {
+        // Direct Insert Record with the URL
         const { data: article, error: dbError } = await supabase
             .from('articles')
             .insert([
                 {
                     ...data,
-                    file_url: publicUrl,
+                    file_url: googleDocUrl,
                     status: 'submitted'
                 }
             ])

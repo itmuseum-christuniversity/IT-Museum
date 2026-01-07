@@ -6,9 +6,10 @@ interface ReviewPanelProps {
     currentStageStatus: Article['status'];
     nextStageStatus: Article['status'];
     reviewerName: string;
+    onActionComplete?: () => void;
 }
 
-export default function ReviewPanel({ title, currentStageStatus, nextStageStatus, reviewerName: _reviewerName }: ReviewPanelProps) {
+export default function ReviewPanel({ title, currentStageStatus, nextStageStatus, reviewerName: _reviewerName, onActionComplete }: ReviewPanelProps) {
     const [articles, setArticles] = useState<Article[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -68,6 +69,7 @@ export default function ReviewPanel({ title, currentStageStatus, nextStageStatus
                 await articleService.updateStatus(articleId, nextStageStatus);
                 // Refresh list locally
                 setArticles(articles.filter(a => a.id !== articleId));
+                if (onActionComplete) onActionComplete();
             }
         } catch (error: any) {
             alert("Error approving: " + error.message);

@@ -61,23 +61,41 @@ export default function KeywordExtractor() {
             setProgress(60);
             await new Promise(r => setTimeout(r, 300));
 
-            // Extract keywords
+            // 1. Extract Keywords (Standard NLP)
             const extractionResult = keyword_extractor.extract(text, {
                 language: "english",
                 remove_digits: true,
-                return_changed_case: true,
+                return_changed_case: true, // Keep original case for potential proper nouns here too
                 remove_duplicates: true
             });
 
-            setProgress(90);
+            // 2. Extract Proper Nouns via Regex (Simple heuristic: Capitalized words in middle of sentences)
+            // Matches words starting with Capital not at start of sentence (conceptually hard without sentence splitting, 
+            // but simply matching [A-Z][a-z]+ can work well for names/places)
+            const properNounRegex = /\b[A-Z][a-zA-Z]+\b/g;
+            const properNouns = text.match(properNounRegex) || [];
 
-            // Filter for length and relevance (simple heuristic)
-            const filteredKeywords = extractionResult
+            // Filter common stop words from proper nouns just in case (like 'The', 'A')
+            const commonStarts = ['The', 'A', 'An', 'This', 'That', 'It', 'In', 'On', 'For', 'Of', 'With', 'And', 'But'];
+            const filteredProperNouns = properNouns.filter(w => !commonStarts.includes(w) && w.length > 3);
+
+            // Combine
+            const allCandidates = [...filteredProperNouns, ...extractionResult];
+
+            // Filter and Deduplicate
+            const uniqueKeywords = Array.from(new Set(allCandidates));
+
+            // Select Top Results (Logic: Proper nouns first, then others)
+            // Dynamic limit: Base 30, plus 1 for every 30 words, capped at 100 to prevent UI clutter
+            const wordCount = text.split(/\s+/).length;
+            const dynamicLimit = Math.min(100, Math.max(30, Math.ceil(wordCount / 30)));
+
+            const finalKeywords = uniqueKeywords
                 .filter(w => w.length > 3)
-                .slice(0, 15); // Top 15 keywords
+                .slice(0, dynamicLimit);
 
             // Merge with existing unique keywords
-            const newKeywords = Array.from(new Set([...keywords, ...filteredKeywords]));
+            const newKeywords = Array.from(new Set([...keywords, ...finalKeywords]));
             setKeywords(newKeywords);
 
             setProgress(100);
@@ -171,6 +189,20 @@ export default function KeywordExtractor() {
                     {selectedArticle ? (
                         <div>
                             <h3 style={{ marginTop: 0 }}>Analysis: {selectedArticle.title}</h3>
+
+                            {selectedArticle.file_url && (
+                                <div style={{ marginBottom: '1.5rem', padding: '1rem', background: '#e3f2fd', borderRadius: '8px', border: '1px solid #90caf9' }}>
+                                    <p style={{ margin: 0, fontWeight: 500, color: '#1565c0' }}>
+                                        Original Submission: {' '}
+                                        <a href={selectedArticle.file_url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline' }}>
+                                            Open Google Doc ↗
+                                        </a>
+                                    </p>
+                                    <small style={{ display: 'block', marginTop: '0.5rem', color: '#555' }}>
+                                        Step 0: Open this doc, go to File &gt; Download &gt; Microsoft Word (.docx).
+                                    </small>
+                                </div>
+                            )}
 
                             <div style={{ background: '#f5f5f5', padding: '1.5rem', borderRadius: '8px', marginBottom: '2rem' }}>
                                 <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '0.5rem' }}>Step 1: Upload .docx File</label>

@@ -21,6 +21,7 @@ export default function Admin() {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [sections, setSections] = useState<Section[]>([]);
+    const [refreshKey, setRefreshKey] = useState(0);
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
@@ -210,49 +211,12 @@ export default function Admin() {
                             currentStageStatus="approved_literature"
                             nextStageStatus="ready_for_publishing"
                             reviewerName={user.email || 'Admin'}
+                            onActionComplete={() => setRefreshKey(prev => prev + 1)}
                         />
 
                         <div style={{ borderTop: '2px solid #eee', margin: '4rem 0' }}></div>
 
-                        <KeywordExtractor />
-
-                        <div style={{ borderTop: '2px solid #eee', margin: '4rem 0' }}></div>
-
-                        <h2>Website Content Management</h2>
-                        <div className="card-premium" style={{ marginBottom: '3rem', marginTop: '2rem' }}>
-                            <h3>Add New Home Section</h3>
-                            <form onSubmit={handleAddSection} style={{ marginTop: '2rem' }}>
-                                <div style={{ marginBottom: '1rem' }}>
-                                    <label style={{ display: 'block', marginBottom: '0.5rem' }}>Title</label>
-                                    <input
-                                        type="text"
-                                        value={title}
-                                        onChange={e => setTitle(e.target.value)}
-                                        style={{ width: '100%', padding: '10px', border: '1px solid #ddd', borderRadius: '8px' }}
-                                    />
-                                </div>
-                                <div style={{ marginBottom: '1rem' }}>
-                                    <label style={{ display: 'block', marginBottom: '0.5rem' }}>Content (HTML allowed)</label>
-                                    <textarea
-                                        value={content}
-                                        onChange={e => setContent(e.target.value)}
-                                        rows={5}
-                                        style={{ width: '100%', padding: '10px', border: '1px solid #ddd', borderRadius: '8px' }}
-                                    />
-                                </div>
-                                <button type="submit" className="cta-button" style={{ border: 'none' }}>Add Section</button>
-                            </form>
-                        </div>
-
-                        <h3>Existing Sections</h3>
-                        <div style={{ marginTop: '2rem', display: 'grid', gap: '1rem' }}>
-                            {sections.map(sec => (
-                                <div key={sec.id} style={{ background: 'white', padding: '1rem', borderRadius: '8px', boxShadow: '0 2px 5px rgba(0,0,0,0.1)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                                    <span>{sec.title || 'Untitled Section'}</span>
-                                    <button onClick={() => sec.id && handleDelete(sec.id)} style={{ color: 'red', border: 'none', background: 'none', cursor: 'pointer' }}>Delete</button>
-                                </div>
-                            ))}
-                        </div>
+                        <KeywordExtractor key={refreshKey} />
                     </>
                 );
         }

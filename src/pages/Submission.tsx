@@ -5,7 +5,7 @@ import { articleService } from '../services/articleService';
 export default function Submission() {
     useScrollAnimation();
     const [loading, setLoading] = useState(false);
-    const [file, setFile] = useState<File | null>(null);
+    const [googleDocUrl, setGoogleDocUrl] = useState('');
     const [formData, setFormData] = useState({
         title: '',
         author: '',
@@ -13,23 +13,13 @@ export default function Submission() {
         abstract: ''
     });
 
-    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files[0]) {
-            setFile(e.target.files[0]);
-        }
-    };
-
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         setLoading(true);
 
         try {
-            // Note: mixing Firestore and hypothetical storage upload
-            // In a real app, upload file to Storage, get URL, then save to Firestore.
-            // For now, we simulate the file URL.
-
-            if (!file) {
-                alert('Please select a file to upload.');
+            if (!googleDocUrl.includes('docs.google.com')) {
+                alert('Please provide a valid Google Docs URL (docs.google.com).');
                 setLoading(false);
                 return;
             }
@@ -41,11 +31,11 @@ export default function Submission() {
                 institution_email: formData.email,
                 abstract: formData.abstract,
                 status: 'submitted'
-            }, file);
+            }, googleDocUrl);
 
-            alert('Thank you for your submission! Our academic panel will review it shortly.');
+            alert('Thank you for your submission! Our academic panel will review it using the link provided.');
             setFormData({ title: '', author: '', email: '', abstract: '' });
-            setFile(null);
+            setGoogleDocUrl('');
         } catch (error: any) {
             console.error("Error submitting document: ", error);
             alert('Submission failed: ' + error.message);
@@ -87,7 +77,7 @@ export default function Submission() {
                             alignItems: 'center', justifyContent: 'center', fontWeight: 700, margin: '0 auto 1rem'
                         }}>2</div>
                         <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>Prepare Manuscript</h3>
-                        <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Include abstract, keywords, and rigorous analysis. Max file size 10MB.</p>
+                        <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Upload your work to Google Docs and ensure 'Anyone with the link can comment' access.</p>
                     </div>
 
                     <div className="card-premium" style={{ flex: '1', minWidth: '250px', maxWidth: '300px', textAlign: 'center', padding: '2rem' }}>
@@ -96,8 +86,8 @@ export default function Submission() {
                             width: '40px', height: '40px', borderRadius: '50%', display: 'flex',
                             alignItems: 'center', justifyContent: 'center', fontWeight: 700, margin: '0 auto 1rem'
                         }}>3</div>
-                        <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>Submit for Review</h3>
-                        <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Our academic panel will review your submission for originality and impact.</p>
+                        <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>Submit Link</h3>
+                        <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Submit the link here. Our academic panel will review your submission.</p>
                     </div>
                 </div>
 
@@ -115,7 +105,7 @@ export default function Submission() {
                                     <li>All submissions must be original and not properly published elsewhere.</li>
                                     <li>Articles must strictly follow the IEEE two-column format.</li>
                                     <li>Include a clear abstract (max 250 words) and keywords.</li>
-                                    <li>Graphics should be high-resolution (300 DPI+).</li>
+                                    <li><strong>Submit a Google Docs Link</strong> (Access: Anyone with link can comment).</li>
                                 </ul>
                             </div>
                             <div>
@@ -187,27 +177,23 @@ export default function Submission() {
                         </div>
 
                         <div style={{ marginBottom: '2rem' }}>
-                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Manuscript Upload</label>
-                            <div style={{
-                                padding: '3rem', border: '2px dashed #b0bec5', borderRadius: '12px', textAlign: 'center',
-                                background: '#fbfbfb', cursor: 'pointer', position: 'relative'
-                            }}>
-                                <input
-                                    type="file"
-                                    required
-                                    accept=".pdf,.doc,.docx"
-                                    onChange={handleFileChange}
-                                    style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', opacity: 0, cursor: 'pointer' }}
-                                />
-                                <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>📄</div>
-                                <h4 style={{ marginBottom: '0.5rem' }}>{file ? file.name : "Drag & drop your file here"}</h4>
-                                <p style={{ color: '#78909c' }}>or click to browse</p>
-                            </div>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Google Document Link</label>
+                            <input
+                                type="url"
+                                required
+                                placeholder="https://docs.google.com/document/d/..."
+                                value={googleDocUrl}
+                                onChange={e => setGoogleDocUrl(e.target.value)}
+                                style={{ width: '100%', padding: '1rem', border: '1px solid #ddd', borderRadius: '8px' }}
+                            />
+                            <p style={{ color: '#666', fontSize: '0.85rem', marginTop: '0.5rem' }}>
+                                Please ensure share settings are set to <strong>"Anyone with the link can comment"</strong>.
+                            </p>
                         </div>
 
                         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
                             <button type="submit" className="cta-button" disabled={loading}>
-                                {loading ? 'Submitting...' : 'Submit Research'}
+                                {loading ? 'Submitting...' : 'Submit Link for Review'}
                             </button>
                         </div>
                     </form>
