@@ -105,7 +105,7 @@ body {
 
 @keyframes slideInUp {
     from {
-        opactiy: 0;
+        opacity: 0;
         transform: translateY(40px);
     }
 
