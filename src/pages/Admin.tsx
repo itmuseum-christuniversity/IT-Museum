@@ -223,17 +223,26 @@ export default function Admin() {
     };
 
     return (
-        <div className="page active" style={{ display: 'block', padding: '2rem' }}>
-            <div className="article-container">
-                <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem' }}>
-                    <div>
-                        <h1>{role === 'admin' ? 'Admin Dashboard' : 'Reviewer Portal'}</h1>
-                        <p style={{ color: '#666' }}>Logged in as: {user.email} <span style={{ background: '#eee', padding: '2px 8px', borderRadius: '4px', fontSize: '0.8em', marginLeft: '10px' }}>{role}</span></p>
-                    </div>
-                    <button onClick={handleLogout} style={{ padding: '0.5rem 1rem', background: '#e0e0e0', border: 'none', borderRadius: '5px', cursor: 'pointer' }}>Logout</button>
-                </header>
+        <div className="page active" style={{ display: 'block' }}>
+            <section className="hero" style={{ minHeight: '40vh' }}>
+                <div className="hero-content">
+                    <h1>{role === 'admin' ? 'Admin Dashboard' : 'Reviewer Portal'}</h1>
+                    <p>Manage submissions, review articles, and curate the digital museum content.</p>
+                </div>
+            </section>
 
-                {renderDashboard()}
+            <div className="section" style={{ marginTop: '-4rem', position: 'relative', zIndex: 10 }}>
+                <div className="card-premium" style={{ minHeight: '600px' }}>
+                    <header style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '3rem', borderBottom: '1px solid #eee', paddingBottom: '1rem' }}>
+                        <div>
+                            <h2 style={{ margin: 0, fontSize: '1.8rem' }}>Welcome Back</h2>
+                            <p style={{ color: 'var(--text-muted)' }}>Logged in as: <strong>{user.email}</strong> <span style={{ background: 'var(--primary-light)', color: 'white', padding: '2px 8px', borderRadius: '4px', fontSize: '0.8em', marginLeft: '10px' }}>{role}</span></p>
+                        </div>
+                        <button onClick={handleLogout} className="cta-button secondary" style={{ fontSize: '0.9rem', padding: '0.5rem 1.5rem' }}>Logout</button>
+                    </header>
+
+                    {renderDashboard()}
+                </div>
             </div>
         </div>
     );

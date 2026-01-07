@@ -91,7 +91,7 @@ export default function Collection() {
                         For now, requested behavior implies searching the Supabase articles. I'll hide static items if searching to focus on results. 
                     */}
                     {!searchQuery && (
-                        <a onClick={() => navigate('/article/kolam')} className="gallery-item" style={{ cursor: 'pointer' }}>
+                        <a onClick={() => navigate('/article/kolam')} className="gallery-item slide-in-up" style={{ cursor: 'pointer' }}>
                             <div className="gallery-thumb">
                                 <div style={{ width: '100%', height: '100%', background: 'linear-gradient(45deg, #4A148C, #7B1FA2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '3rem' }}>🥨</div>
                             </div>
@@ -114,8 +114,8 @@ export default function Collection() {
                                 <p style={{ fontSize: '0.9rem' }}>Try checking your spelling or using different keywords.</p>
                             </div>
                         ) : (
-                            filteredArticles.map((article) => (
-                                <a key={article.id} href={article.file_url} target="_blank" rel="noopener noreferrer" className="gallery-item">
+                            filteredArticles.map((article, index) => (
+                                <a key={article.id} href={article.file_url} target="_blank" rel="noopener noreferrer" className="gallery-item slide-in-up" style={{ animationDelay: `${index * 100}ms` }}>
                                     <div className="gallery-thumb">
                                         <div style={{ width: '100%', height: '100%', background: 'linear-gradient(45deg, #006064, #0097A7)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '3rem' }}>📄</div>
                                     </div>

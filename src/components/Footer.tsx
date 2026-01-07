@@ -1,4 +1,6 @@
 import { Link } from 'react-router-dom';
+import christLogo from '../assets/christ-logo.png';
+import museumLogo from '../assets/dataart-museum-logo.jpg';
 
 export default function Footer() {
     return (
@@ -7,8 +9,9 @@ export default function Footer() {
                 {/* Brand Column */}
                 <div className="footer-col brand-col">
                     <div className="footer-logo">
-                        <span style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--footer-text-white)' }}>CHRIST</span>
-                        <span style={{ fontSize: '1.5rem', fontWeight: 800, color: 'var(--footer-accent)' }}>DataArt</span>
+                        <img src={christLogo} alt="Christ University" style={{ height: '50px', objectFit: 'contain', background: 'white', padding: '5px', borderRadius: '4px' }} />
+                        <div style={{ width: '1px', height: '30px', background: 'rgba(255,255,255,0.3)', margin: '0 15px' }}></div>
+                        <img src={museumLogo} alt="DataArt" style={{ height: '50px', objectFit: 'contain', borderRadius: '4px' }} />
                     </div>
                     <p className="footer-tagline">
                         Where Tradition Meets Computation.<br />

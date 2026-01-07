@@ -29,10 +29,18 @@ export default function Contact() {
                         </div>
                     </div>
 
-                    {/* Abstract Visual for Map */}
-                    <div style={{ background: 'var(--primary-light)', borderRadius: '24px', minHeight: '400px', display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative', overflow: 'hidden' }}>
-                        <div style={{ opacity: 0.2, fontSize: '15rem', color: 'white' }}>🗺️</div>
-                        <div style={{ position: 'absolute', bottom: '2rem', left: '2rem', background: 'white', padding: '1rem 2rem', borderRadius: '50px', fontWeight: 700 }}>Find us on Maps &nearr;</div>
+                    {/* Google Map Embed */}
+                    <div style={{ borderRadius: '24px', overflow: 'hidden', height: '400px', boxShadow: 'var(--shadow-soft)' }}>
+                        <iframe
+                            src="https://maps.google.com/maps?q=Christ+University+Yeshwanthpur+Campus+Bangalore&t=&z=15&ie=UTF8&iwloc=&output=embed"
+                            width="100%"
+                            height="100%"
+                            style={{ border: 0 }}
+                            allowFullScreen
+                            loading="lazy"
+                            referrerPolicy="no-referrer-when-downgrade"
+                            title="Christ University Yeshwantpur Campus Map"
+                        ></iframe>
                     </div>
                 </div>
             </section>

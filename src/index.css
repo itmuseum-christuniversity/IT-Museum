@@ -15,6 +15,8 @@
     --bg-glass: rgba(255, 255, 255, 0.85);
 
     --text-main: #1a1a1a;
+    --text-blue-theme: #1e40af;
+    /* Professional Blue for inner pages */
     --text-muted: #546e7a;
     --text-light: #eceff1;
 
@@ -23,12 +25,50 @@
     /* Blue Shadow */
     --shadow-gold: 0 4px 15px rgba(255, 215, 0, 0.3);
 
-    --radius-lg: 24px;
-    --radius-md: 16px;
+    --radius-lg: 2px;
+    /* Sharp edges */
+    --radius-md: 2px;
+    /* Sharp edges */
 
-    --font-heading: 'Outfit', 'Inter', sans-serif;
-    --font-body: 'Inter', sans-serif;
+    --font-heading: 'Raleway', sans-serif;
+    --font-body: 'Raleway', sans-serif;
 }
+
+/* Blue Theme for Non-Home Pages */
+.blue-theme {
+    --text-main: var(--text-blue-theme);
+    color: var(--text-blue-theme);
+}
+
+.blue-theme h1,
+.blue-theme h2,
+.blue-theme h3,
+.blue-theme h4,
+.blue-theme h5,
+.blue-theme h6 {
+    color: var(--primary);
+    /* Keep headings primary blue/gold or switch? Staying consistent usually better */
+}
+
+.blue-theme p,
+.blue-theme li,
+.blue-theme span,
+.blue-theme div {
+    color: var(--text-blue-theme);
+}
+
+/* Specific overrides for Hero section in Blue Theme */
+.blue-theme .hero h1 {
+    color: var(--primary);
+    text-shadow: none;
+    /* Remove shadow for cleaner look on white bg */
+}
+
+.blue-theme .hero p {
+    color: var(--text-blue-theme);
+    text-shadow: none;
+}
+
 
 * {
     margin: 0;
@@ -38,6 +78,8 @@
 
 body {
     font-family: var(--font-body);
+    font-weight: 600;
+    /* SemiBold Global */
     line-height: 1.7;
     color: var(--text-main);
     background: var(--bg-body);
@@ -61,6 +103,30 @@ body {
     }
 }
 
+@keyframes slideInUp {
+    from {
+        opactiy: 0;
+        transform: translateY(40px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
 @keyframes float {
     0% {
         transform: translateY(0px);
@@ -78,6 +144,32 @@ body {
 .fade-in {
     animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
 }
+
+.slide-in-up {
+    animation: slideInUp 0.8s ease-out forwards;
+}
+
+.slide-in-left {
+    animation: slideInLeft 0.8s ease-out forwards;
+}
+
+.animate-float {
+    animation: float 6s ease-in-out infinite;
+}
+
+/* Stagger delays utils */
+.delay-100 {
+    animation-delay: 100ms;
+}
+
+.delay-200 {
+    animation-delay: 200ms;
+}
+
+.delay-300 {
+    animation-delay: 300ms;
+}
+
 
 /* Utility Classes */
 .glass {
@@ -143,7 +235,8 @@ nav {
 .logo-separator {
     height: 35px;
     width: 1px;
-    background: #333; /* Darker to be more visible */
+    background: #333;
+    /* Darker to be more visible */
     margin: 0 15px;
 }
 
@@ -738,6 +831,7 @@ footer.footer-professional::before {
     z-index: 2000;
     backdrop-filter: blur(5px);
 }
+
 /* Admin Button Styling */
 .nav-links a.admin-btn {
     border: 1px solid var(--primary);
@@ -806,7 +900,7 @@ footer.footer-professional::before {
     width: 100%;
     height: 100%;
     background: radial-gradient(circle at 10% 20%, rgba(13, 71, 161, 0.05) 0%, transparent 40%),
-                radial-gradient(circle at 90% 80%, rgba(255, 215, 0, 0.08) 0%, transparent 40%);
+        radial-gradient(circle at 90% 80%, rgba(255, 215, 0, 0.08) 0%, transparent 40%);
     z-index: 1;
 }
 
@@ -814,6 +908,7 @@ footer.footer-professional::before {
     0% {
         transform: scale(1.1) translate(2%, 0);
     }
+
     100% {
         transform: scale(1.1) translate(-2%, 0);
     }

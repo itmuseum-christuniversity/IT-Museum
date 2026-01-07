@@ -19,7 +19,7 @@ export default function Home() {
                     </p>
                     <div className="btn-group fade-in" style={{ animationDelay: '0.4s' }}>
                         <Link className="cta-button" to="/collection">Explore the Archive</Link>
-                        <Link className="cta-button secondary" to="/team">Meet the Curators</Link>
+                        <Link className="cta-button secondary" style={{ background: 'white', border: 'none', boxShadow: 'var(--shadow-soft)' }} to="/team">Meet the Curators</Link>
                     </div>
                 </div>
             </section>
@@ -28,58 +28,37 @@ export default function Home() {
             <section className="section">
                 <h2>Our Core Mission</h2>
                 <div className="team-grid">
-                    <div className="profile-card">
-                        <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>👁️</div>
-                        <h3>Vision</h3>
-                        <p style={{ color: 'var(--text-muted)', marginTop: '1rem' }}>To digitally preserve intangible cultural heritage through the lens of ethnomathematics and array grammars.</p>
+                    <div className="profile-card" style={{ borderTop: '4px solid var(--primary)', position: 'relative' }}>
+                        <div style={{ color: 'var(--primary)', marginBottom: '1.5rem', display: 'flex', justifyContent: 'center' }}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" /><circle cx="12" cy="12" r="3" /></svg>
+                        </div>
+                        <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>Vision</h3>
+                        <p style={{ color: 'var(--text-muted)', lineHeight: '1.8' }}>
+                            To serve as a global beacon for the digital preservation of <strong>intangible cultural heritage</strong>. We aim to bridge the gap between ancient artistic traditions and modern computational science through the innovative lens of ethnomathematics.
+                        </p>
                     </div>
-                    <div className="profile-card">
-                        <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>🎯</div>
-                        <h3>Mission</h3>
-                        <p style={{ color: 'var(--text-muted)', marginTop: '1rem' }}>Archiving and modeling Kolam art to foster interdisciplinary research between art, culture, and algorithms.</p>
+                    <div className="profile-card" style={{ borderTop: '4px solid var(--accent)', position: 'relative' }}>
+                        <div style={{ color: 'var(--accent)', marginBottom: '1.5rem', display: 'flex', justifyContent: 'center' }}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10" /><path d="m9 12 2 2 4-4" /></svg>
+                        </div>
+                        <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>Mission</h3>
+                        <p style={{ color: 'var(--text-muted)', lineHeight: '1.8' }}>
+                            We are dedicated to meticulously archiving, analyzing, and modeling the intricate logic of <strong>traditional geometric art</strong> using Array Grammars. Our goal is to foster a vibrant interdisciplinary dialogue that unites art historians, mathematicians, and computer scientists.
+                        </p>
                     </div>
-                    <div className="profile-card">
-                        <div style={{ fontSize: '3rem', marginBottom: '1rem' }}>💎</div>
-                        <h3>Values</h3>
-                        <p style={{ color: 'var(--text-muted)', marginTop: '1rem' }}>Integrity in preservation, innovation in technology, and inclusivity in bringing rural arts to the global stage.</p>
+                    <div className="profile-card" style={{ borderTop: '4px solid var(--primary)', position: 'relative' }}>
+                        <div style={{ color: 'var(--primary)', marginBottom: '1.5rem', display: 'flex', justifyContent: 'center' }}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"><path d="M6 3h12l4 6-10 13L2 9Z" /><path d="M11 3 8 9l4 13 4-13-3-6" /></svg>
+                        </div>
+                        <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>Values</h3>
+                        <p style={{ color: 'var(--text-muted)', lineHeight: '1.8' }}>
+                            Our work is grounded in an unwavering commitment to <strong>integrity</strong> in preservation and <strong>inclusivity</strong> in access. We believe in the power of technology to democratize culture, ensuring that the wisdom of rural artisans is celebrated and preserved for future generations.
+                        </p>
                     </div>
                 </div>
             </section>
 
-            {/* Timeline Journey */}
-            <section className="section">
-                <h2>The Journey of Kolam Research</h2>
-                <div className="timeline-modern">
-                    <div className="timeline-track"></div>
 
-                    <div className="timeline-item">
-                        <div className="timeline-dot"></div>
-                        <div className="timeline-content">
-                            <span className="profile-badge">1954</span>
-                            <h3>Foundations at MCC</h3>
-                            <p>Dr. Gift Siromoney initiates academic interest in traditional Tamil art forms.</p>
-                        </div>
-                    </div>
-
-                    <div className="timeline-item">
-                        <div className="timeline-dot"></div>
-                        <div className="timeline-content">
-                            <span className="profile-badge">1974</span>
-                            <h3>Formal Grammar Defined</h3>
-                            <p>Publication connecting Kolam art with Array Grammars, establishing the syntax.</p>
-                        </div>
-                    </div>
-
-                    <div className="timeline-item">
-                        <div className="timeline-dot"></div>
-                        <div className="timeline-content">
-                            <span className="profile-badge">2024</span>
-                            <h3>Digital IT Museum</h3>
-                            <p>Christ University & DataArt launch this digital museum to future-proof the research.</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
 
             <DynamicHomeSections />
         </div>

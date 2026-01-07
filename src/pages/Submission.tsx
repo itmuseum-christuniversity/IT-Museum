@@ -13,20 +13,13 @@ export default function Submission() {
         abstract: ''
     });
 
-<<<<<<< HEAD
-=======
 
 
->>>>>>> a4a7950 (made the changes to google docs)
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         setLoading(true);
 
         try {
-<<<<<<< HEAD
-            if (!googleDocUrl.includes('docs.google.com')) {
-                alert('Please provide a valid Google Docs URL (docs.google.com).');
-=======
             if (!googleDocUrl) {
                 alert('Please provide the Google Docs URL.');
                 setLoading(false);
@@ -36,7 +29,6 @@ export default function Submission() {
             // Basic validation for Google Docs URL
             if (!googleDocUrl.includes('docs.google.com')) {
                 alert('Please enter a valid Google Docs URL (e.g., https://docs.google.com/document/d/...)');
->>>>>>> a4a7950 (made the changes to google docs)
                 setLoading(false);
                 return;
             }
@@ -116,29 +108,40 @@ export default function Submission() {
                         position: 'relative', overflow: 'hidden', boxShadow: 'var(--shadow-soft)'
                     }}>
                         <div style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '2rem' }}>
-                            <div style={{ flex: '1', minWidth: '300px' }}>
-                                <h2 style={{ color: 'white', marginBottom: '1rem', textAlign: 'left', fontSize: '1.8rem' }}>📝 Submission Guidelines</h2>
-                                <ul style={{ color: 'rgba(255,255,255,0.9)', lineHeight: '1.8', paddingLeft: '1.5rem' }}>
-                                    <li>All submissions must be original and not properly published elsewhere.</li>
-                                    <li>Articles must strictly follow the IEEE two-column format.</li>
-                                    <li>Include a clear abstract (max 250 words) and keywords.</li>
-                                    <li><strong>Submit a Google Docs Link</strong> (Access: Anyone with link can comment).</li>
-                                </ul>
-                            </div>
-                            <div>
-                                <a href="https://docs.google.com/document/d/1K7n8O0YxF9ywZ-2pG_y5jX5uPq4l3-2/edit" // Replace with actual template link
-                                    target="_blank" rel="noopener noreferrer" className="cta-button"
-                                    style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
-                                    <span>View Google Doc Template</span>
-                                </a>
-                                <p style={{ textAlign: 'center', color: 'rgba(255,255,255,0.7)', marginTop: '0.5rem', fontSize: '0.85rem' }}>View-only access</p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+<<<<<<< HEAD
+    <div style={{ flex: '1', minWidth: '300px' }}>
+        <h2 style={{ color: 'white', marginBottom: '1rem', textAlign: 'left', fontSize: '1.8rem' }}>📝 Submission Guidelines</h2>
+        <ul style={{ color: 'rgba(255,255,255,0.9)', lineHeight: '1.8', paddingLeft: '1.5rem' }}>
+            <li>All submissions must be original and not properly published elsewhere.</li>
+            <li>Articles must strictly follow the IEEE two-column format.</li>
+            <li>Include a clear abstract (max 250 words) and keywords.</li>
+            <li><strong>Submit a Google Docs Link</strong> (Access: Anyone with link can comment).</li>
+=======
+                            <div style={{ flex: '1', minWidth: '300px' }} className="text-white-force">
+                <h2 style={{ marginBottom: '1rem', textAlign: 'left', fontSize: '1.8rem', color: 'white' }}>📝 Submission Guidelines</h2>
+                <ul style={{ lineHeight: '1.8', paddingLeft: '1.5rem', color: 'white' }}>
+                    <li style={{ color: 'white' }}>All submissions must be original and not properly published elsewhere.</li>
+                    <li style={{ color: 'white' }}>Articles must strictly follow the IEEE two-column format.</li>
+                    <li style={{ color: 'white' }}>Include a clear abstract (max 250 words) and keywords.</li>
+                    <li style={{ color: 'white' }}>Graphics should be high-resolution (300 DPI+).</li>
+>>>>>>> 6863ec0 (Fixed the ui of the website)
+                </ul>
+            </div>
+            <div>
+                <a href="https://docs.google.com/document/d/1K7n8O0YxF9ywZ-2pG_y5jX5uPq4l3-2/edit" // Replace with actual template link
+                    target="_blank" rel="noopener noreferrer" className="cta-button"
+                    style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
+                    <span>View Google Doc Template</span>
+                </a>
+                <p style={{ textAlign: 'center', color: 'rgba(255,255,255,0.7)', marginTop: '0.5rem', fontSize: '0.85rem' }}>View-only access</p>
+            </div>
+    </div>
+                    </div >
+                </div >
 
-                {/* Submission Form */}
-                <div className="card-premium fade-in" style={{ animationDelay: '0.5s', maxWidth: '800px', margin: '0 auto' }}>
+        {/* Submission Form */ }
+        < div className = "card-premium fade-in" style = {{ animationDelay: '0.5s', maxWidth: '800px', margin: '0 auto' }
+}>
                     <h2 style={{ borderBottom: '2px solid #f0f0f0', paddingBottom: '1rem', marginBottom: '2rem', fontSize: '1.5rem' }}>New Submission</h2>
 
                     <form onSubmit={handleSubmit}>
@@ -216,19 +219,19 @@ export default function Submission() {
                                 Please ensure share settings are set to <strong>"Anyone with the link can comment"</strong>.
 =======
                             <p style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666' }}>
-                                * Please ensure your document Link Sharing is set to "Anyone with the link can comment" so our reviewers can provide feedback.
+            * Please ensure your document Link Sharing is set to "Anyone with the link can comment" so our reviewers can provide feedback.
 >>>>>>> a4a7950 (made the changes to google docs)
-                            </p>
-                        </div>
+        </p>
+    </div>
 
-                        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
-                            <button type="submit" className="cta-button" disabled={loading}>
-                                {loading ? 'Submitting...' : 'Submit Link for Review'}
-                            </button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
+    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
+        <button type="submit" className="cta-button" disabled={loading}>
+            {loading ? 'Submitting...' : 'Submit Link for Review'}
+        </button>
+    </div>
+                    </form >
+                </div >
+            </div >
+        </div >
     );
 }
