@@ -12,6 +12,7 @@ export default function KeywordExtractor() {
     const [loading, setLoading] = useState(false);
     const [processing, setProcessing] = useState(false);
     const [progress, setProgress] = useState(0);
+    const [uploadedFileName, setUploadedFileName] = useState('');
 
     useEffect(() => {
         loadReadyArticles();
@@ -39,6 +40,7 @@ export default function KeywordExtractor() {
     const handleSelectArticle = (article: Article) => {
         setSelectedArticle(article);
         setKeywords(article.tags || []);
+        setUploadedFileName('');
         setProgress(0);
     };
 
@@ -46,6 +48,7 @@ export default function KeywordExtractor() {
         const file = e.target.files?.[0];
         if (!file) return;
 
+        setUploadedFileName(file.name);
         setProcessing(true);
         setProgress(10); // Start progress
 
@@ -140,6 +143,7 @@ export default function KeywordExtractor() {
             setArticles(articles.filter(a => a.id !== selectedArticle.id));
             setSelectedArticle(null);
             setKeywords([]);
+            setUploadedFileName('');
             setProgress(0);
 
         } catch (error: any) {
@@ -206,13 +210,54 @@ export default function KeywordExtractor() {
 
                             <div style={{ background: '#f5f5f5', padding: '1.5rem', borderRadius: '8px', marginBottom: '2rem' }}>
                                 <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '0.5rem' }}>Step 1: Upload .docx File</label>
-                                <input
-                                    type="file"
-                                    accept=".docx"
-                                    onChange={handleFileUpload}
-                                    disabled={processing}
-                                    style={{ display: 'block', width: '100%' }}
-                                />
+
+                                <div style={{ position: 'relative' }}>
+                                    <input
+                                        type="file"
+                                        id="docx-upload"
+                                        accept=".docx"
+                                        onChange={handleFileUpload}
+                                        disabled={processing}
+                                        style={{ display: 'none' }}
+                                    />
+                                    <label
+                                        htmlFor="docx-upload"
+                                        style={{
+                                            display: 'block',
+                                            padding: '2rem',
+                                            border: '2px dashed #bbb',
+                                            borderRadius: '8px',
+                                            textAlign: 'center',
+                                            background: uploadedFileName ? '#e8f5e9' : 'white',
+                                            cursor: processing ? 'not-allowed' : 'pointer',
+                                            transition: 'all 0.2s ease',
+                                            color: uploadedFileName ? '#2e7d32' : '#666'
+                                        }}
+                                        onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--primary)'}
+                                        onMouseLeave={(e) => e.currentTarget.style.borderColor = '#bbb'}
+                                    >
+                                        <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>
+                                            {processing ? '⏳' : (uploadedFileName ? '✅' : '📄')}
+                                        </div>
+                                        {processing ? (
+                                            <span style={{ fontWeight: 'bold' }}>Analyzing Document...</span>
+                                        ) : (
+                                            uploadedFileName ? (
+                                                <>
+                                                    <span style={{ display: 'block', fontWeight: 'bold', fontSize: '1.1rem' }}>Analysis Complete!</span>
+                                                    <span style={{ fontSize: '0.9rem' }}>File: {uploadedFileName}</span>
+                                                    <span style={{ display: 'block', fontSize: '0.8rem', marginTop: '0.5rem', color: '#666' }}>(Click to upload different file)</span>
+                                                </>
+                                            ) : (
+                                                <>
+                                                    <span style={{ display: 'block', fontWeight: 'bold' }}>Click to Upload Word Document</span>
+                                                    <span style={{ fontSize: '0.8rem' }}>(.docx format only)</span>
+                                                </>
+                                            )
+                                        )}
+                                    </label>
+                                </div>
+
                                 {processing && (
                                     <div style={{ marginTop: '1rem' }}>
                                         <div style={{ height: '8px', background: '#ccc', borderRadius: '4px', overflow: 'hidden' }}>
