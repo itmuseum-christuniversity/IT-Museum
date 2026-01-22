@@ -3,7 +3,7 @@ import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, on
 import { auth } from '../firebase-config';
 import ReviewPanel from '../components/admin/ReviewPanel';
 import KeywordExtractor from '../components/admin/KeywordExtractor';
-import { contentService, Section } from '../services/contentService';
+// import { contentService, Section } from '../services/contentService'; // Currently unused
 
 // Define types for Section data
 
@@ -17,21 +17,22 @@ export default function Admin() {
     const [password, setPassword] = useState('');
     const [loading, setLoading] = useState(true);
 
-    // Dashboard State
-    const [title, setTitle] = useState('');
-    const [content, setContent] = useState('');
-    const [sections, setSections] = useState<Section[]>([]);
+    // Dashboard State - Currently unused, kept for future functionality
+    // const [title, setTitle] = useState('');
+    // const [content, setContent] = useState('');
+    // const [sections, setSections] = useState<Section[]>([]);
     const [refreshKey, setRefreshKey] = useState(0);
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser);
             if (currentUser && currentUser.email) {
-                // Simple hardcoded role mapping for demonstration
-                // In production, this should be fetched from a 'users' collection
-                if (currentUser.email.includes('reviewer1')) setRole('reviewer_first');
-                else if (currentUser.email.includes('tech')) setRole('reviewer_technical');
-                else if (currentUser.email.includes('lit')) setRole('reviewer_literature');
+                // Role mapping based on Gmail email patterns
+                const email = currentUser.email.toLowerCase();
+                if (email.includes('firstreview') || email.includes('first.review')) setRole('reviewer_first');
+                else if (email.includes('technical') || email.includes('tech.review') || email.includes('technicalreview')) setRole('reviewer_technical');
+                else if (email.includes('literature') || email.includes('lit.review') || email.includes('literaturereview')) setRole('reviewer_literature');
+                else if (email.includes('admin') || email.includes('itmuseum.admin')) setRole('admin');
                 else setRole('admin');
             }
             setLoading(false);
@@ -39,24 +40,23 @@ export default function Admin() {
         return () => unsubscribe();
     }, []);
 
-    // Subscribe to sections for list view (Admin only)
-    // Subscribe to sections for list view (Admin only)
-    useEffect(() => {
-        if (!user || role !== 'admin') return;
-
-        const loadSections = async () => {
-            try {
-                const data = await contentService.getSections();
-                setSections(data as Section[]);
-            } catch (error) {
-                console.error("Error loading sections:", error);
-            }
-        };
-
-        loadSections();
-        // Set up an interval or real-time subscription here if needed. 
-        // For now, simple fetch on load is robust.
-    }, [user, role]);
+    // Subscribe to sections for list view (Admin only) - Currently unused
+    // useEffect(() => {
+    //     if (!user || role !== 'admin') return;
+    //
+    //     const loadSections = async () => {
+    //         try {
+    //             const data = await contentService.getSections();
+    //             setSections(data as Section[]);
+    //         } catch (error) {
+    //             console.error("Error loading sections:", error);
+    //         }
+    //     };
+    //
+    //     loadSections();
+    //     // Set up an interval or real-time subscription here if needed. 
+    //     // For now, simple fetch on load is robust.
+    // }, [user, role]);
 
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -69,10 +69,10 @@ export default function Admin() {
 
     const handleCreateTestUsers = async () => {
         const users = [
-            { email: 'reviewer1@it.edu', pass: 'password123', role: 'First Reviewer' },
-            { email: 'tech@it.edu', pass: 'password123', role: 'Technical Reviewer' },
-            { email: 'lit@it.edu', pass: 'password123', role: 'Literature Reviewer' },
-            { email: 'admin@it.edu', pass: 'password123', role: 'Admin' }
+            { email: 'itmuseum.firstreview@gmail.com', pass: 'ITMuseum@2026', role: 'First Reviewer' },
+            { email: 'itmuseum.technicalreview@gmail.com', pass: 'ITMuseum@2026', role: 'Technical Reviewer' },
+            { email: 'itmuseum.literaturereview@gmail.com', pass: 'ITMuseum@2026', role: 'Literature Reviewer' },
+            { email: 'itmuseum.admin@gmail.com', pass: 'ITMuseum@2026', role: 'Admin' }
         ];
 
         let createdCount = 0;
@@ -87,7 +87,7 @@ export default function Admin() {
                 console.log(`Skipped ${u.email} (might exist)`);
             }
         }
-        alert(`Process Complete. Try logging in as:\nreviewer1@it.edu\ntech@it.edu\nlit@it.edu\nadmin@it.edu\n\nPassword for all: password123`);
+        alert(`Accounts created successfully.\n\nUse these credentials to login:\n\nFirst Reviewer: itmuseum.firstreview@gmail.com\nTechnical Reviewer: itmuseum.technicalreview@gmail.com\nLiterature Reviewer: itmuseum.literaturereview@gmail.com\nAdmin: itmuseum.admin@gmail.com\n\nPassword for all: ITMuseum@2026`);
     };
 
     const handleLogout = async () => {
@@ -95,36 +95,37 @@ export default function Admin() {
         window.location.reload();
     };
 
-    const handleAddSection = async (e: React.FormEvent) => {
-        if (role !== 'admin') return;
-        e.preventDefault();
-        try {
-            await contentService.addSection({
-                title,
-                content,
-                order: Date.now()
-            });
-            alert("Section Added");
-            setTitle('');
-            setContent('');
-            // Refresh list
-            const data = await contentService.getSections();
-            setSections(data as Section[]);
-        } catch (error: any) {
-            alert("Error: " + error.message);
-        }
-    };
-
-    const handleDelete = async (id: string) => {
-        if (!window.confirm("Delete this section?")) return;
-        try {
-            await contentService.deleteSection(id);
-            // Refresh list
-            setSections(sections.filter(s => s.id !== id));
-        } catch (error: any) {
-            alert("Error: " + error.message);
-        }
-    };
+    // Admin section management functions - Currently unused, kept for future functionality
+    // const handleAddSection = async (e: React.FormEvent) => {
+    //     if (role !== 'admin') return;
+    //     e.preventDefault();
+    //     try {
+    //         await contentService.addSection({
+    //             title,
+    //             content,
+    //             order: Date.now()
+    //         });
+    //         alert("Section Added");
+    //         setTitle('');
+    //         setContent('');
+    //         // Refresh list
+    //         const data = await contentService.getSections();
+    //         setSections(data as Section[]);
+    //     } catch (error: any) {
+    //         alert("Error: " + error.message);
+    //     }
+    // };
+    //
+    // const handleDelete = async (id: string) => {
+    //     if (!window.confirm("Delete this section?")) return;
+    //     try {
+    //         await contentService.deleteSection(id);
+    //         // Refresh list
+    //         setSections(sections.filter(s => s.id !== id));
+    //     } catch (error: any) {
+    //         alert("Error: " + error.message);
+    //     }
+    // };
 
     if (loading) return <div style={{ padding: '2rem', textAlign: 'center' }}>Loading...</div>;
 
@@ -132,42 +133,49 @@ export default function Admin() {
         return (
             <div className="page active" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '80vh' }}>
                 <div className="card-premium" style={{ width: '90%', maxWidth: '450px', padding: '3rem' }}>
-                    <h2 style={{ textAlign: 'center', marginBottom: '2rem' }}>Portal Login</h2>
+                    <h2 style={{ textAlign: 'center', marginBottom: '0.5rem' }}>Portal Login</h2>
+                    <p style={{ textAlign: 'center', color: 'var(--text-muted)', marginBottom: '2.5rem', fontSize: '0.9rem' }}>IT Museum Administrative Access</p>
                     <form onSubmit={handleLogin}>
                         <div style={{ marginBottom: '1.5rem' }}>
-                            <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>Email</label>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)', fontWeight: 600 }}>Email Address</label>
                             <input
                                 type="email"
                                 required
-                                placeholder="role@university.edu"
+                                placeholder="your.email@gmail.com"
                                 value={email}
                                 onChange={e => setEmail(e.target.value)}
-                                style={{ width: '100%', padding: '10px', border: '1px solid #ddd', borderRadius: '8px' }}
+                                className="enhanced-input"
+                                style={{ width: '100%', padding: '12px 16px', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1rem', transition: 'all 0.3s ease' }}
                             />
                         </div>
                         <div style={{ marginBottom: '2rem' }}>
-                            <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)' }}>Password</label>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)', fontWeight: 600 }}>Password</label>
                             <input
                                 type="password"
                                 required
-                                placeholder="••••••••"
+                                placeholder="Enter your password"
                                 value={password}
                                 onChange={e => setPassword(e.target.value)}
-                                style={{ width: '100%', padding: '10px', border: '1px solid #ddd', borderRadius: '8px' }}
+                                className="enhanced-input"
+                                style={{ width: '100%', padding: '12px 16px', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1rem', transition: 'all 0.3s ease' }}
                             />
                         </div>
-                        <button type="submit" className="cta-button" style={{ width: '100%', border: 'none', marginBottom: '1rem' }}>Login</button>
+                        <button type="submit" className="cta-button" style={{ width: '100%', border: 'none', marginBottom: '1rem', fontSize: '1rem', padding: '14px' }}>Sign In</button>
                     </form>
 
-                    <div style={{ textAlign: 'center', marginTop: '1rem', paddingTop: '1rem', borderTop: '1px solid #eee' }}>
-                        <p style={{ fontSize: '0.9rem', color: '#666', marginBottom: '0.5rem' }}>Developer Tools</p>
-                        <button
-                            onClick={handleCreateTestUsers}
-                            style={{ background: 'none', border: '1px solid var(--primary)', color: 'var(--primary)', padding: '0.5rem 1rem', borderRadius: '4px', cursor: 'pointer', fontSize: '0.8rem' }}
-                        >
-                            Create Test Accounts (Dev)
-                        </button>
-                    </div>
+                    {process.env.NODE_ENV === 'development' && (
+                        <div style={{ textAlign: 'center', marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '1px solid #eee' }}>
+                            <p style={{ fontSize: '0.85rem', color: '#999', marginBottom: '0.75rem' }}>Development Tools</p>
+                            <button
+                                onClick={handleCreateTestUsers}
+                                style={{ background: 'none', border: '1px solid var(--primary)', color: 'var(--primary)', padding: '0.6rem 1.2rem', borderRadius: '6px', cursor: 'pointer', fontSize: '0.85rem', transition: 'all 0.3s ease' }}
+                                onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(13, 71, 161, 0.05)'}
+                                onMouseLeave={(e) => e.currentTarget.style.background = 'none'}
+                            >
+                                Initialize User Accounts
+                            </button>
+                        </div>
+                    )}
                 </div>
             </div>
         );

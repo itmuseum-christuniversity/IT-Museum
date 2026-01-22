@@ -913,3 +913,274 @@ footer.footer-professional::before {
         transform: scale(1.1) translate(-2%, 0);
     }
 }
+
+/* Enhanced UI/UX Improvements */
+
+/* Enhanced Input Fields */
+.enhanced-input:focus {
+    outline: none;
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 3px rgba(13, 71, 161, 0.1);
+    transform: translateY(-1px);
+}
+
+.enhanced-input::placeholder {
+    color: #999;
+    transition: color 0.3s ease;
+}
+
+.enhanced-input:focus::placeholder {
+    color: #ccc;
+}
+
+/* Form Inputs - Global Enhancement */
+input[type="text"],
+input[type="email"],
+input[type="url"],
+input[type="password"],
+textarea {
+    transition: all 0.3s ease;
+    font-family: var(--font-body);
+}
+
+input[type="text"]:focus,
+input[type="email"]:focus,
+input[type="url"]:focus,
+input[type="password"]:focus,
+textarea:focus {
+    outline: none;
+    border-color: var(--primary);
+    box-shadow: 0 0 0 3px rgba(13, 71, 161, 0.08);
+    transform: translateY(-1px);
+}
+
+/* Validation States */
+input.error,
+textarea.error {
+    border-color: #ef5350 !important;
+    box-shadow: 0 0 0 3px rgba(239, 83, 80, 0.1) !important;
+}
+
+input.success,
+textarea.success {
+    border-color: #66bb6a !important;
+    box-shadow: 0 0 0 3px rgba(102, 187, 106, 0.1) !important;
+}
+
+/* Enhanced Buttons */
+button {
+    font-family: var(--font-body);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+button:active {
+    transform: scale(0.98);
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+    transform: none !important;
+}
+
+/* Loading State */
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.loading {
+    position: relative;
+    pointer-events: none;
+}
+
+.loading::after {
+    content: '';
+    position: absolute;
+    width: 16px;
+    height: 16px;
+    top: 50%;
+    left: 50%;
+    margin-left: -8px;
+    margin-top: -8px;
+    border: 2px solid transparent;
+    border-top-color: currentColor;
+    border-radius: 50%;
+    animation: spin 0.6s linear infinite;
+}
+
+/* Improved Card Hover Effects */
+.card-premium {
+    will-change: transform, box-shadow;
+}
+
+.card-premium:hover::before {
+    transform: scaleX(1);
+}
+
+/* Smooth Page Transitions */
+.page {
+    animation: fadeIn 0.5s ease-in;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Toast Notifications */
+.toast {
+    position: fixed;
+    bottom: 2rem;
+    right: 2rem;
+    padding: 1rem 1.5rem;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+    z-index: 3000;
+    animation: slideInRight 0.3s ease;
+    border-left: 4px solid var(--primary);
+}
+
+.toast.success {
+    border-left-color: #66bb6a;
+}
+
+.toast.error {
+    border-left-color: #ef5350;
+}
+
+@keyframes slideInRight {
+    from {
+        transform: translateX(100%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translateX(0);
+        opacity: 1;
+    }
+}
+
+/* Better Scroll Behavior */
+html {
+    scroll-behavior: smooth;
+}
+
+/* Enhanced Selection */
+::selection {
+    background-color: rgba(13, 71, 161, 0.2);
+    color: var(--primary-dark);
+}
+
+/* Focus Visible for Accessibility */
+*:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 2px;
+}
+
+/* Improved Button Accessibility */
+button:focus-visible,
+a.cta-button:focus-visible {
+    outline: 2px solid var(--primary);
+    outline-offset: 4px;
+}
+
+/* Skeleton Loading */
+.skeleton {
+    background: linear-gradient(90deg,
+            #f0f0f0 0%,
+            #e0e0e0 50%,
+            #f0f0f0 100%);
+    background-size: 200% 100%;
+    animation: skeleton-loading 1.5s ease-in-out infinite;
+}
+
+@keyframes skeleton-loading {
+    0% {
+        background-position: 200% 0;
+    }
+
+    100% {
+        background-position: -200% 0;
+    }
+}
+
+/* Responsive Touch Targets */
+@media (hover: none) {
+
+    button,
+    .cta-button,
+    a {
+        min-height: 44px;
+        min-width: 44px;
+    }
+}
+
+/* Pulse Animation for Important Elements */
+@keyframes pulse {
+
+    0%,
+    100% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.8;
+    }
+}
+
+.pulse {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Character Counter */
+.char-counter {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    text-align: right;
+    margin-top: 0.25rem;
+}
+
+.char-counter.warning {
+    color: #ff9800;
+}
+
+.char-counter.error {
+    color: #ef5350;
+}
+
+/* Improved Mobile Responsiveness */
+@media (max-width: 768px) {
+    .cta-button {
+        padding: 0.875rem 2rem;
+        font-size: 0.95rem;
+    }
+
+    .card-premium {
+        padding: 2rem;
+    }
+
+    .section {
+        margin: 4rem auto;
+    }
+
+    .section h2 {
+        font-size: 2rem;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="url"],
+    input[type="password"],
+    textarea {
+        font-size: 16px;
+        /* Prevents zoom on iOS */
+    }
+}

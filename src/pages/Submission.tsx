@@ -6,6 +6,7 @@ export default function Submission() {
     useScrollAnimation();
     const [loading, setLoading] = useState(false);
     const [googleDocUrl, setGoogleDocUrl] = useState('');
+    const [urlError, setUrlError] = useState('');
     const [formData, setFormData] = useState({
         title: '',
         author: '',
@@ -13,7 +14,19 @@ export default function Submission() {
         abstract: ''
     });
 
-
+    // Validate Google Docs URL in real-time
+    const validateGoogleDocUrl = (url: string) => {
+        if (!url) {
+            setUrlError('');
+            return false;
+        }
+        if (!url.includes('docs.google.com')) {
+            setUrlError('Please enter a valid Google Docs URL');
+            return false;
+        }
+        setUrlError('');
+        return true;
+    };
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
@@ -27,7 +40,7 @@ export default function Submission() {
             }
 
             // Basic validation for Google Docs URL
-            if (!googleDocUrl.includes('docs.google.com')) {
+            if (!validateGoogleDocUrl(googleDocUrl)) {
                 alert('Please enter a valid Google Docs URL (e.g., https://docs.google.com/document/d/...)');
                 setLoading(false);
                 return;
@@ -42,12 +55,13 @@ export default function Submission() {
                 status: 'submitted'
             }, googleDocUrl);
 
-            alert('Thank you for your submission! Our academic panel will review it using the link provided.');
+            alert('✅ Submission successful! Our academic panel will review your article.');
             setFormData({ title: '', author: '', email: '', abstract: '' });
             setGoogleDocUrl('');
+            setUrlError('');
         } catch (error: any) {
             console.error("Error submitting document: ", error);
-            alert('Submission failed: ' + error.message);
+            alert('❌ Submission failed: ' + error.message);
         } finally {
             setLoading(false);
         }
@@ -108,40 +122,30 @@ export default function Submission() {
                         position: 'relative', overflow: 'hidden', boxShadow: 'var(--shadow-soft)'
                     }}>
                         <div style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '2rem' }}>
-<<<<<<< HEAD
-    <div style={{ flex: '1', minWidth: '300px' }}>
-        <h2 style={{ color: 'white', marginBottom: '1rem', textAlign: 'left', fontSize: '1.8rem' }}>📝 Submission Guidelines</h2>
-        <ul style={{ color: 'rgba(255,255,255,0.9)', lineHeight: '1.8', paddingLeft: '1.5rem' }}>
-            <li>All submissions must be original and not properly published elsewhere.</li>
-            <li>Articles must strictly follow the IEEE two-column format.</li>
-            <li>Include a clear abstract (max 250 words) and keywords.</li>
-            <li><strong>Submit a Google Docs Link</strong> (Access: Anyone with link can comment).</li>
-=======
                             <div style={{ flex: '1', minWidth: '300px' }} className="text-white-force">
-                <h2 style={{ marginBottom: '1rem', textAlign: 'left', fontSize: '1.8rem', color: 'white' }}>📝 Submission Guidelines</h2>
-                <ul style={{ lineHeight: '1.8', paddingLeft: '1.5rem', color: 'white' }}>
-                    <li style={{ color: 'white' }}>All submissions must be original and not properly published elsewhere.</li>
-                    <li style={{ color: 'white' }}>Articles must strictly follow the IEEE two-column format.</li>
-                    <li style={{ color: 'white' }}>Include a clear abstract (max 250 words) and keywords.</li>
-                    <li style={{ color: 'white' }}>Graphics should be high-resolution (300 DPI+).</li>
->>>>>>> 6863ec0 (Fixed the ui of the website)
-                </ul>
-            </div>
-            <div>
-                <a href="https://docs.google.com/document/d/1K7n8O0YxF9ywZ-2pG_y5jX5uPq4l3-2/edit" // Replace with actual template link
-                    target="_blank" rel="noopener noreferrer" className="cta-button"
-                    style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
-                    <span>View Google Doc Template</span>
-                </a>
-                <p style={{ textAlign: 'center', color: 'rgba(255,255,255,0.7)', marginTop: '0.5rem', fontSize: '0.85rem' }}>View-only access</p>
-            </div>
-    </div>
+                                <h2 style={{ marginBottom: '1rem', textAlign: 'left', fontSize: '1.8rem', color: 'white' }}>📝 Submission Guidelines</h2>
+                                <ul style={{ lineHeight: '1.8', paddingLeft: '1.5rem', color: 'white' }}>
+                                    <li style={{ color: 'white' }}>All submissions must be original and not properly published elsewhere.</li>
+                                    <li style={{ color: 'white' }}>Articles must strictly follow the IEEE two-column format.</li>
+                                    <li style={{ color: 'white' }}>Include a clear abstract (max 250 words) and keywords.</li>
+                                    <li style={{ color: 'white' }}><strong>Submit a Google Docs Link</strong> (Access: Anyone with link can comment).</li>
+                                </ul>
+                            </div>
+                            <div>
+                                <a href="https://docs.google.com/document/d/1K7n8O0YxF9ywZ-2pG_y5jX5uPq4l3-2/edit"
+                                    target="_blank" rel="noopener noreferrer" className="cta-button"
+                                    style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
+                                    <span>View Google Doc Template</span>
+                                </a>
+                                <p style={{ textAlign: 'center', color: 'rgba(255,255,255,0.7)', marginTop: '0.5rem', fontSize: '0.85rem' }}>View-only access</p>
+                            </div>
+                        </div>
                     </div >
                 </div >
 
-        {/* Submission Form */ }
-        < div className = "card-premium fade-in" style = {{ animationDelay: '0.5s', maxWidth: '800px', margin: '0 auto' }
-}>
+                {/* Submission Form */}
+                < div className="card-premium fade-in" style={{ animationDelay: '0.5s', maxWidth: '800px', margin: '0 auto' }
+                }>
                     <h2 style={{ borderBottom: '2px solid #f0f0f0', paddingBottom: '1rem', marginBottom: '2rem', fontSize: '1.5rem' }}>New Submission</h2>
 
                     <form onSubmit={handleSubmit}>
@@ -154,7 +158,8 @@ export default function Submission() {
                                     placeholder="Enter the full title of your research paper"
                                     value={formData.title}
                                     onChange={e => setFormData({ ...formData, title: e.target.value })}
-                                    style={{ width: '100%', padding: '1rem', border: '1px solid #ddd', borderRadius: '8px' }}
+                                    className="enhanced-input"
+                                    style={{ width: '100%', padding: '1rem', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1rem' }}
                                 />
                             </div>
 
@@ -166,7 +171,8 @@ export default function Submission() {
                                     placeholder="Full Name"
                                     value={formData.author}
                                     onChange={e => setFormData({ ...formData, author: e.target.value })}
-                                    style={{ width: '100%', padding: '1rem', border: '1px solid #ddd', borderRadius: '8px' }}
+                                    className="enhanced-input"
+                                    style={{ width: '100%', padding: '1rem', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1rem' }}
                                 />
                             </div>
 
@@ -178,7 +184,8 @@ export default function Submission() {
                                     placeholder="name@university.edu"
                                     value={formData.email}
                                     onChange={e => setFormData({ ...formData, email: e.target.value })}
-                                    style={{ width: '100%', padding: '1rem', border: '1px solid #ddd', borderRadius: '8px' }}
+                                    className="enhanced-input"
+                                    style={{ width: '100%', padding: '1rem', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1rem' }}
                                 />
                             </div>
                         </div>
@@ -191,44 +198,48 @@ export default function Submission() {
                                 placeholder="Paste your abstract here (approx. 200-250 words)..."
                                 value={formData.abstract}
                                 onChange={e => setFormData({ ...formData, abstract: e.target.value })}
-                                style={{ width: '100%', padding: '1rem', border: '1px solid #ddd', borderRadius: '8px' }}
+                                className="enhanced-input"
+                                style={{ width: '100%', padding: '1rem', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1rem', resize: 'vertical' }}
                             ></textarea>
-                            <p style={{ textAlign: 'right', color: '#999', fontSize: '0.8rem', marginTop: '0.5rem' }}>{formData.abstract.split(' ').filter(x => x).length} / 250 words</p>
+                            <p className="char-counter" style={{ fontSize: '0.85rem', marginTop: '0.5rem' }}>
+                                {formData.abstract.split(' ').filter(x => x).length} / 250 words
+                            </p>
                         </div>
 
                         <div style={{ marginBottom: '2rem' }}>
-<<<<<<< HEAD
-                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Google Document Link</label>
-                            <input
-                                type="url"
-                                required
-                                placeholder="https://docs.google.com/document/d/..."
-=======
                             <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Google Docs Link</label>
                             <input
                                 type="url"
                                 required
                                 placeholder="Paste your Google Docs URL here (e.g. https://docs.google.com/document/d/...)"
->>>>>>> a4a7950 (made the changes to google docs)
                                 value={googleDocUrl}
-                                onChange={e => setGoogleDocUrl(e.target.value)}
-                                style={{ width: '100%', padding: '1rem', border: '1px solid #ddd', borderRadius: '8px' }}
+                                onChange={e => {
+                                    setGoogleDocUrl(e.target.value);
+                                    validateGoogleDocUrl(e.target.value);
+                                }}
+                                className={`enhanced-input ${urlError ? 'error' : googleDocUrl && !urlError ? 'success' : ''}`}
+                                style={{ width: '100%', padding: '1rem', border: `2px solid ${urlError ? '#ef5350' : '#e0e0e0'}`, borderRadius: '8px', fontSize: '1rem' }}
                             />
-<<<<<<< HEAD
-                            <p style={{ color: '#666', fontSize: '0.85rem', marginTop: '0.5rem' }}>
-                                Please ensure share settings are set to <strong>"Anyone with the link can comment"</strong>.
-=======
+                            {urlError && (
+                                <p style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#ef5350' }}>
+                                    ❌ {urlError}
+                                </p>
+                            )}
                             <p style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666' }}>
-            * Please ensure your document Link Sharing is set to "Anyone with the link can comment" so our reviewers can provide feedback.
->>>>>>> a4a7950 (made the changes to google docs)
-        </p>
-    </div>
+                                ℹ️ Please ensure your document Link Sharing is set to <strong>"Anyone with the link can comment"</strong> so our reviewers can provide feedback.
+                            </p>
+                        </div>
 
-    <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
-        <button type="submit" className="cta-button" disabled={loading}>
-            {loading ? 'Submitting...' : 'Submit Link for Review'}
-        </button>
-    </div>
+                        <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
+                            <button
+                                type="submit"
+                                className={`cta-button ${loading ? 'loading' : ''}`}
+                                disabled={loading || !!urlError}
+                                style={{ fontSize: '1rem', padding: '14px 28px' }}
+                            >
+                                {loading ? 'Submitting...' : '📤 Submit for Review'}
+                            </button>
+                        </div>
                     </form >
                 </div >
             </div >
