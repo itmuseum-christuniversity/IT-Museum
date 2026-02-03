@@ -7,7 +7,13 @@ export interface Article {
     title: string;
     author_name: string;
     institution_email: string;
-    abstract: string;
+    description: string; // Renamed from abstract
+    keywords: string; // Comma-separated keywords for NLP processing
+    num_authors: number; // Number of authors (1-10)
+    author_designations: string; // Designations for all authors
+    similarity_report_url: string; // Link to similarity/plagiarism report
+    ai_content_percentage: number; // AI content percentage (must be ≤ 5)
+    originality_confirmed: boolean; // Confirmation that article is original
     file_url?: string;
     status: 'submitted' | 'under_review' | 'accepted' | 'rejected' | 'approved_first' | 'approved_technical' | 'approved_literature' | 'ready_for_publishing' | 'published';
     created_at?: string;

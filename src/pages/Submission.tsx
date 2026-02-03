@@ -7,12 +7,33 @@ export default function Submission() {
     const [loading, setLoading] = useState(false);
     const [googleDocUrl, setGoogleDocUrl] = useState('');
     const [urlError, setUrlError] = useState('');
+    const [similarityReportUrl, setSimilarityReportUrl] = useState('');
+    const [similarityReportError, setSimilarityReportError] = useState('');
+    const [aiContentError, setAiContentError] = useState('');
     const [formData, setFormData] = useState({
         title: '',
-        author: '',
-        email: '',
-        abstract: ''
+        description: '',
+        keywords: '',
+        numAuthors: 1,
+        authors: [{ name: '', email: '', designation: '' }], // Array of author objects
+        aiContentPercentage: 0,
+        originalityConfirmed: false
     });
+
+    // Update authors array when numAuthors changes
+    const handleNumAuthorsChange = (num: number) => {
+        const newAuthors = Array.from({ length: num }, (_, i) =>
+            formData.authors[i] || { name: '', email: '', designation: '' }
+        );
+        setFormData({ ...formData, numAuthors: num, authors: newAuthors });
+    };
+
+    // Update individual author field
+    const handleAuthorChange = (index: number, field: 'name' | 'email' | 'designation', value: string) => {
+        const newAuthors = [...formData.authors];
+        newAuthors[index] = { ...newAuthors[index], [field]: value };
+        setFormData({ ...formData, authors: newAuthors });
+    };
 
     // Validate Google Docs URL in real-time
     const validateGoogleDocUrl = (url: string) => {
@@ -28,37 +49,117 @@ export default function Submission() {
         return true;
     };
 
+    // Validate Similarity Report URL
+    const validateSimilarityReportUrl = (url: string) => {
+        if (!url) {
+            setSimilarityReportError('');
+            return false;
+        }
+        // Accept Google Drive, Dropbox, or other common file sharing URLs
+        const validDomains = ['drive.google.com', 'dropbox.com', 'onedrive.live.com', 'docs.google.com'];
+        const isValid = validDomains.some(domain => url.includes(domain));
+        if (!isValid) {
+            setSimilarityReportError('Please provide a valid file sharing URL (Google Drive, Dropbox, etc.)');
+            return false;
+        }
+        setSimilarityReportError('');
+        return true;
+    };
+
+    // Validate AI Content Percentage
+    const validateAiContent = (percentage: number) => {
+        if (percentage > 5) {
+            setAiContentError('AI content must not exceed 5%');
+            return false;
+        }
+        if (percentage < 0) {
+            setAiContentError('Please enter a valid percentage (0-100)');
+            return false;
+        }
+        setAiContentError('');
+        return true;
+    };
+
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         setLoading(true);
 
         try {
+            // Validate all required fields
             if (!googleDocUrl) {
                 alert('Please provide the Google Docs URL.');
                 setLoading(false);
                 return;
             }
 
-            // Basic validation for Google Docs URL
+            if (!similarityReportUrl) {
+                alert('Please provide the similarity report URL.');
+                setLoading(false);
+                return;
+            }
+
+            if (!formData.originalityConfirmed) {
+                alert('Please confirm that your article is original work.');
+                setLoading(false);
+                return;
+            }
+
+            // Validate URLs
             if (!validateGoogleDocUrl(googleDocUrl)) {
                 alert('Please enter a valid Google Docs URL (e.g., https://docs.google.com/document/d/...)');
                 setLoading(false);
                 return;
             }
 
+            if (!validateSimilarityReportUrl(similarityReportUrl)) {
+                alert('Please enter a valid similarity report URL from a file sharing service.');
+                setLoading(false);
+                return;
+            }
+
+            // Validate AI content percentage
+            if (!validateAiContent(formData.aiContentPercentage)) {
+                alert('AI content must not exceed 5%. Please revise your submission.');
+                setLoading(false);
+                return;
+            }
+
             // Submit using Supabase service
+            // Combine all authors' data
+            const allAuthorsNames = formData.authors.map(a => a.name).join(', ');
+            const allAuthorsEmails = formData.authors.map(a => a.email).join(', ');
+            const allAuthorsDesignations = formData.authors.map(a => a.designation).join(', ');
+
             await articleService.submitArticle({
                 title: formData.title,
-                author_name: formData.author,
-                institution_email: formData.email,
-                abstract: formData.abstract,
+                author_name: allAuthorsNames,
+                institution_email: allAuthorsEmails,
+                description: formData.description,
+                keywords: formData.keywords,
+                num_authors: formData.numAuthors,
+                author_designations: allAuthorsDesignations,
+                similarity_report_url: similarityReportUrl,
+                ai_content_percentage: formData.aiContentPercentage,
+                originality_confirmed: formData.originalityConfirmed,
                 status: 'submitted'
             }, googleDocUrl);
 
             alert('✅ Submission successful! Our academic panel will review your article.');
-            setFormData({ title: '', author: '', email: '', abstract: '' });
+            // Reset form
+            setFormData({
+                title: '',
+                description: '',
+                keywords: '',
+                numAuthors: 1,
+                authors: [{ name: '', email: '', designation: '' }],
+                aiContentPercentage: 0,
+                originalityConfirmed: false
+            });
             setGoogleDocUrl('');
+            setSimilarityReportUrl('');
             setUrlError('');
+            setSimilarityReportError('');
+            setAiContentError('');
         } catch (error: any) {
             console.error("Error submitting document: ", error);
             alert('❌ Submission failed: ' + error.message);
@@ -149,60 +250,174 @@ export default function Submission() {
                     <h2 style={{ borderBottom: '2px solid #f0f0f0', paddingBottom: '1rem', marginBottom: '2rem', fontSize: '1.5rem' }}>New Submission</h2>
 
                     <form onSubmit={handleSubmit}>
-                        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '1.5rem' }}>
-                            <div style={{ gridColumn: '1 / -1' }}>
-                                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Article Title</label>
-                                <input
-                                    type="text"
-                                    required
-                                    placeholder="Enter the full title of your research paper"
-                                    value={formData.title}
-                                    onChange={e => setFormData({ ...formData, title: e.target.value })}
-                                    className="enhanced-input"
-                                    style={{ width: '100%', padding: '1rem', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1rem' }}
-                                />
-                            </div>
-
-                            <div>
-                                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Primary Author</label>
-                                <input
-                                    type="text"
-                                    required
-                                    placeholder="Full Name"
-                                    value={formData.author}
-                                    onChange={e => setFormData({ ...formData, author: e.target.value })}
-                                    className="enhanced-input"
-                                    style={{ width: '100%', padding: '1rem', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1rem' }}
-                                />
-                            </div>
-
-                            <div>
-                                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Institutional Email</label>
-                                <input
-                                    type="email"
-                                    required
-                                    placeholder="name@university.edu"
-                                    value={formData.email}
-                                    onChange={e => setFormData({ ...formData, email: e.target.value })}
-                                    className="enhanced-input"
-                                    style={{ width: '100%', padding: '1rem', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1rem' }}
-                                />
-                            </div>
+                        <div style={{ marginBottom: '1.5rem' }}>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Article Title</label>
+                            <input
+                                type="text"
+                                required
+                                placeholder="Enter the full title of your research paper"
+                                value={formData.title}
+                                onChange={e => setFormData({ ...formData, title: e.target.value })}
+                                className="enhanced-input"
+                                style={{ width: '100%', padding: '1rem', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1rem' }}
+                            />
                         </div>
 
                         <div style={{ marginBottom: '1.5rem' }}>
-                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Abstract</label>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Number of Authors</label>
+                            <select
+                                required
+                                value={formData.numAuthors}
+                                onChange={e => handleNumAuthorsChange(parseInt(e.target.value))}
+                                className="enhanced-input"
+                                style={{ width: '100%', maxWidth: '200px', padding: '1rem', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1rem', backgroundColor: 'white' }}
+                            >
+                                {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map(num => (
+                                    <option key={num} value={num}>{num}</option>
+                                ))}
+                            </select>
+                            <p style={{ fontSize: '0.85rem', marginTop: '0.3rem', color: 'var(--text-muted)' }}>
+                                Select the total number of authors
+                            </p>
+                        </div>
+
+                        {/* Dynamic Author Fields */}
+                        <div style={{ marginBottom: '2rem' }}>
+                            <h3 style={{ fontSize: '1.2rem', marginBottom: '1rem', color: 'var(--primary)' }}>Author Information</h3>
+                            {formData.authors.map((author, index) => (
+                                <div key={index} style={{
+                                    marginBottom: '1.5rem',
+                                    padding: '1.5rem',
+                                    backgroundColor: index === 0 ? '#f0f7ff' : '#f8f9fa',
+                                    borderRadius: '8px',
+                                    border: `2px solid ${index === 0 ? '#0d47a1' : '#e0e0e0'}`
+                                }}>
+                                    <h4 style={{ fontSize: '1rem', marginBottom: '1rem', fontWeight: 600 }}>
+                                        {index === 0 ? '👤 Primary Author' : `👤 Author ${index + 1}`}
+                                    </h4>
+                                    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1rem' }}>
+                                        <div style={{ gridColumn: '1 / -1' }}>
+                                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, fontSize: '0.9rem' }}>Full Name *</label>
+                                            <input
+                                                type="text"
+                                                required
+                                                placeholder="Enter full name"
+                                                value={author.name}
+                                                onChange={e => handleAuthorChange(index, 'name', e.target.value)}
+                                                className="enhanced-input"
+                                                style={{ width: '100%', padding: '0.875rem', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1rem' }}
+                                            />
+                                        </div>
+                                        <div>
+                                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, fontSize: '0.9rem' }}>Institutional Email *</label>
+                                            <input
+                                                type="email"
+                                                required
+                                                placeholder="name@university.edu"
+                                                value={author.email}
+                                                onChange={e => handleAuthorChange(index, 'email', e.target.value)}
+                                                className="enhanced-input"
+                                                style={{ width: '100%', padding: '0.875rem', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1rem' }}
+                                            />
+                                        </div>
+                                        <div>
+                                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600, fontSize: '0.9rem' }}>Designation *</label>
+                                            <input
+                                                type="text"
+                                                required
+                                                placeholder="e.g., Associate Professor"
+                                                value={author.designation}
+                                                onChange={e => handleAuthorChange(index, 'designation', e.target.value)}
+                                                className="enhanced-input"
+                                                style={{ width: '100%', padding: '0.875rem', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1rem' }}
+                                            />
+                                        </div>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div style={{ marginBottom: '1.5rem' }}>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Description</label>
                             <textarea
                                 rows={6}
                                 required
-                                placeholder="Paste your abstract here (approx. 200-250 words)..."
-                                value={formData.abstract}
-                                onChange={e => setFormData({ ...formData, abstract: e.target.value })}
+                                placeholder="Provide a comprehensive description of your research (approx. 200-250 words)..."
+                                value={formData.description}
+                                onChange={e => setFormData({ ...formData, description: e.target.value })}
                                 className="enhanced-input"
                                 style={{ width: '100%', padding: '1rem', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1rem', resize: 'vertical' }}
                             ></textarea>
                             <p className="char-counter" style={{ fontSize: '0.85rem', marginTop: '0.5rem' }}>
-                                {formData.abstract.split(' ').filter(x => x).length} / 250 words
+                                {formData.description.split(' ').filter((x: string) => x).length} / 250 words
+                            </p>
+                        </div>
+
+                        <div style={{ marginBottom: '1.5rem' }}>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Keywords</label>
+                            <input
+                                type="text"
+                                required
+                                placeholder="Enter keywords separated by commas (e.g., machine learning, neural networks, AI)"
+                                value={formData.keywords}
+                                onChange={e => setFormData({ ...formData, keywords: e.target.value })}
+                                className="enhanced-input"
+                                style={{ width: '100%', padding: '1rem', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1rem' }}
+                            />
+                            <p style={{ fontSize: '0.85rem', marginTop: '0.3rem', color: 'var(--text-muted)' }}>
+                                These keywords help categorize and index your research
+                            </p>
+                        </div>
+
+                        <div style={{ marginBottom: '1.5rem' }}>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Similarity Report Link</label>
+                            <input
+                                type="url"
+                                required
+                                placeholder="Paste your similarity/plagiarism report URL (Google Drive, Dropbox, etc.)"
+                                value={similarityReportUrl}
+                                onChange={e => {
+                                    setSimilarityReportUrl(e.target.value);
+                                    validateSimilarityReportUrl(e.target.value);
+                                }}
+                                className={`enhanced-input ${similarityReportError ? 'error' : similarityReportUrl && !similarityReportError ? 'success' : ''}`}
+                                style={{ width: '100%', padding: '1rem', border: `2px solid ${similarityReportError ? '#ef5350' : '#e0e0e0'}`, borderRadius: '8px', fontSize: '1rem' }}
+                            />
+                            {similarityReportError && (
+                                <p style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#ef5350' }}>
+                                    ❌ {similarityReportError}
+                                </p>
+                            )}
+                            <p style={{ marginTop: '0.5rem', fontSize: '0.85rem', color: '#666' }}>
+                                ℹ️ Upload your similarity report to a file sharing service and paste the shareable link
+                            </p>
+                        </div>
+
+                        <div style={{ marginBottom: '1.5rem' }}>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>AI Content Percentage</label>
+                            <input
+                                type="number"
+                                required
+                                min="0"
+                                max="100"
+                                step="0.1"
+                                placeholder="Enter AI content percentage (max 5%)"
+                                value={formData.aiContentPercentage}
+                                onChange={e => {
+                                    const value = parseFloat(e.target.value);
+                                    setFormData({ ...formData, aiContentPercentage: value });
+                                    validateAiContent(value);
+                                }}
+                                className={`enhanced-input ${aiContentError ? 'error' : formData.aiContentPercentage <= 5 && formData.aiContentPercentage >= 0 ? 'success' : ''}`}
+                                style={{ width: '100%', padding: '1rem', border: `2px solid ${aiContentError ? '#ef5350' : '#e0e0e0'}`, borderRadius: '8px', fontSize: '1rem' }}
+                            />
+                            {aiContentError && (
+                                <p style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#ef5350' }}>
+                                    ❌ {aiContentError}
+                                </p>
+                            )}
+                            <p style={{ marginTop: '0.5rem', fontSize: '0.85rem', color: '#666' }}>
+                                ⚠️ Maximum allowed AI content: <strong>5%</strong>
                             </p>
                         </div>
 
@@ -230,11 +445,44 @@ export default function Submission() {
                             </p>
                         </div>
 
+                        <div style={{
+                            marginBottom: '2rem',
+                            padding: '1.5rem',
+                            backgroundColor: '#f8f9fa',
+                            borderRadius: '8px',
+                            border: '2px solid #0d47a1'
+                        }}>
+                            <label style={{
+                                display: 'flex',
+                                alignItems: 'flex-start',
+                                cursor: 'pointer',
+                                fontSize: '1rem',
+                                fontWeight: 600
+                            }}>
+                                <input
+                                    type="checkbox"
+                                    required
+                                    checked={formData.originalityConfirmed}
+                                    onChange={e => setFormData({ ...formData, originalityConfirmed: e.target.checked })}
+                                    style={{
+                                        marginRight: '0.75rem',
+                                        marginTop: '0.25rem',
+                                        width: '20px',
+                                        height: '20px',
+                                        cursor: 'pointer'
+                                    }}
+                                />
+                                <span>
+                                    I confirm that this article is original work and has not been published elsewhere. I understand that plagiarism or submission of non-original work will result in rejection.
+                                </span>
+                            </label>
+                        </div>
+
                         <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '1rem' }}>
                             <button
                                 type="submit"
                                 className={`cta-button ${loading ? 'loading' : ''}`}
-                                disabled={loading || !!urlError}
+                                disabled={loading || !!urlError || !!similarityReportError || !!aiContentError || !formData.originalityConfirmed}
                                 style={{ fontSize: '1rem', padding: '14px 28px' }}
                             >
                                 {loading ? 'Submitting...' : '📤 Submit for Review'}
