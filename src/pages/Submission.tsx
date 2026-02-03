@@ -10,7 +10,6 @@ export default function Submission() {
     const [similarityReportUrl, setSimilarityReportUrl] = useState('');
     const [similarityReportImage, setSimilarityReportImage] = useState<File | null>(null);
     const [similarityReportError, setSimilarityReportError] = useState('');
-    const [aiContentError, setAiContentError] = useState('');
     const [formData, setFormData] = useState({
         title: '',
         description: '',
@@ -67,18 +66,7 @@ export default function Submission() {
     };
 
     // Validate AI Content Percentage
-    const validateAiContent = (percentage: number) => {
-        if (percentage > 5) {
-            setAiContentError('AI content must not exceed 5%');
-            return false;
-        }
-        if (percentage < 0) {
-            setAiContentError('Please enter a valid percentage (0-100)');
-            return false;
-        }
-        setAiContentError('');
-        return true;
-    };
+
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
@@ -146,7 +134,6 @@ export default function Submission() {
                 keywords: '',
                 numAuthors: 1,
                 authors: [{ name: '', email: '', designation: '' }],
-                aiContentPercentage: 0,
                 originalityConfirmed: false
             });
             setGoogleDocUrl('');
@@ -493,7 +480,7 @@ export default function Submission() {
                             <button
                                 type="submit"
                                 className={`cta-button ${loading ? 'loading' : ''}`}
-                                disabled={loading || !!urlError || !!similarityReportError || !!aiContentError || !formData.originalityConfirmed}
+                                disabled={loading || !!urlError || !!similarityReportError || !formData.originalityConfirmed}
                                 style={{ fontSize: '1rem', padding: '14px 28px' }}
                             >
                                 {loading ? 'Submitting...' : '📤 Submit for Review'}

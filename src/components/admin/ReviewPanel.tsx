@@ -15,7 +15,7 @@ export default function ReviewPanel({ title, currentStageStatus, nextStageStatus
 
     // Edit & Notification State
     const [editingId, setEditingId] = useState<string | null>(null);
-    const [editForm, setEditForm] = useState({ title: '', abstract: '' });
+    const [editForm, setEditForm] = useState({ title: '', description: '' });
     const [notifications, setNotifications] = useState<any[]>([]);
 
     useEffect(() => {
@@ -42,7 +42,7 @@ export default function ReviewPanel({ title, currentStageStatus, nextStageStatus
 
     const handleEditStart = (article: Article) => {
         setEditingId(article.id || null);
-        setEditForm({ title: article.title, abstract: article.abstract });
+        setEditForm({ title: article.title, description: article.description });
     };
 
     const handleEditSave = async (id: string) => {
@@ -50,7 +50,7 @@ export default function ReviewPanel({ title, currentStageStatus, nextStageStatus
             if (id) {
                 await articleService.updateArticleDetails(id, {
                     title: editForm.title,
-                    abstract: editForm.abstract
+                    description: editForm.description
                 });
                 // Update local state
                 setArticles(articles.map(a => a.id === id ? { ...a, ...editForm } : a));
@@ -169,16 +169,16 @@ export default function ReviewPanel({ title, currentStageStatus, nextStageStatus
                             </div>
 
                             <div style={{ background: '#f9f9f9', padding: '1rem', borderRadius: '4px', marginBottom: '1.5rem' }}>
-                                <strong>Abstract:</strong>
+                                <strong>Description:</strong>
                                 {editingId === article.id ? (
                                     <textarea
-                                        value={editForm.abstract}
-                                        onChange={(e) => setEditForm({ ...editForm, abstract: e.target.value })}
+                                        value={editForm.description}
+                                        onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
                                         rows={6}
                                         style={{ width: '100%', padding: '0.8rem', marginTop: '0.5rem', border: '2px solid var(--primary)', borderRadius: '4px', fontFamily: 'inherit' }}
                                     />
                                 ) : (
-                                    <p style={{ marginTop: '0.5rem', lineHeight: '1.6' }}>{article.abstract}</p>
+                                    <p style={{ marginTop: '0.5rem', lineHeight: '1.6' }}>{article.description}</p>
                                 )}
                             </div>
 

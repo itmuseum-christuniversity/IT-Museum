@@ -32,7 +32,7 @@ export default function Collection() {
     // Configure Fuse.js for fuzzy search
     const fuse = useMemo(() => {
         return new Fuse(articles, {
-            keys: ['title', 'tags', 'abstract', 'author_name'],
+            keys: ['title', 'tags', 'description', 'author_name'],
             threshold: 0.4, // 0.0 = perfect match, 1.0 = match anything. 0.4 is good for "lexical ambiguity"
             includeScore: true
         });
@@ -124,8 +124,8 @@ export default function Collection() {
                                             <span className="gallery-tag">Research Paper</span>
                                         </div>
                                         <h3>{article.title}</h3>
-                                        <p style={{ color: 'var(--text-muted)', marginTop: '0.5rem' }}>By {article.author_name}</p>
-                                        <p style={{ fontSize: '0.9rem', marginTop: '0.5rem', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{article.abstract}</p>
+                                        <p style={{ color: 'var(--text-muted)', marginTop: '0.5rem', fontWeight: 'bold' }}>By {article.author_name}</p>
+                                        <p style={{ fontSize: '0.9rem', marginTop: '0.5rem', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{article.description}</p>
                                     </div>
                                 </a>
                             ))
