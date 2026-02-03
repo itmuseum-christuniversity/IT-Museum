@@ -8,6 +8,7 @@ export default function Submission() {
     const [googleDocUrl, setGoogleDocUrl] = useState('');
     const [urlError, setUrlError] = useState('');
     const [similarityReportUrl, setSimilarityReportUrl] = useState('');
+    const [similarityReportImage, setSimilarityReportImage] = useState<File | null>(null);
     const [similarityReportError, setSimilarityReportError] = useState('');
     const [aiContentError, setAiContentError] = useState('');
     const [formData, setFormData] = useState({
@@ -16,7 +17,6 @@ export default function Submission() {
         keywords: '',
         numAuthors: 1,
         authors: [{ name: '', email: '', designation: '' }], // Array of author objects
-        aiContentPercentage: 0,
         originalityConfirmed: false
     });
 
@@ -92,8 +92,8 @@ export default function Submission() {
                 return;
             }
 
-            if (!similarityReportUrl) {
-                alert('Please provide the similarity report URL.');
+            if (!similarityReportImage) {
+                alert('Please upload the similarity report image.');
                 setLoading(false);
                 return;
             }
@@ -111,18 +111,13 @@ export default function Submission() {
                 return;
             }
 
-            if (!validateSimilarityReportUrl(similarityReportUrl)) {
+            // Validate similarity report URL only if provided (it's optional)
+            if (similarityReportUrl && !validateSimilarityReportUrl(similarityReportUrl)) {
                 alert('Please enter a valid similarity report URL from a file sharing service.');
                 setLoading(false);
                 return;
             }
 
-            // Validate AI content percentage
-            if (!validateAiContent(formData.aiContentPercentage)) {
-                alert('AI content must not exceed 5%. Please revise your submission.');
-                setLoading(false);
-                return;
-            }
 
             // Submit using Supabase service
             // Combine all authors' data
@@ -138,8 +133,7 @@ export default function Submission() {
                 keywords: formData.keywords,
                 num_authors: formData.numAuthors,
                 author_designations: allAuthorsDesignations,
-                similarity_report_url: similarityReportUrl,
-                ai_content_percentage: formData.aiContentPercentage,
+                similarity_report_url: similarityReportUrl || 'Image uploaded', // Store image reference
                 originality_confirmed: formData.originalityConfirmed,
                 status: 'submitted'
             }, googleDocUrl);
@@ -157,9 +151,9 @@ export default function Submission() {
             });
             setGoogleDocUrl('');
             setSimilarityReportUrl('');
+            setSimilarityReportImage(null);
             setUrlError('');
             setSimilarityReportError('');
-            setAiContentError('');
         } catch (error: any) {
             console.error("Error submitting document: ", error);
             alert('❌ Submission failed: ' + error.message);
@@ -348,7 +342,7 @@ export default function Submission() {
                                 className="enhanced-input"
                                 style={{ width: '100%', padding: '1rem', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1rem', resize: 'vertical' }}
                             ></textarea>
-                            <p className="char-counter" style={{ fontSize: '0.85rem', marginTop: '0.5rem' }}>
+                            <p className="char-counter" style={{ fontSize: '0.85rem', marginTop: '0.5rem', color: 'var(--text-muted)' }}>
                                 {formData.description.split(' ').filter((x: string) => x).length} / 250 words
                             </p>
                         </div>
@@ -370,56 +364,73 @@ export default function Submission() {
                         </div>
 
                         <div style={{ marginBottom: '1.5rem' }}>
-                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Similarity Report Link</label>
-                            <input
-                                type="url"
-                                required
-                                placeholder="Paste your similarity/plagiarism report URL (Google Drive, Dropbox, etc.)"
-                                value={similarityReportUrl}
-                                onChange={e => {
-                                    setSimilarityReportUrl(e.target.value);
-                                    validateSimilarityReportUrl(e.target.value);
-                                }}
-                                className={`enhanced-input ${similarityReportError ? 'error' : similarityReportUrl && !similarityReportError ? 'success' : ''}`}
-                                style={{ width: '100%', padding: '1rem', border: `2px solid ${similarityReportError ? '#ef5350' : '#e0e0e0'}`, borderRadius: '8px', fontSize: '1rem' }}
-                            />
-                            {similarityReportError && (
-                                <p style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#ef5350' }}>
-                                    ❌ {similarityReportError}
+                            <label style={{ display: 'block', marginBottom: '0.75rem', fontWeight: 600 }}>Similarity Report</label>
+
+                            {/* Image Upload */}
+                            <div style={{ marginBottom: '1rem' }}>
+                                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500, fontSize: '0.95rem' }}>Upload Report Image (PNG/JPG) *</label>
+                                <input
+                                    type="file"
+                                    required
+                                    accept="image/png,image/jpeg,image/jpg"
+                                    onChange={e => {
+                                        const file = e.target.files?.[0];
+                                        if (file) {
+                                            setSimilarityReportImage(file);
+                                            setSimilarityReportError('');
+                                        }
+                                    }}
+                                    className="enhanced-input"
+                                    style={{
+                                        width: '100%',
+                                        padding: '0.75rem',
+                                        border: '2px solid #e0e0e0',
+                                        borderRadius: '8px',
+                                        fontSize: '1rem',
+                                        backgroundColor: 'white'
+                                    }}
+                                />
+                                {similarityReportImage && (
+                                    <p style={{ marginTop: '0.5rem', fontSize: '0.85rem', color: '#2e7d32' }}>
+                                        ✓ File selected: {similarityReportImage.name}
+                                    </p>
+                                )}
+                                <p style={{ fontSize: '0.85rem', marginTop: '0.3rem', color: 'var(--text-muted)' }}>
+                                    Upload a screenshot or PDF export of your similarity/plagiarism report
                                 </p>
-                            )}
-                            <p style={{ marginTop: '0.5rem', fontSize: '0.85rem', color: '#666' }}>
-                                ℹ️ Upload your similarity report to a file sharing service and paste the shareable link
-                            </p>
+                            </div>
+
+                            {/* URL Option (Optional) */}
+                            <div>
+                                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500, fontSize: '0.95rem' }}>
+                                    Report Link
+                                </label>
+                                <input
+                                    type="url"
+                                    placeholder="Paste your similarity/plagiarism report URL (Google Drive, Dropbox, etc.)"
+                                    value={similarityReportUrl}
+                                    onChange={e => {
+                                        setSimilarityReportUrl(e.target.value);
+                                        if (e.target.value) {
+                                            validateSimilarityReportUrl(e.target.value);
+                                        } else {
+                                            setSimilarityReportError('');
+                                        }
+                                    }}
+                                    className={`enhanced-input ${similarityReportError ? 'error' : similarityReportUrl && !similarityReportError ? 'success' : ''}`}
+                                    style={{ width: '100%', padding: '1rem', border: `2px solid ${similarityReportError ? '#ef5350' : '#e0e0e0'}`, borderRadius: '8px', fontSize: '1rem' }}
+                                />
+                                {similarityReportError && (
+                                    <p style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#ef5350' }}>
+                                        ❌ {similarityReportError}
+                                    </p>
+                                )}
+                                <p style={{ marginTop: '0.5rem', fontSize: '0.85rem', color: '#666' }}>
+                                    ℹ️ Optionally provide a link to your full report for reference
+                                </p>
+                            </div>
                         </div>
 
-                        <div style={{ marginBottom: '1.5rem' }}>
-                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>AI Content Percentage</label>
-                            <input
-                                type="number"
-                                required
-                                min="0"
-                                max="100"
-                                step="0.1"
-                                placeholder="Enter AI content percentage (max 5%)"
-                                value={formData.aiContentPercentage}
-                                onChange={e => {
-                                    const value = parseFloat(e.target.value);
-                                    setFormData({ ...formData, aiContentPercentage: value });
-                                    validateAiContent(value);
-                                }}
-                                className={`enhanced-input ${aiContentError ? 'error' : formData.aiContentPercentage <= 5 && formData.aiContentPercentage >= 0 ? 'success' : ''}`}
-                                style={{ width: '100%', padding: '1rem', border: `2px solid ${aiContentError ? '#ef5350' : '#e0e0e0'}`, borderRadius: '8px', fontSize: '1rem' }}
-                            />
-                            {aiContentError && (
-                                <p style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#ef5350' }}>
-                                    ❌ {aiContentError}
-                                </p>
-                            )}
-                            <p style={{ marginTop: '0.5rem', fontSize: '0.85rem', color: '#666' }}>
-                                ⚠️ Maximum allowed AI content: <strong>5%</strong>
-                            </p>
-                        </div>
 
                         <div style={{ marginBottom: '2rem' }}>
                             <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Google Docs Link</label>
