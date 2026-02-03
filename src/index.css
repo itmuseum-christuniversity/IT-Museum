@@ -1,3 +1,7 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
 :root {
     /* Premium Color Palette (Dark Blue & Gold) */
     --primary: #0D47A1;
