@@ -171,8 +171,8 @@ export default function Submission() {
                             width: '40px', height: '40px', borderRadius: '50%', display: 'flex',
                             alignItems: 'center', justifyContent: 'center', fontWeight: 700, margin: '0 auto 1rem'
                         }}>1</div>
-                        <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>View Template</h3>
-                        <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>View our Google Doc template to see the required format and structure.</p>
+                        <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>Download Template</h3>
+                        <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Download our docx template to see the required format and structure.</p>
                     </div>
 
                     <div className="card-premium" style={{ flex: '1', minWidth: '250px', maxWidth: '300px', textAlign: 'center', padding: '2rem' }}>
@@ -214,12 +214,13 @@ export default function Submission() {
                                 </ul>
                             </div>
                             <div>
-                                <a href="https://docs.google.com/document/d/1K7n8O0YxF9ywZ-2pG_y5jX5uPq4l3-2/edit"
-                                    target="_blank" rel="noopener noreferrer" className="cta-button"
+                                <a href="/IT_Research_Paper_Template.docx"
+                                    download
+                                    className="cta-button"
                                     style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
-                                    <span>View Google Doc Template</span>
+                                    <span>Download Template (.docx)</span>
                                 </a>
-                                <p style={{ textAlign: 'center', color: 'rgba(255,255,255,0.7)', marginTop: '0.5rem', fontSize: '0.85rem' }}>View-only access</p>
+                                <p style={{ textAlign: 'center', color: 'rgba(255,255,255,0.7)', marginTop: '0.5rem', fontSize: '0.85rem' }}>Direct download</p>
                             </div>
                         </div>
                     </div >
