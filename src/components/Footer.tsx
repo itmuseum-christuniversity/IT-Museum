@@ -4,64 +4,61 @@ import museumLogo from '../assets/dataart-museum-logo.jpg';
 
 export default function Footer() {
     return (
-        <footer className="footer-professional">
+        <footer className="footer-retrospect">
             <div className="footer-content">
-                {/* Brand Column */}
-                <div className="footer-col brand-col">
-                    <div className="footer-logo">
-                        <img src={christLogo} alt="Christ University" style={{ height: '50px', objectFit: 'contain', background: 'white', padding: '5px', borderRadius: '4px' }} />
-                        <div style={{ width: '1px', height: '30px', background: 'rgba(255,255,255,0.3)', margin: '0 15px' }}></div>
-                        <img src={museumLogo} alt="DataArt" style={{ height: '50px', objectFit: 'contain', borderRadius: '4px' }} />
-                    </div>
-                    <p className="footer-tagline">
-                        Where Tradition Meets Computation.<br />
-                        Preserving the algorithmic beauty of Indian heritage.
+                {/* Column 1: Navigation / Credits style */}
+                <div className="footer-col">
+                    <h3>About the Project</h3>
+                    <Link to="/" className="footer-link">Home</Link>
+                    <Link to="/collection" className="footer-link">Digital Archive</Link>
+                    <Link to="/team" className="footer-link">Curators</Link>
+                    <Link to="/submission" className="footer-link">Submit Research</Link>
+                    <Link to="/admin" className="footer-link">Admin Portal</Link>
+                </div>
+
+                {/* Column 2: Museum Info */}
+                <div className="footer-col">
+                    <h3>About the Museum</h3>
+                    <p className="footer-text">
+                        The Christ University IT Museum is a historical project dedicated to exploring and promoting the IT engineering heritage in India.
+                        We aim to reconstruct the historical landscape surrounding significant engineering achievements and preserve the algorithmic beauty of Indian heritage.
                     </p>
+                    <p className="footer-text">
+                        Where Tradition Meets Computation.
+                    </p>
+
+                    <a href="https://retrospect.dataart.com" target="_blank" rel="noopener noreferrer" className="retrospect-link">
+                        Explore the history of data and computing at DataArt IT Museum
+                    </a>
                 </div>
 
-                {/* Navigation Column */}
+                {/* Column 3: Brand & Partners */}
                 <div className="footer-col">
-                    <h3>Explore</h3>
-                    <Link to="/">Home</Link>
-                    <Link to="/collection">Digital Archive</Link>
-                    <Link to="/team">Curators</Link>
-                    <Link to="/submission">Submit Research</Link>
-                </div>
+                    <h3>About Partners</h3>
+                    <div className="footer-logo-container">
+                        <div style={{ display: 'flex', alignItems: 'center', gap: '20px', marginBottom: '20px' }}>
+                            <img src={christLogo} alt="Christ University" className="footer-logo-img" style={{ background: 'white', padding: '5px', borderRadius: '4px', filter: 'none' }} />
+                            <img src={museumLogo} alt="DataArt" className="footer-logo-img" style={{ borderRadius: '4px' }} />
+                        </div>
+                    </div>
 
-                {/* Contact Column */}
-                <div className="footer-col">
-                    <h3>Contact</h3>
-                    <div className="contact-item">
-                        <span>📍</span>
-                        <p>Yeshwanthpur Campus, Bangalore</p>
+                    <div className="footer-text" style={{ fontSize: '0.9rem' }}>
+                        📍 Yeshwanthpur Campus, Bangalore<br />
+                        📧 itmuseum@christuniversity.in<br />
+                        📞 +91-80-4012-9100
                     </div>
-                    <div className="contact-item">
-                        <span>📧</span>
-                        <p>itmuseum@christuniversity.in</p>
-                    </div>
-                    <div className="contact-item">
-                        <span>📞</span>
-                        <p>+91-80-4012-9100</p>
-                    </div>
-                </div>
 
-                {/* Legal / Admin Column */}
-                <div className="footer-col">
-                    <h3>Legal & Admin</h3>
-                    <Link to="/admin">Admin Portal</Link>
-                    <span className="disabled-link">Privacy Policy</span>
-                    <span className="disabled-link">Terms of Service</span>
+                    <div style={{ marginTop: '20px', display: 'flex', gap: '15px' }}>
+                        <div className="social-dot" style={{ width: '25px', height: '25px' }}></div>
+                        <div className="social-dot" style={{ width: '25px', height: '25px' }}></div>
+                        <div className="social-dot" style={{ width: '25px', height: '25px' }}></div>
+                    </div>
                 </div>
             </div>
 
             <div className="footer-bottom">
-                <p>&copy; {new Date().getFullYear()} IT Museum. All rights reserved.</p>
-                <div className="social-links-placeholder">
-                    {/* Placeholders for social icons */}
-                    <div className="social-dot"></div>
-                    <div className="social-dot"></div>
-                    <div className="social-dot"></div>
-                </div>
+                <p>&copy; {new Date().getFullYear()} IT Museum Christ University. All rights reserved.</p>
+                <p>Designed with algorithmic beauty.</p>
             </div>
         </footer>
     );
