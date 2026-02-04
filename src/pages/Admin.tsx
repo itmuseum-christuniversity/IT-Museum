@@ -187,8 +187,8 @@ export default function Admin() {
                 return (
                     <ReviewPanel
                         title="First Review Panel"
-                        currentStageStatus="submitted"
-                        nextStageStatus="approved_first"
+                        currentStageStatus="reviewer_first"
+                        nextStageStatus="reviewer_technical"
                         reviewerName={user.email || 'Reviewer 1'}
                     />
                 );
@@ -196,8 +196,8 @@ export default function Admin() {
                 return (
                     <ReviewPanel
                         title="Technical Review Panel"
-                        currentStageStatus="approved_first"
-                        nextStageStatus="approved_technical"
+                        currentStageStatus="reviewer_technical"
+                        nextStageStatus="reviewer_literature"
                         reviewerName={user.email || 'Tech Reviewer'}
                     />
                 );
@@ -205,8 +205,8 @@ export default function Admin() {
                 return (
                     <ReviewPanel
                         title="Literature Review Panel"
-                        currentStageStatus="approved_technical"
-                        nextStageStatus="approved_literature"
+                        currentStageStatus="reviewer_literature"
+                        nextStageStatus="admin"
                         reviewerName={user.email || 'Lit Reviewer'}
                     />
                 );
@@ -216,7 +216,7 @@ export default function Admin() {
                     <>
                         <ReviewPanel
                             title="Final Publisher Approval"
-                            currentStageStatus="approved_literature"
+                            currentStageStatus="admin"
                             nextStageStatus="ready_for_publishing"
                             reviewerName={user.email || 'Admin'}
                             onActionComplete={() => setRefreshKey(prev => prev + 1)}

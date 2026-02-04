@@ -39,7 +39,19 @@ export default function KeywordExtractor() {
 
     const handleSelectArticle = (article: Article) => {
         setSelectedArticle(article);
-        setKeywords(article.tags || []);
+
+        // Merge existing tags with submitter's keywords
+        let initialKeywords: string[] = article.tags || [];
+
+        if (article.keywords) {
+            // Split comma-separated keywords from submission
+            const submitterKeywords = article.keywords.split(',').map(k => k.trim()).filter(k => k.length > 0);
+
+            // Merge strictly
+            initialKeywords = Array.from(new Set([...initialKeywords, ...submitterKeywords]));
+        }
+
+        setKeywords(initialKeywords);
         setUploadedFileName('');
         setProgress(0);
     };
@@ -113,9 +125,19 @@ export default function KeywordExtractor() {
 
     const handleAddKeyword = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
-            const val = (e.target as HTMLInputElement).value.trim();
-            if (val && !keywords.includes(val)) {
-                setKeywords([...keywords, val]);
+            const val = (e.target as HTMLInputElement).value;
+
+            // Support comma-separated entry
+            const newTags = val.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
+
+            if (newTags.length > 0) {
+                // Merge and deduplicate
+                const uniqueNewKeywords = newTags.filter(tag => !keywords.includes(tag));
+
+                if (uniqueNewKeywords.length > 0) {
+                    setKeywords([...keywords, ...uniqueNewKeywords]);
+                }
+
                 (e.target as HTMLInputElement).value = '';
             }
         }

@@ -92,6 +92,14 @@ export default function Submission() {
                 return;
             }
 
+            // Validate Keywords Format (Comma separated)
+            const keywordRegex = /^([a-zA-Z0-9\s-]+,)*[a-zA-Z0-9\s-]+$/;
+            if (!keywordRegex.test(formData.keywords.trim())) {
+                alert('Please enter keywords in a comma-separated format (e.g. "AI, Machine Learning, Data Science").');
+                setLoading(false);
+                return;
+            }
+
             // Validate URLs
             if (!validateGoogleDocUrl(googleDocUrl)) {
                 alert('Please enter a valid Google Docs URL (e.g., https://docs.google.com/document/d/...)');
@@ -118,12 +126,12 @@ export default function Submission() {
                 author_name: allAuthorsNames,
                 institution_email: allAuthorsEmails,
                 description: formData.description,
-                keywords: formData.keywords,
+                keywords: formData.keywords, // validated comma-separated string
                 num_authors: formData.numAuthors,
                 author_designations: allAuthorsDesignations,
                 similarity_report_url: similarityReportUrl || 'Image uploaded', // Store image reference
                 originality_confirmed: formData.originalityConfirmed,
-                status: 'submitted'
+                status: 'reviewer_first'
             }, googleDocUrl);
 
             alert('✅ Submission successful! Our academic panel will review your article.');

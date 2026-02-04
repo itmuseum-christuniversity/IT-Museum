@@ -164,7 +164,7 @@ export default function ReviewPanel({ title, currentStageStatus, nextStageStatus
                                     marginLeft: '1rem',
                                     height: 'fit-content'
                                 }}>
-                                    {article.status.replace('_', ' ').toUpperCase()}
+                                    {article.status.replace(/_/g, ' ').toUpperCase()}
                                 </span>
                             </div>
 

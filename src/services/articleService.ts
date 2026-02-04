@@ -14,7 +14,7 @@ export interface Article {
     similarity_report_url: string; // Link to similarity/plagiarism report
     originality_confirmed: boolean; // Confirmation that article is original
     file_url?: string;
-    status: 'submitted' | 'under_review' | 'accepted' | 'rejected' | 'approved_first' | 'approved_technical' | 'approved_literature' | 'ready_for_publishing' | 'published';
+    status: 'reviewer_first' | 'reviewer_technical' | 'reviewer_literature' | 'admin' | 'ready_for_publishing' | 'published' | 'rejected' | 'submitted'; // submitted kept for legacy/fallback
     created_at?: string;
     tags?: string[];
 }
@@ -29,7 +29,7 @@ export const articleService = {
                 {
                     ...data,
                     file_url: googleDocUrl,
-                    status: 'submitted'
+                    status: 'reviewer_first'
                 }
             ])
             .select()
