@@ -190,7 +190,7 @@ export default function Submission() {
                             alignItems: 'center', justifyContent: 'center', fontWeight: 700, margin: '0 auto 1rem'
                         }}>2</div>
                         <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>Prepare Manuscript</h3>
-                        <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Upload your work to Google Docs and ensure 'Anyone with the link can comment' access.</p>
+                        <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Upload your work to Google Docs and ensure you grant <strong>Commenter access</strong> to our team.</p>
                     </div>
 
                     <div className="card-premium" style={{ flex: '1', minWidth: '250px', maxWidth: '300px', textAlign: 'center', padding: '2rem' }}>
@@ -215,10 +215,21 @@ export default function Submission() {
                             <div style={{ flex: '1', minWidth: '300px' }} className="text-white-force">
                                 <h2 style={{ marginBottom: '1rem', textAlign: 'left', fontSize: '1.8rem', color: 'white' }}>📝 Submission Guidelines</h2>
                                 <ul style={{ lineHeight: '1.8', paddingLeft: '1.5rem', color: 'white' }}>
-                                    <li style={{ color: 'white' }}>All submissions must be original and not properly published elsewhere.</li>
-                                    <li style={{ color: 'white' }}>Articles must strictly follow the IEEE two-column format.</li>
+                                    <li style={{ color: 'white' }}>All submissions must be original and not previously published elsewhere.</li>
                                     <li style={{ color: 'white' }}>Include a clear abstract (max 250 words) and keywords.</li>
-                                    <li style={{ color: 'white' }}><strong>Submit a Google Docs Link</strong> (Access: Anyone with link can comment).</li>
+                                    <li style={{
+                                        background: '#FFD700',
+                                        color: '#002147',
+                                        padding: '12px 20px',
+                                        borderRadius: '8px',
+                                        listStyle: 'none',
+                                        marginLeft: '-1.5rem',
+                                        marginTop: '1.5rem',
+                                        boxShadow: '0 4px 15px rgba(0,0,0,0.2)',
+                                        fontWeight: 'bold'
+                                    }}>
+                                        Submit a Google Docs Link (Access: You must grant Commenter access to our academic panel).
+                                    </li>
                                 </ul>
                             </div>
                             <div>
@@ -448,7 +459,7 @@ export default function Submission() {
                                 </p>
                             )}
                             <p style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666' }}>
-                                ℹ️ Please ensure your document Link Sharing is set to <strong>"Anyone with the link can comment"</strong> so our reviewers can provide feedback.
+                                ℹ️ Please ensure your document Link Sharing is set to <strong style={{ color: 'var(--primary)' }}>"Commenter access"</strong> so our reviewers can provide feedback.
                             </p>
                         </div>
 

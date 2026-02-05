@@ -1,8 +1,8 @@
-
 import { Link } from 'react-router-dom';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
 import DynamicHomeSections from '../components/DynamicHomeSections';
 import HeroSlideshow from '../components/HeroSlideshow';
+import indianITImg from '../assets/hero-images/hero1.jpg';
 
 export default function Home() {
     useScrollAnimation();
@@ -24,9 +24,50 @@ export default function Home() {
                 </div>
             </section>
 
+            {/* Discovery Spotlight Section */}
+            <section className="spotlight-section fade-in">
+                <div className="spotlight-grid">
+                    <div className="spotlight-image-container">
+                        <img src={indianITImg} alt="Indian IT History - Early Mainframes" />
+                    </div>
+                    <div className="spotlight-content">
+                        <h2>The Dawn of Indian Computing</h2>
+                        <p style={{ color: 'rgba(255,255,255,0.8)', fontSize: '1.2rem', lineHeight: '1.8', marginBottom: '2rem' }}>
+                            In 1955, the <strong>HEC-2M</strong> arrived at the Indian Statistical Institute, marking India's entry into the digital age.
+                            This was soon followed by the <strong>TIFRAC</strong> in Mumbai—the first computer designed and built indigenously in India.
+                            These machines, housed in massive cooling halls, were the architectural blueprints for India's future as a global technology powerhouse.
+                        </p>
+                        <Link to="/collection" className="cta-button">Explore the IT Origins</Link>
+                    </div>
+                </div>
+            </section>
+
+            {/* Discovery Timeline Ribbon: Chapters of Computing History */}
+            <div style={{ textAlign: 'center', marginTop: '6rem', marginBottom: '-2rem' }}>
+                <h3 style={{ textTransform: 'uppercase', letterSpacing: '4px', color: 'var(--text-muted)', fontSize: '1rem', opacity: 0.8 }}>Discovery Timeline</h3>
+            </div>
+            <div className="milestone-ribbon">
+                <div className="ribbon-track">
+                    <a href="https://museum.dataart.com/history/chapter-1-from-military-to-civil-computing" target="_blank" rel="noopener noreferrer" className="ribbon-item">Chapter I. From Military to Civil Computing</a>
+                    <a href="https://museum.dataart.com/history/chapter-2-computers-for-business-and-industry" target="_blank" rel="noopener noreferrer" className="ribbon-item">Chapter II. Computers for Business and Industry</a>
+                    <a href="https://museum.dataart.com/history/chapter-3-computer-globalization" target="_blank" rel="noopener noreferrer" className="ribbon-item">Chapter III. Computer Globalization</a>
+                    <a href="https://museum.dataart.com/history/chapter-4-early-networks-and-proto-internet" target="_blank" rel="noopener noreferrer" className="ribbon-item">Chapter IV. Early Networks and Proto-Internet</a>
+                    <a href="https://museum.dataart.com/history/chapter-5-mass-computerization" target="_blank" rel="noopener noreferrer" className="ribbon-item">Chapter V. Mass Computerization</a>
+                    <a href="https://museum.dataart.com/history/chapter-6-computer-footprint-on-culture" target="_blank" rel="noopener noreferrer" className="ribbon-item">Chapter VI. Computer Footprint on Culture</a>
+
+                    {/* Duplicate for seamless scrolling */}
+                    <a href="https://museum.dataart.com/history/chapter-1-from-military-to-civil-computing" target="_blank" rel="noopener noreferrer" className="ribbon-item">Chapter I. From Military to Civil Computing</a>
+                    <a href="https://museum.dataart.com/history/chapter-2-computers-for-business-and-industry" target="_blank" rel="noopener noreferrer" className="ribbon-item">Chapter II. Computers for Business and Industry</a>
+                    <a href="https://museum.dataart.com/history/chapter-3-computer-globalization" target="_blank" rel="noopener noreferrer" className="ribbon-item">Chapter III. Computer Globalization</a>
+                    <a href="https://museum.dataart.com/history/chapter-4-early-networks-and-proto-internet" target="_blank" rel="noopener noreferrer" className="ribbon-item">Chapter IV. Early Networks and Proto-Internet</a>
+                    <a href="https://museum.dataart.com/history/chapter-5-mass-computerization" target="_blank" rel="noopener noreferrer" className="ribbon-item">Chapter V. Mass Computerization</a>
+                    <a href="https://museum.dataart.com/history/chapter-6-computer-footprint-on-culture" target="_blank" rel="noopener noreferrer" className="ribbon-item">Chapter VI. Computer Footprint on Culture</a>
+                </div>
+            </div>
+
             {/* Core Philosophy */}
             <section className="section">
-                <h2>Our Core Mission</h2>
+                <h2 style={{ textAlign: 'center' }}>Our Core Mission</h2>
                 <div className="team-grid">
                     <div className="profile-card" style={{ borderTop: '4px solid var(--primary)', position: 'relative' }}>
                         <div style={{ color: 'var(--primary)', marginBottom: '1.5rem', display: 'flex', justifyContent: 'center' }}>
@@ -34,7 +75,7 @@ export default function Home() {
                         </div>
                         <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>Vision</h3>
                         <p style={{ color: 'var(--text-muted)', lineHeight: '1.8' }}>
-                            To serve as a global beacon for the digital preservation of <strong>intangible cultural heritage</strong>. We aim to bridge the gap between ancient artistic traditions and modern computational science through the innovative lens of ethnomathematics.
+                            To serve as a global beacon for the digital preservation of <strong>intangible cultural heritage</strong>. We aim to bridge the gap between ancient artistic traditions and modern computational science.
                         </p>
                     </div>
                     <div className="profile-card" style={{ borderTop: '4px solid var(--accent)', position: 'relative' }}>
@@ -43,7 +84,7 @@ export default function Home() {
                         </div>
                         <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>Mission</h3>
                         <p style={{ color: 'var(--text-muted)', lineHeight: '1.8' }}>
-                            We are dedicated to meticulously archiving, analyzing, and modeling the intricate logic of <strong>traditional geometric art</strong> using Array Grammars. Our goal is to foster a vibrant interdisciplinary dialogue that unites art historians, mathematicians, and computer scientists.
+                            We are dedicated to meticulously archiving and modeling the intricate logic of <strong>traditional geometric art</strong>. Our goal is to foster a vibrant interdisciplinary dialogue.
                         </p>
                     </div>
                     <div className="profile-card" style={{ borderTop: '4px solid var(--primary)', position: 'relative' }}>
@@ -52,14 +93,19 @@ export default function Home() {
                         </div>
                         <h3 style={{ fontSize: '1.5rem', marginBottom: '1rem' }}>Values</h3>
                         <p style={{ color: 'var(--text-muted)', lineHeight: '1.8' }}>
-                            Our work is grounded in an unwavering commitment to <strong>integrity</strong> in preservation and <strong>inclusivity</strong> in access. We believe in the power of technology to democratize culture, ensuring that the wisdom of rural artisans is celebrated and preserved for future generations.
+                            Grounded in an unwavering commitment to <strong>integrity</strong> in preservation and <strong>inclusivity</strong> in access. We believe technology democratizes culture.
                         </p>
                     </div>
                 </div>
             </section>
 
-
-
+            {/* Curator Quote Section */}
+            <section className="quote-section fade-in">
+                <blockquote className="quote-text">
+                    "History is not a record of the past, but the blueprints for the future."
+                </blockquote>
+                <div className="quote-author">— The Christ University IT Museum Board</div>
+            </section>
 
             <DynamicHomeSections />
         </div>

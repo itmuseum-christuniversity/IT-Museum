@@ -1,0 +1,170 @@
+/* Home Page Discovery Sections */
+.spotlight-section {
+    background: var(--primary-dark);
+    color: white;
+    padding: 120px 0;
+    margin: 4rem 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.spotlight-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6rem;
+    align-items: center;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 2rem;
+}
+
+.spotlight-content h2 {
+    color: var(--accent) !important;
+    text-align: left;
+    margin-bottom: 2rem;
+    font-size: 3rem;
+}
+
+.spotlight-content h2::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background: var(--accent);
+    margin: 1rem 0;
+}
+
+.spotlight-image-container {
+    position: relative;
+    border: 2px solid var(--accent);
+    padding: 20px;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5);
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.spotlight-image-container img {
+    width: 100%;
+    height: auto;
+    display: block;
+    transition: transform 0.5s ease;
+}
+
+.spotlight-image-container:hover img {
+    transform: scale(1.02);
+}
+
+.milestone-ribbon {
+    background: #ffffff;
+    padding: 60px 0;
+    border-top: 1px solid rgba(0, 0, 0, 0.05);
+    border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    white-space: nowrap;
+    margin: 4rem 0;
+    position: relative;
+}
+
+.milestone-ribbon::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--primary), transparent);
+    opacity: 0.2;
+    z-index: 0;
+}
+
+.ribbon-track {
+    display: inline-block;
+    animation: scroll-ribbon 60s linear infinite;
+}
+
+.ribbon-item {
+    display: inline-block;
+    padding: 0 60px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: var(--primary);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    opacity: 0.7;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+    background: white;
+    /* To cover the axis line behind text */
+}
+
+.ribbon-item::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 0;
+    width: 10px;
+    height: 10px;
+    background: var(--accent);
+    border-radius: 50%;
+    transform: translateY(-50%);
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.ribbon-item:hover {
+    opacity: 1;
+    color: var(--primary-light);
+    transform: translateY(-5px);
+}
+
+@keyframes scroll-ribbon {
+    from {
+        transform: translateX(0);
+    }
+
+    to {
+        transform: translateX(-50%);
+    }
+}
+
+.quote-section {
+    max-width: 900px;
+    margin: 120px auto;
+    text-align: center;
+    padding: 0 2rem;
+}
+
+.quote-section blockquote {
+    font-size: 2.2rem;
+    color: var(--primary-dark);
+    font-style: italic;
+    line-height: 1.4;
+    margin-bottom: 2rem;
+    font-family: var(--font-heading);
+}
+
+.quote-author {
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    color: var(--accent);
+    font-weight: 700;
+}
+
+@media (max-width: 1024px) {
+    .spotlight-grid {
+        grid-template-columns: 1fr;
+        gap: 4rem;
+        text-align: center;
+    }
+
+    .spotlight-content h2 {
+        text-align: center;
+        font-size: 2.5rem;
+    }
+
+    .spotlight-content h2::after {
+        margin: 1rem auto;
+    }
+}

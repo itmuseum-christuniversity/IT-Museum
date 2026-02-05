@@ -123,23 +123,27 @@ export default function KeywordExtractor() {
         }
     };
 
+    const addManualKeywords = (val: string) => {
+        if (!val.trim()) return;
+
+        // Support comma-separated entry
+        const newTags = val.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
+
+        if (newTags.length > 0) {
+            // Merge and deduplicate
+            const uniqueNewKeywords = newTags.filter(tag => !keywords.includes(tag));
+
+            if (uniqueNewKeywords.length > 0) {
+                setKeywords([...keywords, ...uniqueNewKeywords]);
+            }
+        }
+    };
+
     const handleAddKeyword = (e: React.KeyboardEvent<HTMLInputElement>) => {
         if (e.key === 'Enter') {
-            const val = (e.target as HTMLInputElement).value;
-
-            // Support comma-separated entry
-            const newTags = val.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
-
-            if (newTags.length > 0) {
-                // Merge and deduplicate
-                const uniqueNewKeywords = newTags.filter(tag => !keywords.includes(tag));
-
-                if (uniqueNewKeywords.length > 0) {
-                    setKeywords([...keywords, ...uniqueNewKeywords]);
-                }
-
-                (e.target as HTMLInputElement).value = '';
-            }
+            const input = e.target as HTMLInputElement;
+            addManualKeywords(input.value);
+            input.value = '';
         }
     };
 
@@ -295,8 +299,8 @@ export default function KeywordExtractor() {
                                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1rem', minHeight: '50px', padding: '0.5rem', border: '1px solid #ddd', borderRadius: '4px' }}>
                                     {keywords.map(k => (
                                         <span key={k} style={{
-                                            background: 'var(--secondary)',
-                                            color: 'white',
+                                            background: 'var(--secondary, #eee)',
+                                            color: 'black',
                                             padding: '4px 10px',
                                             borderRadius: '16px',
                                             fontSize: '0.9rem',
@@ -307,19 +311,35 @@ export default function KeywordExtractor() {
                                             {k}
                                             <button
                                                 onClick={() => removeKeyword(k)}
-                                                style={{ background: 'none', border: 'none', color: 'white', cursor: 'pointer', padding: 0, fontWeight: 'bold' }}
+                                                style={{ background: 'none', border: 'none', color: 'black', cursor: 'pointer', padding: 0, fontWeight: 'bold' }}
                                             >×</button>
                                         </span>
                                     ))}
                                     {keywords.length === 0 && <span style={{ color: '#999', padding: '4px' }}>No keywords yet. Upload file or add manually.</span>}
                                 </div>
 
-                                <input
-                                    type="text"
-                                    placeholder="Type keyword and press Enter..."
-                                    onKeyDown={handleAddKeyword}
-                                    style={{ width: '100%', padding: '0.8rem', borderRadius: '4px', border: '1px solid #ccc' }}
-                                />
+                                <div style={{ display: 'flex', gap: '0.5rem' }}>
+                                    <input
+                                        type="text"
+                                        id="manual-keyword-input"
+                                        placeholder="Type keyword..."
+                                        onKeyDown={handleAddKeyword}
+                                        style={{ flex: 1, padding: '0.8rem', borderRadius: '4px', border: '1px solid #ccc' }}
+                                    />
+                                    <button
+                                        onClick={() => {
+                                            const input = document.getElementById('manual-keyword-input') as HTMLInputElement;
+                                            if (input) {
+                                                addManualKeywords(input.value);
+                                                input.value = '';
+                                            }
+                                        }}
+                                        className="cta-button"
+                                        style={{ padding: '0 1.5rem', borderRadius: '4px', background: 'var(--primary)', height: 'auto', display: 'flex', alignItems: 'center' }}
+                                    >
+                                        Add
+                                    </button>
+                                </div>
                             </div>
 
                             <button
