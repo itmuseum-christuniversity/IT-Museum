@@ -11,6 +11,7 @@ export interface Article {
     keywords: string; // Comma-separated keywords for NLP processing
     num_authors: number; // Number of authors (1-10)
     author_designations: string; // Designations for all authors
+    submitter_email?: string; // Email of the person submitting the article
     similarity_report_url: string; // Link to similarity/plagiarism report
     originality_confirmed: boolean; // Confirmation that article is original
     file_url?: string;

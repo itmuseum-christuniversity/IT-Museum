@@ -15,6 +15,7 @@ export default function Submission() {
         description: '',
         keywords: '',
         numAuthors: 1,
+        submitterEmail: '',
         authors: [{ name: '', email: '', designation: '' }], // Array of author objects
         originalityConfirmed: false
     });
@@ -129,6 +130,7 @@ export default function Submission() {
                 keywords: formData.keywords, // validated comma-separated string
                 num_authors: formData.numAuthors,
                 author_designations: allAuthorsDesignations,
+                submitter_email: formData.submitterEmail,
                 similarity_report_url: similarityReportUrl || 'Image uploaded', // Store image reference
                 originality_confirmed: formData.originalityConfirmed,
                 status: 'reviewer_first'
@@ -141,6 +143,7 @@ export default function Submission() {
                 description: '',
                 keywords: '',
                 numAuthors: 1,
+                submitterEmail: '',
                 authors: [{ name: '', email: '', designation: '' }],
                 originalityConfirmed: false
             });
@@ -262,6 +265,22 @@ export default function Submission() {
                                 className="enhanced-input"
                                 style={{ width: '100%', padding: '1rem', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1rem' }}
                             />
+                        </div>
+
+                        <div style={{ marginBottom: '1.5rem' }}>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Submitter Email</label>
+                            <input
+                                type="email"
+                                required
+                                placeholder="Enter your email for notifications"
+                                value={formData.submitterEmail}
+                                onChange={e => setFormData({ ...formData, submitterEmail: e.target.value })}
+                                className="enhanced-input"
+                                style={{ width: '100%', padding: '1rem', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1rem' }}
+                            />
+                            <p style={{ fontSize: '0.85rem', marginTop: '0.3rem', color: 'var(--text-muted)' }}>
+                                Important: We will use this email to communicate the status of your submission (acceptance/rejection).
+                            </p>
                         </div>
 
                         <div style={{ marginBottom: '1.5rem' }}>
