@@ -1,9 +1,13 @@
 
 import { useState, useEffect } from 'react';
-import mammoth from 'mammoth';
+import * as pdfjsLib from 'pdfjs-dist';
+import pdfWorker from 'pdfjs-dist/build/pdf.worker.mjs?url';
 import keyword_extractor from 'keyword-extractor';
 import { articleService, Article } from '../../services/articleService';
 import { supabase } from '../../lib/supabase';
+
+// Setup PDF.js worker
+pdfjsLib.GlobalWorkerOptions.workerSrc = pdfWorker;
 
 export default function KeywordExtractor() {
     const [articles, setArticles] = useState<Article[]>([]);
@@ -11,8 +15,10 @@ export default function KeywordExtractor() {
     const [keywords, setKeywords] = useState<string[]>([]);
     const [loading, setLoading] = useState(false);
     const [processing, setProcessing] = useState(false);
+    const [isPublishing, setIsPublishing] = useState(false);
     const [progress, setProgress] = useState(0);
     const [uploadedFileName, setUploadedFileName] = useState('');
+    const [pdfFile, setPdfFile] = useState<File | null>(null);
 
     useEffect(() => {
         loadReadyArticles();
@@ -53,44 +59,60 @@ export default function KeywordExtractor() {
 
         setKeywords(initialKeywords);
         setUploadedFileName('');
+        setPdfFile(null);
         setProgress(0);
+    };
+
+    const extractTextFromPdf = async (arrayBuffer: ArrayBuffer) => {
+        const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+        let fullText = '';
+
+        for (let i = 1; i <= pdf.numPages; i++) {
+            const page = await pdf.getPage(i);
+            const textContent = await page.getTextContent();
+            const pageText = textContent.items
+                .map((item: any) => item.str)
+                .join(' ');
+            fullText += pageText + ' ';
+            setProgress(Math.round((i / pdf.numPages) * 100));
+        }
+
+        return fullText;
     };
 
     const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (!file) return;
 
+        if (file.type !== 'application/pdf') {
+            alert("Please upload a PDF file.");
+            return;
+        }
+
         setUploadedFileName(file.name);
+        setPdfFile(file);
         setProcessing(true);
-        setProgress(10); // Start progress
+        setProgress(0);
 
         try {
-            // Simulate progress steps
-            await new Promise(r => setTimeout(r, 500));
-            setProgress(30);
-
             const arrayBuffer = await file.arrayBuffer();
-            const result = await mammoth.extractRawText({ arrayBuffer });
-            const text = result.value;
+            const text = await extractTextFromPdf(arrayBuffer);
 
-            setProgress(60);
+            setProgress(90);
             await new Promise(r => setTimeout(r, 300));
 
             // 1. Extract Keywords (Standard NLP)
             const extractionResult = keyword_extractor.extract(text, {
                 language: "english",
                 remove_digits: true,
-                return_changed_case: true, // Keep original case for potential proper nouns here too
+                return_changed_case: true,
                 remove_duplicates: true
             });
 
-            // 2. Extract Proper Nouns via Regex (Simple heuristic: Capitalized words in middle of sentences)
-            // Matches words starting with Capital not at start of sentence (conceptually hard without sentence splitting, 
-            // but simply matching [A-Z][a-z]+ can work well for names/places)
+            // 2. Extract Proper Nouns via Regex
             const properNounRegex = /\b[A-Z][a-zA-Z]+\b/g;
             const properNouns = text.match(properNounRegex) || [];
 
-            // Filter common stop words from proper nouns just in case (like 'The', 'A')
             const commonStarts = ['The', 'A', 'An', 'This', 'That', 'It', 'In', 'On', 'For', 'Of', 'With', 'And', 'But'];
             const filteredProperNouns = properNouns.filter(w => !commonStarts.includes(w) && w.length > 3);
 
@@ -100,8 +122,6 @@ export default function KeywordExtractor() {
             // Filter and Deduplicate
             const uniqueKeywords = Array.from(new Set(allCandidates));
 
-            // Select Top Results (Logic: Proper nouns first, then others)
-            // Dynamic limit: Base 30, plus 1 for every 30 words, capped at 100 to prevent UI clutter
             const wordCount = text.split(/\s+/).length;
             const dynamicLimit = Math.min(100, Math.max(30, Math.ceil(wordCount / 30)));
 
@@ -116,7 +136,8 @@ export default function KeywordExtractor() {
             setProgress(100);
             await new Promise(r => setTimeout(r, 200));
         } catch (error: any) {
-            alert("Error parsing file: " + error.message);
+            console.error("PDF Parsing error:", error);
+            alert("Error parsing PDF file: " + error.message);
             setProgress(0);
         } finally {
             setProcessing(false);
@@ -126,11 +147,9 @@ export default function KeywordExtractor() {
     const addManualKeywords = (val: string) => {
         if (!val.trim()) return;
 
-        // Support comma-separated entry
         const newTags = val.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0);
 
         if (newTags.length > 0) {
-            // Merge and deduplicate
             const uniqueNewKeywords = newTags.filter(tag => !keywords.includes(tag));
 
             if (uniqueNewKeywords.length > 0) {
@@ -153,43 +172,60 @@ export default function KeywordExtractor() {
 
     const handlePublishLive = async () => {
         if (!selectedArticle?.id) return;
+        if (!pdfFile) {
+            alert("Please scan a PDF file before publishing. This PDF will be the version displayed on the website.");
+            return;
+        }
 
         if (keywords.length === 0 && !window.confirm("Publish without keywords?")) return;
 
+        setIsPublishing(true);
         try {
-            // Update keywords AND Status
+            // 1. Upload the PDF to Supabase Storage
+            const finalPdfUrl = await articleService.uploadFile(pdfFile, 'articles');
+
+            // 2. Update article with new PDF URL and Keywords
             await articleService.updateArticleDetails(selectedArticle.id, {
                 tags: keywords,
+                file_url: finalPdfUrl, // Replaces Google Doc URL with permanent PDF storage
                 status: 'published'
             });
 
-            alert("Article is now LIVE!");
+            alert("Article is now LIVE! The Google Doc link has been replaced with the permanent PDF archive.");
 
-            // Remove from local list since it's now published
+            // Find next article before removing current one
+            const currentIndex = articles.findIndex(a => a.id === selectedArticle.id);
+            const nextArticle = articles[currentIndex + 1] || articles[currentIndex - 1];
+
             setArticles(articles.filter(a => a.id !== selectedArticle.id));
-            setSelectedArticle(null);
+
+            if (nextArticle) handleSelectArticle(nextArticle);
+            else setSelectedArticle(null);
+
             setKeywords([]);
+            setPdfFile(null);
             setUploadedFileName('');
             setProgress(0);
 
         } catch (error: any) {
             alert("Error publishing: " + error.message);
+        } finally {
+            setIsPublishing(false);
         }
     };
 
-    if (loading) return <div>Loading articles for analysis...</div>;
+    if (loading) return <div style={{ padding: '2rem', textAlign: 'center' }}>Loading articles for analysis...</div>;
 
     return (
         <div className="card-premium" style={{ marginBottom: '3rem' }}>
-            <h2>Keyword Analysis & Extraction</h2>
+            <h2>Step 4: Final Archive & Publication (PDF)</h2>
             <p style={{ color: '#666', marginBottom: '1.5rem' }}>
-                Analyze articles approved by the Lit Reviewer. Extract keywords before final publishing.
+                Analyze approved articles. Download the final Google Doc as a PDF, scan it for keywords here, and publish it to the live archive.
             </p>
 
             <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
-                {/* Article List */}
                 <div style={{ flex: 1, minWidth: '300px', borderRight: '1px solid #eee', paddingRight: '2rem' }}>
-                    <h3>Ready for Analysis</h3>
+                    <h3>Ready for Archiving</h3>
                     <div style={{ maxHeight: '400px', overflowY: 'auto' }}>
                         {articles.length === 0 ? <p>No articles waiting for analysis.</p> : (
                             <ul style={{ listStyle: 'none', padding: 0 }}>
@@ -214,40 +250,39 @@ export default function KeywordExtractor() {
                     </div>
                 </div>
 
-                {/* Extraction Panel */}
                 <div style={{ flex: 2, minWidth: '300px' }}>
                     {selectedArticle ? (
                         <div>
-                            <h3 style={{ marginTop: 0 }}>Analysis: {selectedArticle.title}</h3>
+                            <h3 style={{ marginTop: 0 }}>Processing: {selectedArticle.title}</h3>
 
                             {selectedArticle.file_url && (
                                 <div style={{ marginBottom: '1.5rem', padding: '1rem', background: '#e3f2fd', borderRadius: '8px', border: '1px solid #90caf9' }}>
                                     <p style={{ margin: 0, fontWeight: 500, color: '#1565c0' }}>
-                                        Original Submission: {' '}
+                                        Current Google Doc: {' '}
                                         <a href={selectedArticle.file_url} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'underline' }}>
-                                            Open Google Doc ↗
+                                            Open Document for Export ↗
                                         </a>
                                     </p>
                                     <small style={{ display: 'block', marginTop: '0.5rem', color: '#555' }}>
-                                        Step 0: Open this doc, go to File &gt; Download &gt; Microsoft Word (.docx).
+                                        Instructions: 1. Open Google Doc. 2. File &gt; Download &gt; PDF Document. 3. Upload the PDF below to replace the link with the permanent file.
                                     </small>
                                 </div>
                             )}
 
                             <div style={{ background: '#f5f5f5', padding: '1.5rem', borderRadius: '8px', marginBottom: '2rem' }}>
-                                <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '0.5rem' }}>Step 1: Upload .docx File</label>
+                                <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '0.5rem' }}>Step 1: Upload Final PDF for Scanning</label>
 
                                 <div style={{ position: 'relative' }}>
                                     <input
                                         type="file"
-                                        id="docx-upload"
-                                        accept=".docx"
+                                        id="pdf-upload"
+                                        accept=".pdf"
                                         onChange={handleFileUpload}
-                                        disabled={processing}
+                                        disabled={processing || isPublishing}
                                         style={{ display: 'none' }}
                                     />
                                     <label
-                                        htmlFor="docx-upload"
+                                        htmlFor="pdf-upload"
                                         style={{
                                             display: 'block',
                                             padding: '2rem',
@@ -255,29 +290,29 @@ export default function KeywordExtractor() {
                                             borderRadius: '8px',
                                             textAlign: 'center',
                                             background: uploadedFileName ? '#e8f5e9' : 'white',
-                                            cursor: processing ? 'not-allowed' : 'pointer',
+                                            cursor: (processing || isPublishing) ? 'not-allowed' : 'pointer',
                                             transition: 'all 0.2s ease',
                                             color: uploadedFileName ? '#2e7d32' : '#666'
                                         }}
-                                        onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--primary)'}
-                                        onMouseLeave={(e) => e.currentTarget.style.borderColor = '#bbb'}
+                                        onMouseEnter={(e) => !(processing || isPublishing) && (e.currentTarget.style.borderColor = 'var(--primary)')}
+                                        onMouseLeave={(e) => !(processing || isPublishing) && (e.currentTarget.style.borderColor = '#bbb')}
                                     >
                                         <div style={{ fontSize: '2rem', marginBottom: '0.5rem' }}>
                                             {processing ? '⏳' : (uploadedFileName ? '✅' : '📄')}
                                         </div>
                                         {processing ? (
-                                            <span style={{ fontWeight: 'bold' }}>Analyzing Document...</span>
+                                            <span style={{ fontWeight: 'bold' }}>Scanning Document Content...</span>
                                         ) : (
                                             uploadedFileName ? (
                                                 <>
-                                                    <span style={{ display: 'block', fontWeight: 'bold', fontSize: '1.1rem' }}>Analysis Complete!</span>
-                                                    <span style={{ fontSize: '0.9rem' }}>File: {uploadedFileName}</span>
-                                                    <span style={{ display: 'block', fontSize: '0.8rem', marginTop: '0.5rem', color: '#666' }}>(Click to upload different file)</span>
+                                                    <span style={{ display: 'block', fontWeight: 'bold', fontSize: '1.1rem' }}>Scan Complete!</span>
+                                                    <span style={{ fontSize: '0.9rem' }}>File ready: {uploadedFileName}</span>
+                                                    <span style={{ display: 'block', fontSize: '0.8rem', marginTop: '0.5rem', color: '#666' }}>(Click to upload different version)</span>
                                                 </>
                                             ) : (
                                                 <>
-                                                    <span style={{ display: 'block', fontWeight: 'bold' }}>Click to Upload Word Document</span>
-                                                    <span style={{ fontSize: '0.8rem' }}>(.docx format only)</span>
+                                                    <span style={{ display: 'block', fontWeight: 'bold' }}>Click to Upload PDF</span>
+                                                    <span style={{ fontSize: '0.8rem' }}>(Downloaded from Google Docs)</span>
                                                 </>
                                             )
                                         )}
@@ -289,13 +324,13 @@ export default function KeywordExtractor() {
                                         <div style={{ height: '8px', background: '#ccc', borderRadius: '4px', overflow: 'hidden' }}>
                                             <div style={{ width: `${progress}%`, height: '100%', background: 'var(--primary)', transition: 'width 0.3s ease' }}></div>
                                         </div>
-                                        <p style={{ fontSize: '0.8rem', textAlign: 'right', marginTop: '4px' }}>{progress}% Analyzed</p>
+                                        <p style={{ fontSize: '0.8rem', textAlign: 'right', marginTop: '4px' }}>{progress}% Scanned</p>
                                     </div>
                                 )}
                             </div>
 
                             <div style={{ marginBottom: '2rem' }}>
-                                <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '0.5rem' }}>Step 2: Manage Keywords</label>
+                                <label style={{ fontWeight: 'bold', display: 'block', marginBottom: '0.5rem' }}>Step 2: Review Keywords</label>
                                 <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', marginBottom: '1rem', minHeight: '50px', padding: '0.5rem', border: '1px solid #ddd', borderRadius: '4px' }}>
                                     {keywords.map(k => (
                                         <span key={k} style={{
@@ -344,15 +379,22 @@ export default function KeywordExtractor() {
 
                             <button
                                 onClick={handlePublishLive}
-                                className="cta-button"
-                                style={{ width: '100%', fontSize: '1.2rem', padding: '1rem', background: 'linear-gradient(45deg, #43a047, #2e7d32)' }}
+                                disabled={isPublishing || !pdfFile}
+                                className={`cta-button ${isPublishing ? 'loading' : ''}`}
+                                style={{
+                                    width: '100%',
+                                    fontSize: '1.2rem',
+                                    padding: '1rem',
+                                    background: isPublishing ? '#999' : 'linear-gradient(45deg, #43a047, #2e7d32)',
+                                    cursor: (isPublishing || !pdfFile) ? 'not-allowed' : 'pointer'
+                                }}
                             >
-                                🚀 Publish Live to Website
+                                {isPublishing ? 'Uploading PDF & Publishing...' : '🚀 Replace Link & Publish Live'}
                             </button>
                         </div>
                     ) : (
                         <div style={{ display: 'flex', height: '100%', alignItems: 'center', justifyContent: 'center', color: '#999', border: '2px dashed #ddd', borderRadius: '8px' }}>
-                            <p>Select an article to begin (from left)</p>
+                            <p>Select an article to archive (from left)</p>
                         </div>
                     )}
                 </div>

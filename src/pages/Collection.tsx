@@ -114,21 +114,44 @@ export default function Collection() {
                                 <p style={{ fontSize: '0.9rem' }}>Try checking your spelling or using different keywords.</p>
                             </div>
                         ) : (
+
                             filteredArticles.map((article, index) => (
-                                <a key={article.id} href={article.file_url} target="_blank" rel="noopener noreferrer" className="gallery-item slide-in-up" style={{ animationDelay: `${index * 100}ms` }}>
+                                <a key={article.id} onClick={() => navigate(`/article/${article.id}`)} className="gallery-item slide-in-up" style={{ animationDelay: `${index * 100}ms`, cursor: 'pointer' }}>
                                     <div className="gallery-thumb">
                                         <div style={{ width: '100%', height: '100%', background: 'linear-gradient(45deg, #006064, #0097A7)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '3rem' }}>📄</div>
                                     </div>
                                     <div className="gallery-content">
-                                        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '0.5rem' }}>
-                                            <span className="gallery-tag">Research Paper</span>
+                                        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
+                                            <span className="gallery-tag" style={{ borderBottom: '2px solid var(--accent)', paddingBottom: '2px' }}>Feature Article</span>
                                         </div>
-                                        <h3>{article.title}</h3>
-                                        <p style={{ color: 'var(--text-muted)', marginTop: '0.5rem', fontWeight: 'bold' }}>By {article.author_name}</p>
-                                        <p style={{ fontSize: '0.9rem', marginTop: '0.5rem', display: '-webkit-box', WebkitLineClamp: 3, WebkitBoxOrient: 'vertical', overflow: 'hidden' }}>{article.description}</p>
+                                        <h3 style={{ fontSize: '1.2rem', marginBottom: '0.8rem', lineHeight: '1.3' }}>{article.title}</h3>
+                                        <p style={{ color: 'var(--text-muted)', marginBottom: '0.8rem', fontWeight: 600, fontSize: '0.9rem' }}>By {article.author_name}</p>
+
+                                        {article.tags && article.tags.length > 0 && (
+                                            <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
+                                                {article.tags.slice(0, 5).map(tag => (
+                                                    <span key={tag} style={{ fontSize: '0.7rem', background: '#f0f4f8', color: '#1565c0', padding: '2px 8px', borderRadius: '4px', border: '1px solid #e1e8ed' }}>
+                                                        {tag}
+                                                    </span>
+                                                ))}
+                                                {article.tags.length > 5 && (
+                                                    <span style={{ fontSize: '0.7rem', color: 'var(--primary)', fontWeight: 'bold', alignSelf: 'center' }}>
+                                                        +{article.tags.length - 5} more
+                                                    </span>
+                                                )}
+                                            </div>
+                                        )}
+
+                                        <p style={{ fontSize: '0.85rem', color: '#555', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', lineHeight: '1.5' }}>
+                                            {article.description}
+                                        </p>
+                                        <span style={{ color: 'var(--primary)', fontWeight: 700, fontSize: '0.85rem', marginTop: '1.2rem', display: 'block', borderTop: '1px solid #eee', paddingTop: '1rem' }}>
+                                            View Full Analysis &rarr;
+                                        </span>
                                     </div>
                                 </a>
                             ))
+
                         )
                     )}
                 </div>

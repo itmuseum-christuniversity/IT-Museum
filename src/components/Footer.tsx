@@ -43,9 +43,9 @@ export default function Footer() {
                     </div>
 
                     <div className="footer-text" style={{ fontSize: '0.9rem' }}>
-                        📍 Yeshwanthpur Campus, Bangalore<br />
+                        📍 Bangalore Yeshwanthpur Campus<br />
                         📧 itmuseum@christuniversity.in<br />
-                        📞 +91-80-4012-9100
+                        📞 080 6989 6666
                     </div>
 
                     <div style={{ marginTop: '20px', display: 'flex', gap: '15px' }}>
@@ -58,7 +58,7 @@ export default function Footer() {
 
             <div className="footer-bottom">
                 <p>&copy; {new Date().getFullYear()} IT Museum Christ University. All rights reserved.</p>
-                <p>Designed with algorithmic beauty.</p>
+                <p>Designed with algorithmic beauty and Gemini AI.</p>
             </div>
         </footer>
     );

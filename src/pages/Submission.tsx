@@ -1,3 +1,4 @@
+
 import { FormEvent, useState } from 'react';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
 import { articleService } from '../services/articleService';
@@ -16,11 +17,10 @@ export default function Submission() {
         keywords: '',
         numAuthors: 1,
         submitterEmail: '',
-        authors: [{ name: '', email: '', designation: '' }], // Array of author objects
+        authors: [{ name: '', email: '', designation: '' }],
         originalityConfirmed: false
     });
 
-    // Update authors array when numAuthors changes
     const handleNumAuthorsChange = (num: number) => {
         const newAuthors = Array.from({ length: num }, (_, i) =>
             formData.authors[i] || { name: '', email: '', designation: '' }
@@ -28,34 +28,30 @@ export default function Submission() {
         setFormData({ ...formData, numAuthors: num, authors: newAuthors });
     };
 
-    // Update individual author field
     const handleAuthorChange = (index: number, field: 'name' | 'email' | 'designation', value: string) => {
         const newAuthors = [...formData.authors];
         newAuthors[index] = { ...newAuthors[index], [field]: value };
         setFormData({ ...formData, authors: newAuthors });
     };
 
-    // Validate Google Docs URL in real-time
     const validateGoogleDocUrl = (url: string) => {
         if (!url) {
-            setUrlError('');
+            setUrlError('Please provide the Google Docs URL.');
             return false;
         }
-        if (!url.includes('docs.google.com')) {
-            setUrlError('Please enter a valid Google Docs URL');
+        if (!url.includes('docs.google.com/document')) {
+            setUrlError('Please provide a valid Google Docs URL.');
             return false;
         }
         setUrlError('');
         return true;
     };
 
-    // Validate Similarity Report URL
     const validateSimilarityReportUrl = (url: string) => {
         if (!url) {
             setSimilarityReportError('');
             return false;
         }
-        // Accept Google Drive, Dropbox, or other common file sharing URLs
         const validDomains = ['drive.google.com', 'dropbox.com', 'onedrive.live.com', 'docs.google.com'];
         const isValid = validDomains.some(domain => url.includes(domain));
         if (!isValid) {
@@ -66,15 +62,11 @@ export default function Submission() {
         return true;
     };
 
-    // Validate AI Content Percentage
-
-
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
         setLoading(true);
 
         try {
-            // Validate all required fields
             if (!googleDocUrl) {
                 alert('Please provide the Google Docs URL.');
                 setLoading(false);
@@ -93,7 +85,6 @@ export default function Submission() {
                 return;
             }
 
-            // Validate Keywords Format (Comma separated)
             const keywordRegex = /^([a-zA-Z0-9\s-]+,)*[a-zA-Z0-9\s-]+$/;
             if (!keywordRegex.test(formData.keywords.trim())) {
                 alert('Please enter keywords in a comma-separated format (e.g. "AI, Machine Learning, Data Science").');
@@ -101,23 +92,12 @@ export default function Submission() {
                 return;
             }
 
-            // Validate URLs
             if (!validateGoogleDocUrl(googleDocUrl)) {
-                alert('Please enter a valid Google Docs URL (e.g., https://docs.google.com/document/d/...)');
+                alert('Please enter a valid Google Docs URL.');
                 setLoading(false);
                 return;
             }
 
-            // Validate similarity report URL only if provided (it's optional)
-            if (similarityReportUrl && !validateSimilarityReportUrl(similarityReportUrl)) {
-                alert('Please enter a valid similarity report URL from a file sharing service.');
-                setLoading(false);
-                return;
-            }
-
-
-            // Submit using Supabase service
-            // Combine all authors' data
             const allAuthorsNames = formData.authors.map(a => a.name).join(', ');
             const allAuthorsEmails = formData.authors.map(a => a.email).join(', ');
             const allAuthorsDesignations = formData.authors.map(a => a.designation).join(', ');
@@ -127,17 +107,17 @@ export default function Submission() {
                 author_name: allAuthorsNames,
                 institution_email: allAuthorsEmails,
                 description: formData.description,
-                keywords: formData.keywords, // validated comma-separated string
+                keywords: formData.keywords,
                 num_authors: formData.numAuthors,
                 author_designations: allAuthorsDesignations,
                 submitter_email: formData.submitterEmail,
-                similarity_report_url: similarityReportUrl || 'Image uploaded', // Store image reference
+                similarity_report_url: similarityReportUrl || 'Image uploaded',
                 originality_confirmed: formData.originalityConfirmed,
-                status: 'reviewer_first'
-            }, googleDocUrl);
+                status: 'reviewer_first',
+                file_url: googleDocUrl
+            });
 
             alert('✅ Submission successful! Our academic panel will review your article.');
-            // Reset form
             setFormData({
                 title: '',
                 description: '',
@@ -162,7 +142,6 @@ export default function Submission() {
 
     return (
         <div className="page active" style={{ display: 'block' }}>
-            {/* Hero Section */}
             <section className="hero" style={{ padding: '6rem 2rem 4rem', minHeight: '50vh', background: 'white' }}>
                 <div className="hero-content">
                     <h1 className="fade-in">Research Submission Portal</h1>
@@ -173,84 +152,51 @@ export default function Submission() {
             </section>
 
             <div className="section" style={{ marginTop: '-4rem', position: 'relative', zIndex: 10 }}>
-                {/* Process Overview */}
                 <div className="fade-in" style={{ display: 'flex', justifyContent: 'center', gap: '2rem', marginBottom: '4rem', flexWrap: 'wrap', animationDelay: '0.3s' }}>
-
                     <div className="card-premium" style={{ flex: '1', minWidth: '250px', maxWidth: '300px', textAlign: 'center', padding: '2rem' }}>
-                        <div style={{
-                            background: 'rgba(13, 71, 161, 0.1)', color: 'var(--primary)',
-                            width: '40px', height: '40px', borderRadius: '50%', display: 'flex',
-                            alignItems: 'center', justifyContent: 'center', fontWeight: 700, margin: '0 auto 1rem'
-                        }}>1</div>
+                        <div style={{ background: 'rgba(13, 71, 161, 0.1)', color: 'var(--primary)', width: '40px', height: '40px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, margin: '0 auto 1rem' }}>1</div>
                         <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>Download Template</h3>
-                        <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Download our docx template to see the required format and structure.</p>
+                        <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Use our template to ensure your research meets all formatting requirements.</p>
                     </div>
 
                     <div className="card-premium" style={{ flex: '1', minWidth: '250px', maxWidth: '300px', textAlign: 'center', padding: '2rem' }}>
-                        <div style={{
-                            background: 'rgba(13, 71, 161, 0.1)', color: 'var(--primary)',
-                            width: '40px', height: '40px', borderRadius: '50%', display: 'flex',
-                            alignItems: 'center', justifyContent: 'center', fontWeight: 700, margin: '0 auto 1rem'
-                        }}>2</div>
+                        <div style={{ background: 'rgba(13, 71, 161, 0.1)', color: 'var(--primary)', width: '40px', height: '40px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, margin: '0 auto 1rem' }}>2</div>
                         <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>Prepare Manuscript</h3>
-                        <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Upload your work to Google Docs and ensure you grant <strong>Commenter access</strong> to our team.</p>
+                        <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Write your paper in Google Docs. Ensure you grant <strong>commenter access</strong> to our editorial team.</p>
                     </div>
 
                     <div className="card-premium" style={{ flex: '1', minWidth: '250px', maxWidth: '300px', textAlign: 'center', padding: '2rem' }}>
-                        <div style={{
-                            background: 'rgba(13, 71, 161, 0.1)', color: 'var(--primary)',
-                            width: '40px', height: '40px', borderRadius: '50%', display: 'flex',
-                            alignItems: 'center', justifyContent: 'center', fontWeight: 700, margin: '0 auto 1rem'
-                        }}>3</div>
-                        <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>Submit Link</h3>
-                        <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Submit the link here. Our academic panel will review your submission.</p>
+                        <div style={{ background: 'rgba(13, 71, 161, 0.1)', color: 'var(--primary)', width: '40px', height: '40px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, margin: '0 auto 1rem' }}>3</div>
+                        <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>Submit URL</h3>
+                        <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Paste your Google Docs URL below. Our academic panel will review your submission directly in the document.</p>
                     </div>
                 </div>
 
-                {/* Guidelines & Template Section */}
                 <div className="fade-in" style={{ animationDelay: '0.4s', maxWidth: '1000px', margin: '0 auto 4rem' }}>
-                    <div style={{
-                        background: 'linear-gradient(135deg, #0d1b2a 0%, var(--primary) 100%)',
-                        color: 'white', padding: '3rem', borderRadius: 'var(--radius-lg)',
-                        position: 'relative', overflow: 'hidden', boxShadow: 'var(--shadow-soft)'
-                    }}>
+                    <div style={{ background: 'linear-gradient(135deg, #0d1b2a 0%, var(--primary) 100%)', color: 'white', padding: '3rem', borderRadius: 'var(--radius-lg)', position: 'relative', overflow: 'hidden', boxShadow: 'var(--shadow-soft)' }}>
                         <div style={{ position: 'relative', zIndex: 2, display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '2rem' }}>
                             <div style={{ flex: '1', minWidth: '300px' }} className="text-white-force">
                                 <h2 style={{ marginBottom: '1rem', textAlign: 'left', fontSize: '1.8rem', color: 'white' }}>📝 Submission Guidelines</h2>
                                 <ul style={{ lineHeight: '1.8', paddingLeft: '1.5rem', color: 'white' }}>
                                     <li style={{ color: 'white' }}>All submissions must be original and not previously published elsewhere.</li>
                                     <li style={{ color: 'white' }}>Include a clear abstract (max 250 words) and keywords.</li>
-                                    <li style={{
-                                        background: '#FFD700',
-                                        color: '#002147',
-                                        padding: '12px 20px',
-                                        borderRadius: '8px',
-                                        listStyle: 'none',
-                                        marginLeft: '-1.5rem',
-                                        marginTop: '1.5rem',
-                                        boxShadow: '0 4px 15px rgba(0,0,0,0.2)',
-                                        fontWeight: 'bold'
-                                    }}>
-                                        Submit a Google Docs Link (Access: You must grant Commenter access to our academic panel).
+                                    <li style={{ color: 'white' }}>AI-generated content must not exceed 5% of the total manuscript.</li>
+                                    <li style={{ background: '#FFD700', color: '#002147', padding: '12px 20px', borderRadius: '8px', listStyle: 'none', marginLeft: '-1.5rem', marginTop: '1.5rem', boxShadow: '0 4px 15px rgba(0,0,0,0.2)', fontWeight: 'bold', textAlign: 'center' }}>
+                                        Give Commenter Access to the Google Doc before submitting
                                     </li>
                                 </ul>
                             </div>
                             <div>
-                                <a href="/IT_Research_Paper_Template.docx"
-                                    download
-                                    className="cta-button"
-                                    style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
-                                    <span>Download Template (.docx)</span>
+                                <a href="https://docs.google.com/document/d/1ExampleTemplate_URL" target="_blank" rel="noopener noreferrer" className="cta-button" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
+                                    <span>View Document Template</span>
                                 </a>
-                                <p style={{ textAlign: 'center', color: 'rgba(255,255,255,0.7)', marginTop: '0.5rem', fontSize: '0.85rem' }}>Direct download</p>
+                                <p style={{ textAlign: 'center', color: 'rgba(255,255,255,0.7)', marginTop: '0.5rem', fontSize: '0.85rem' }}>Opens in Google Docs</p>
                             </div>
                         </div>
                     </div >
                 </div >
 
-                {/* Submission Form */}
-                < div className="card-premium fade-in" style={{ animationDelay: '0.5s', maxWidth: '800px', margin: '0 auto' }
-                }>
+                < div className="card-premium fade-in" style={{ animationDelay: '0.5s', maxWidth: '800px', margin: '0 auto' }}>
                     <h2 style={{ borderBottom: '2px solid #f0f0f0', paddingBottom: '1rem', marginBottom: '2rem', fontSize: '1.5rem' }}>New Submission</h2>
 
                     <form onSubmit={handleSubmit}>
@@ -301,7 +247,6 @@ export default function Submission() {
                             </p>
                         </div>
 
-                        {/* Dynamic Author Fields */}
                         <div style={{ marginBottom: '2rem' }}>
                             <h3 style={{ fontSize: '1.2rem', marginBottom: '1rem', color: 'var(--primary)' }}>Author Information</h3>
                             {formData.authors.map((author, index) => (
@@ -392,7 +337,6 @@ export default function Submission() {
                         <div style={{ marginBottom: '1.5rem' }}>
                             <label style={{ display: 'block', marginBottom: '0.75rem', fontWeight: 600 }}>Similarity Report</label>
 
-                            {/* Image Upload */}
                             <div style={{ marginBottom: '1rem' }}>
                                 <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500, fontSize: '0.95rem' }}>Upload Report Image (PNG/JPG) *</label>
                                 <input
@@ -407,30 +351,17 @@ export default function Submission() {
                                         }
                                     }}
                                     className="enhanced-input"
-                                    style={{
-                                        width: '100%',
-                                        padding: '0.75rem',
-                                        border: '2px solid #e0e0e0',
-                                        borderRadius: '8px',
-                                        fontSize: '1rem',
-                                        backgroundColor: 'white'
-                                    }}
+                                    style={{ width: '100%', padding: '0.75rem', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1rem', backgroundColor: 'white' }}
                                 />
                                 {similarityReportImage && (
                                     <p style={{ marginTop: '0.5rem', fontSize: '0.85rem', color: '#2e7d32' }}>
                                         ✓ File selected: {similarityReportImage.name}
                                     </p>
                                 )}
-                                <p style={{ fontSize: '0.85rem', marginTop: '0.3rem', color: 'var(--text-muted)' }}>
-                                    Upload a screenshot or PDF export of your similarity/plagiarism report
-                                </p>
                             </div>
 
-                            {/* URL Option (Optional) */}
                             <div>
-                                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500, fontSize: '0.95rem' }}>
-                                    Report Link
-                                </label>
+                                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500, fontSize: '0.95rem' }}>Report Link</label>
                                 <input
                                     type="url"
                                     placeholder="Paste your similarity/plagiarism report URL (Google Drive, Dropbox, etc.)"
@@ -447,23 +378,20 @@ export default function Submission() {
                                     style={{ width: '100%', padding: '1rem', border: `2px solid ${similarityReportError ? '#ef5350' : '#e0e0e0'}`, borderRadius: '8px', fontSize: '1rem' }}
                                 />
                                 {similarityReportError && (
-                                    <p style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#ef5350' }}>
-                                        ❌ {similarityReportError}
-                                    </p>
+                                    <p style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#ef5350' }}>❌ {similarityReportError}</p>
                                 )}
-                                <p style={{ marginTop: '0.5rem', fontSize: '0.85rem', color: '#666' }}>
-                                    ℹ️ Optionally provide a link to your full report for reference
+                                <p style={{ fontSize: '0.85rem', marginTop: '0.5rem', color: '#d32f2f', fontWeight: 'bold' }}>
+                                    ⚠️ AI content policy: Only up to 5% AI-generated content is permitted.
                                 </p>
                             </div>
                         </div>
 
-
                         <div style={{ marginBottom: '2rem' }}>
-                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Google Docs Link</label>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Research Manuscript (Google Doc link with Commenter Access)</label>
                             <input
                                 type="url"
                                 required
-                                placeholder="Paste your Google Docs URL here (e.g. https://docs.google.com/document/d/...)"
+                                placeholder="Paste your Google Docs URL here"
                                 value={googleDocUrl}
                                 onChange={e => {
                                     setGoogleDocUrl(e.target.value);
@@ -473,45 +401,23 @@ export default function Submission() {
                                 style={{ width: '100%', padding: '1rem', border: `2px solid ${urlError ? '#ef5350' : '#e0e0e0'}`, borderRadius: '8px', fontSize: '1rem' }}
                             />
                             {urlError && (
-                                <p style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#ef5350' }}>
-                                    ❌ {urlError}
-                                </p>
+                                <p style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#ef5350' }}>❌ {urlError}</p>
                             )}
                             <p style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666' }}>
-                                ℹ️ Please ensure your document Link Sharing is set to <strong style={{ color: 'var(--primary)' }}>"Commenter access"</strong> so our reviewers can provide feedback.
+                                ℹ️ <strong>Give Commenter Access</strong> to the Google Doc before submitting.
                             </p>
                         </div>
 
-                        <div style={{
-                            marginBottom: '2rem',
-                            padding: '1.5rem',
-                            backgroundColor: '#f8f9fa',
-                            borderRadius: '8px',
-                            border: '2px solid #0d47a1'
-                        }}>
-                            <label style={{
-                                display: 'flex',
-                                alignItems: 'flex-start',
-                                cursor: 'pointer',
-                                fontSize: '1rem',
-                                fontWeight: 600
-                            }}>
+                        <div style={{ marginBottom: '2rem', padding: '1.5rem', backgroundColor: '#f8f9fa', borderRadius: '8px', border: '2px solid #0d47a1' }}>
+                            <label style={{ display: 'flex', alignItems: 'flex-start', cursor: 'pointer', fontSize: '1rem', fontWeight: 600 }}>
                                 <input
                                     type="checkbox"
                                     required
                                     checked={formData.originalityConfirmed}
                                     onChange={e => setFormData({ ...formData, originalityConfirmed: e.target.checked })}
-                                    style={{
-                                        marginRight: '0.75rem',
-                                        marginTop: '0.25rem',
-                                        width: '20px',
-                                        height: '20px',
-                                        cursor: 'pointer'
-                                    }}
+                                    style={{ marginRight: '0.75rem', marginTop: '0.25rem', width: '20px', height: '20px', cursor: 'pointer' }}
                                 />
-                                <span>
-                                    I confirm that this article is original work and has not been published elsewhere. I understand that plagiarism or submission of non-original work will result in rejection.
-                                </span>
+                                <span>I confirm that this article is original work and has not been published elsewhere. I understand that plagiarism or submission of non-original work will result in rejection.</span>
                             </label>
                         </div>
 
@@ -519,10 +425,10 @@ export default function Submission() {
                             <button
                                 type="submit"
                                 className={`cta-button ${loading ? 'loading' : ''}`}
-                                disabled={loading || !!urlError || !!similarityReportError || !formData.originalityConfirmed}
+                                disabled={loading || !!urlError || !googleDocUrl || !!similarityReportError || !formData.originalityConfirmed}
                                 style={{ fontSize: '1rem', padding: '14px 28px' }}
                             >
-                                {loading ? 'Submitting...' : '📤 Submit for Review'}
+                                {loading ? 'Submitting...' : '📤 Submit Article'}
                             </button>
                         </div>
                     </form >

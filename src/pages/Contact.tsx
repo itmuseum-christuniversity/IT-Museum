@@ -9,7 +9,7 @@ export default function Contact() {
             <section className="hero" style={{ minHeight: '40vh' }}>
                 <div className="hero-content">
                     <h1>Get in Touch</h1>
-                    <p>Visit us at the Yeshwanthpur Campus or reach out online.</p>
+                    <p>Visit us at the Bangalore Yeshwanthpur Campus or reach out online.</p>
                 </div>
             </section>
 
@@ -20,12 +20,12 @@ export default function Contact() {
 
                         <div style={{ marginBottom: '2rem' }}>
                             <h4 style={{ fontSize: '1.1rem', color: 'var(--primary)' }}>📍 Location</h4>
-                            <p style={{ color: 'var(--text-muted)' }}>Christ University, Yeshwanthpur Campus<br />Bangalore, Karnataka 560022</p>
+                            <p style={{ color: 'var(--text-muted)' }}>Christ University, Bangalore Yeshwanthpur Campus<br />Bangalore, Karnataka 560022</p>
                         </div>
 
                         <div>
                             <h4 style={{ fontSize: '1.1rem', color: 'var(--primary)' }}>📞 Contact</h4>
-                            <p style={{ color: 'var(--text-muted)' }}>+91-80-4012-9100<br />itmuseum@christuniversity.in</p>
+                            <p style={{ color: 'var(--text-muted)' }}>080 6989 6666<br />itmuseum@christuniversity.in</p>
                         </div>
                     </div>
 

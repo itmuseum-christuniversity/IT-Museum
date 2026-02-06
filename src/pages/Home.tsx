@@ -13,14 +13,33 @@ export default function Home() {
             <section className="hero">
                 <HeroSlideshow />
                 <div className="hero-content">
-                    <h1 className="fade-in">Converging Tradition <br /> & Computation.</h1>
+                    <h1 className="fade-in" style={{ textTransform: 'uppercase', letterSpacing: '2px' }}>IT Museum - India</h1>
                     <p className="fade-in" style={{ animationDelay: '0.2s' }}>
-                        Discover the mathematical elegance of active Indian art forms and their profound connection to modern computer science.
+                        Tracing the remarkable evolution of technology in India, from the first indigenous computers to becoming a global digital powerhouse.
                     </p>
                     <div className="btn-group fade-in" style={{ animationDelay: '0.4s' }}>
                         <Link className="cta-button" to="/collection">Explore the Archive</Link>
                         <Link className="cta-button secondary" style={{ background: 'white', border: 'none', boxShadow: 'var(--shadow-soft)' }} to="/team">Meet the Curators</Link>
                     </div>
+                </div>
+            </section>
+
+            {/* Partnership Announcement Section */}
+            <section className="section fade-in" style={{ background: 'rgba(13, 71, 161, 0.03)', borderRadius: '24px', margin: '4rem auto', padding: '4rem 2.5rem', maxWidth: '1200px', border: '1px solid rgba(13, 71, 161, 0.1)' }}>
+                <div style={{ maxWidth: '900px', margin: '0 auto' }}>
+                    <h2 style={{ textAlign: 'center', marginBottom: '2.5rem', color: 'var(--primary)', position: 'relative', display: 'inline-block', left: '50%', transform: 'translateX(-50%)' }}>
+                        IT Museum - India
+                        <span style={{ content: '""', position: 'absolute', bottom: '-10px', left: '25%', width: '50%', height: '3px', background: 'var(--accent)', borderRadius: '2px' }}></span>
+                    </h2>
+                    <p style={{ fontSize: '1.15rem', lineHeight: '1.9', color: '#444', marginBottom: '1.5rem', textAlign: 'justify' }}>
+                        <a href="https://museum.dataart.com/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)', fontWeight: '700', textDecoration: 'none', borderBottom: '2px solid rgba(13, 71, 161, 0.2)' }}>DataArt</a>, a multinational IT firm, has established a collaborative partnership with the Department of Computer Science at <a href="https://christuniversity.in/bangalore-yeshwanthpur-campus" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)', fontWeight: '700', textDecoration: 'none', borderBottom: '2px solid rgba(13, 71, 161, 0.2)' }}>Christ University</a>, Bangalore Yeshwantpur Campus.
+                        Through their "<a href="https://museum.dataart.com/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--primary)', fontWeight: '700', textDecoration: 'none', borderBottom: '2px solid rgba(13, 71, 161, 0.2)' }}>IT Museum</a>" project, DataArt documents the IT innovation contributions of countries across Eastern and Central Europe, Latin America, and Asia.
+                        As part of this Memorandum of Understanding (MoU), the DataArt IT Museum team seeks to collaborate with our University to document and showcase India's contributions to IT innovations.
+                    </p>
+                    <p style={{ fontSize: '1.15rem', lineHeight: '1.9', color: '#444', textAlign: 'justify' }}>
+                        This strategic partnership will facilitate the curation of case studies, research articles, and historical narratives that illuminate the intersection of Indian traditions and IT advancements.
+                        The Departments of Computer Science, Media Studies, and the Centre for Digital Learning (CDL) at Bangalore Yeshwantpur Campus are actively engaged in this collaborative initiative.
+                    </p>
                 </div>
             </section>
 
@@ -44,7 +63,7 @@ export default function Home() {
 
             {/* Discovery Timeline Ribbon: Chapters of Computing History */}
             <div style={{ textAlign: 'center', marginTop: '6rem', marginBottom: '-2rem' }}>
-                <h3 style={{ textTransform: 'uppercase', letterSpacing: '4px', color: 'var(--text-muted)', fontSize: '1rem', opacity: 0.8 }}>Discovery Timeline</h3>
+                <h3 style={{ textTransform: 'uppercase', letterSpacing: '4px', color: 'var(--text-muted)', fontSize: '1rem', opacity: 0.8 }}>Discovery of Global Timeline with DataArt IT Museum</h3>
             </div>
             <div className="milestone-ribbon">
                 <div className="ribbon-track">
@@ -98,6 +117,7 @@ export default function Home() {
                     </div>
                 </div>
             </section>
+
 
             {/* Curator Quote Section */}
             <section className="quote-section fade-in">

@@ -84,13 +84,32 @@ export default function ReviewPanel({ title, currentStageStatus, nextStageStatus
         }
     };
 
+    const [selectedId, setSelectedId] = useState<string | null>(null);
+
+    useEffect(() => {
+        if (articles.length > 0 && !selectedId) {
+            setSelectedId(articles[0].id || null);
+        }
+    }, [articles, selectedId]);
+
+    const activeArticle = articles.find(a => a.id === selectedId) || (articles.length > 0 ? articles[0] : null);
+
     const handleApprove = async (articleId: string) => {
         if (!window.confirm("Approve this article for the next stage?")) return;
         try {
             if (articleId) {
                 await articleService.updateStatus(articleId, nextStageStatus);
+
+                // Find next article before removing current one
+                const currentIndex = articles.findIndex(a => a.id === articleId);
+                const nextArticle = articles[currentIndex + 1] || articles[currentIndex - 1];
+
                 // Refresh list locally
                 setArticles(articles.filter(a => a.id !== articleId));
+
+                if (nextArticle) setSelectedId(nextArticle.id || null);
+                else setSelectedId(null);
+
                 showToast("Article approved successfully!", "success");
                 if (onActionComplete) onActionComplete();
             }
@@ -117,6 +136,10 @@ export default function ReviewPanel({ title, currentStageStatus, nextStageStatus
         try {
             // Find the article to get the submitter's email
             const article = articles.find(a => a.id === articleId);
+
+            // Find next article before removing current one
+            const currentIndex = articles.findIndex(a => a.id === articleId);
+            const nextArticle = articles[currentIndex + 1] || articles[currentIndex - 1];
 
             // Update status in database
             await articleService.updateStatus(articleId, 'rejected');
@@ -149,6 +172,10 @@ export default function ReviewPanel({ title, currentStageStatus, nextStageStatus
             }
 
             setArticles(articles.filter(a => a.id !== articleId));
+
+            if (nextArticle) setSelectedId(nextArticle.id || null);
+            else setSelectedId(null);
+
             setRejectModalOpen(false);
 
             if (emailSent) {
@@ -207,107 +234,139 @@ export default function ReviewPanel({ title, currentStageStatus, nextStageStatus
                     <p>No articles pending for review in this stage.</p>
                 </div>
             ) : (
-                <div style={{ display: 'grid', gap: '2rem' }}>
-                    {articles.map(article => (
-                        <div key={article.id} className="card-premium" style={{ position: 'relative' }}>
-                            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1rem' }}>
-                                <div style={{ width: '100%' }}>
-                                    {editingId === article.id ? (
-                                        <input
-                                            type="text"
-                                            value={editForm.title}
-                                            onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}
-                                            placeholder="Article Title"
-                                            style={{ width: '100%', padding: '0.8rem', marginBottom: '0.5rem', fontSize: '1.2rem', fontWeight: 'bold', border: '2px solid var(--primary)', borderRadius: '4px' }}
+                <div style={{ display: 'flex', gap: '2rem', flexWrap: 'wrap' }}>
+                    {/* Sidebar List */}
+                    <div style={{ flex: 1, minWidth: '250px', borderRight: '1px solid #eee', paddingRight: '1.5rem', maxHeight: '700px', overflowY: 'auto' }}>
+                        <h4 style={{ marginTop: 0, marginBottom: '1rem', color: '#666' }}>Pending Articles ({articles.length})</h4>
+                        {articles.map(a => (
+                            <div
+                                key={a.id}
+                                onClick={() => setSelectedId(a.id || null)}
+                                style={{
+                                    padding: '1rem',
+                                    borderRadius: '8px',
+                                    marginBottom: '0.75rem',
+                                    cursor: 'pointer',
+                                    border: selectedId === a.id ? '2px solid var(--primary)' : '1px solid #eee',
+                                    background: selectedId === a.id ? '#f0f4f8' : 'white',
+                                    transition: 'all 0.2s ease'
+                                }}
+                            >
+                                <strong style={{ display: 'block', fontSize: '0.9rem', color: selectedId === a.id ? 'var(--primary)' : '#333' }}>{a.title}</strong>
+                                <small style={{ color: '#666' }}>{a.author_name}</small>
+                            </div>
+                        ))}
+                    </div>
+
+                    {/* Detailed View */}
+                    <div style={{ flex: 2.5, minWidth: '350px' }}>
+                        {activeArticle ? (
+                            <div className="card-premium" style={{ position: 'relative', margin: 0, border: 'none', boxShadow: '0 4px 20px rgba(0,0,0,0.08)' }}>
+                                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '1.5rem' }}>
+                                    <div style={{ width: '100%' }}>
+                                        {editingId === activeArticle.id ? (
+                                            <input
+                                                type="text"
+                                                value={editForm.title}
+                                                onChange={(e) => setEditForm({ ...editForm, title: e.target.value })}
+                                                placeholder="Article Title"
+                                                style={{ width: '100%', padding: '0.8rem', marginBottom: '0.5rem', fontSize: '1.2rem', fontWeight: 'bold', border: '2px solid var(--primary)', borderRadius: '4px' }}
+                                            />
+                                        ) : (
+                                            <h3 style={{ margin: 0, color: 'var(--primary)', fontSize: '1.5rem' }}>{activeArticle.title}</h3>
+                                        )}
+                                        <p style={{ margin: '0.5rem 0', color: '#666' }}>By {activeArticle.author_name} ({activeArticle.institution_email})</p>
+                                    </div>
+                                    <span style={{
+                                        padding: '0.4rem 1rem',
+                                        background: '#e3f2fd',
+                                        color: '#1565c0',
+                                        borderRadius: '20px',
+                                        fontSize: '0.85rem',
+                                        fontWeight: 600,
+                                        whiteSpace: 'nowrap',
+                                        marginLeft: '1rem'
+                                    }}>
+                                        {activeArticle.status.replace(/_/g, ' ').toUpperCase()}
+                                    </span>
+                                </div>
+
+                                <div style={{ background: '#f8f9fa', padding: '1.5rem', borderRadius: '8px', marginBottom: '2rem', border: '1px solid #edf2f7' }}>
+                                    <strong style={{ color: '#4a5568', display: 'block', marginBottom: '0.75rem' }}>Description / Abstract:</strong>
+                                    {editingId === activeArticle.id ? (
+                                        <textarea
+                                            value={editForm.description}
+                                            onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
+                                            rows={8}
+                                            style={{ width: '100%', padding: '1rem', marginTop: '0.5rem', border: '2px solid var(--primary)', borderRadius: '4px', fontFamily: 'inherit', fontSize: '1rem' }}
                                         />
                                     ) : (
-                                        <h3 style={{ margin: 0, color: 'var(--primary)' }}>{article.title}</h3>
+                                        <p style={{ margin: 0, lineHeight: '1.7', color: '#2d3748' }}>{activeArticle.description}</p>
                                     )}
-
-                                    <p style={{ margin: '0.5rem 0', color: '#666' }}>By {article.author_name} ({article.institution_email})</p>
                                 </div>
-                                <span style={{
-                                    padding: '0.25rem 0.75rem',
-                                    background: '#e3f2fd',
-                                    color: '#1565c0',
-                                    borderRadius: '16px',
-                                    fontSize: '0.8rem',
-                                    whiteSpace: 'nowrap',
-                                    marginLeft: '1rem',
-                                    height: 'fit-content'
-                                }}>
-                                    {article.status.replace(/_/g, ' ').toUpperCase()}
-                                </span>
-                            </div>
 
-                            <div style={{ background: '#f9f9f9', padding: '1rem', borderRadius: '4px', marginBottom: '1.5rem' }}>
-                                <strong>Description:</strong>
-                                {editingId === article.id ? (
-                                    <textarea
-                                        value={editForm.description}
-                                        onChange={(e) => setEditForm({ ...editForm, description: e.target.value })}
-                                        rows={6}
-                                        style={{ width: '100%', padding: '0.8rem', marginTop: '0.5rem', border: '2px solid var(--primary)', borderRadius: '4px', fontFamily: 'inherit' }}
-                                    />
-                                ) : (
-                                    <p style={{ marginTop: '0.5rem', lineHeight: '1.6' }}>{article.description}</p>
-                                )}
-                            </div>
+                                <div style={{ marginBottom: '2rem', display: 'flex', alignItems: 'center', gap: '1rem', padding: '1rem', background: '#fff5f5', borderRadius: '8px', border: '1px solid #feb2b2' }}>
+                                    <span style={{ fontSize: '1.2rem' }}>📄</span>
+                                    <div style={{ flex: 1 }}>
+                                        <strong style={{ display: 'block', color: '#c53030' }}>Document Submission</strong>
+                                        <a href={activeArticle.file_url} target="_blank" rel="noreferrer" style={{ color: '#2b6cb0', fontWeight: 600, textDecoration: 'underline' }}>
+                                            Open Google Doc for Review 🔗
+                                        </a>
+                                    </div>
+                                </div>
 
-                            <div style={{ marginBottom: '1.5rem' }}>
-                                <strong>Submission: </strong>
-                                <a href={article.file_url} target="_blank" rel="noreferrer" style={{ color: 'var(--secondary)', fontWeight: 500 }}>
-                                    Open Google Doc 🔗
-                                </a>
+                                <div style={{ display: 'flex', gap: '1rem', borderTop: '1px solid #eee', paddingTop: '1.5rem' }}>
+                                    {editingId === activeArticle.id ? (
+                                        <>
+                                            <button
+                                                onClick={() => activeArticle.id && handleEditSave(activeArticle.id)}
+                                                className="cta-button"
+                                                style={{ flex: 1, background: '#1976d2' }}
+                                            >
+                                                💾 Save Changes
+                                            </button>
+                                            <button
+                                                onClick={() => setEditingId(null)}
+                                                className="cta-button secondary"
+                                                style={{ flex: 1 }}
+                                            >
+                                                ❌ Cancel
+                                            </button>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <button
+                                                onClick={() => activeArticle.id && handleEditStart(activeArticle)}
+                                                className="cta-button secondary"
+                                                style={{ flex: 0.4 }}
+                                                title="Edit Article Details"
+                                            >
+                                                ✏️ Edit
+                                            </button>
+                                            <button
+                                                onClick={() => activeArticle.id && handleApprove(activeArticle.id)}
+                                                className="cta-button"
+                                                style={{ flex: 1, background: '#2e7d32' }}
+                                            >
+                                                ✅ {nextStageStatus === 'ready_for_publishing' ? 'Move to Final Processing' : 'Approve & Pass'}
+                                            </button>
+                                            <button
+                                                onClick={() => activeArticle.id && openRejectModal(activeArticle.id)}
+                                                className="cta-button"
+                                                style={{ flex: 1, background: '#c62828' }}
+                                            >
+                                                ⛔ Reject
+                                            </button>
+                                        </>
+                                    )}
+                                </div>
                             </div>
-
-                            <div style={{ display: 'flex', gap: '1rem', borderTop: '1px solid #eee', paddingTop: '1rem' }}>
-                                {editingId === article.id ? (
-                                    <>
-                                        <button
-                                            onClick={() => article.id && handleEditSave(article.id)}
-                                            className="cta-button"
-                                            style={{ flex: 1, background: '#1976d2', boxShadow: 'none' }}
-                                        >
-                                            💾 Save Changes
-                                        </button>
-                                        <button
-                                            onClick={() => setEditingId(null)}
-                                            className="cta-button"
-                                            style={{ flex: 1, background: '#757575', boxShadow: 'none' }}
-                                        >
-                                            ❌ Cancel
-                                        </button>
-                                    </>
-                                ) : (
-                                    <>
-                                        <button
-                                            onClick={() => article.id && handleEditStart(article)}
-                                            className="cta-button secondary"
-                                            style={{ flex: 0.5, border: '1px solid #90a4ae', color: '#546e7a' }}
-                                            title="Edit Article Details"
-                                        >
-                                            ✏️ Edit
-                                        </button>
-                                        <button
-                                            onClick={() => article.id && handleApprove(article.id)}
-                                            className="cta-button"
-                                            style={{ flex: 1, background: '#2e7d32' }}
-                                        >
-                                            ✅ {nextStageStatus === 'ready_for_publishing' ? 'Move to Analysis' : 'Approve'}
-                                        </button>
-                                        <button
-                                            onClick={() => article.id && openRejectModal(article.id)}
-                                            className="cta-button"
-                                            style={{ flex: 1, background: '#c62828' }}
-                                        >
-                                            ⛔ Reject
-                                        </button>
-                                    </>
-                                )}
+                        ) : (
+                            <div style={{ display: 'flex', height: '100%', alignItems: 'center', justifyContent: 'center', color: '#999', border: '2px dashed #ddd', borderRadius: '8px' }}>
+                                <p>Select an article from the list to review</p>
                             </div>
-                        </div>
-                    ))}
+                        )}
+                    </div>
                 </div>
             )}
 
