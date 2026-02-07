@@ -49,7 +49,7 @@ export const articleService = {
             .insert([
                 {
                     ...data,
-                    status: 'reviewer_first'
+                    status: 'submitted'
                 }
             ])
             .select();
@@ -76,9 +76,9 @@ export const articleService = {
             .from('articles')
             .select('*');
 
-        if (status === 'reviewer_first') {
-            // Include both current and legacy 'submitted' status
-            query = query.or(`status.eq.reviewer_first,status.eq.submitted`);
+        if (status === 'admin') {
+            // Admin should see both 'admin' (legacy/manual) and 'submitted' (new)
+            query = query.or('status.eq.admin,status.eq.submitted');
         } else {
             query = query.eq('status', status);
         }

@@ -186,10 +186,10 @@ export default function Admin() {
             case 'reviewer_first':
                 return (
                     <ReviewPanel
-                        title="First Review Panel"
+                        title="IT Review Panel"
                         currentStageStatus="reviewer_first"
                         nextStageStatus="reviewer_technical"
-                        reviewerName={user.email || 'Reviewer 1'}
+                        reviewerName={user.email || 'IT Reviewer'}
                     />
                 );
             case 'reviewer_technical':
@@ -203,22 +203,12 @@ export default function Admin() {
                 );
             case 'reviewer_literature':
                 return (
-                    <ReviewPanel
-                        title="Literature Review Panel"
-                        currentStageStatus="reviewer_literature"
-                        nextStageStatus="admin"
-                        reviewerName={user.email || 'Lit Reviewer'}
-                    />
-                );
-            case 'admin':
-            default:
-                return (
                     <>
                         <ReviewPanel
-                            title="Final Publisher Approval"
-                            currentStageStatus="admin"
+                            title="Literature Review Panel"
+                            currentStageStatus="reviewer_literature"
                             nextStageStatus="ready_for_publishing"
-                            reviewerName={user.email || 'Admin'}
+                            reviewerName={user.email || 'Lit Reviewer'}
                             onActionComplete={() => setRefreshKey(prev => prev + 1)}
                         />
 
@@ -226,6 +216,16 @@ export default function Admin() {
 
                         <KeywordExtractor key={refreshKey} />
                     </>
+                );
+            case 'admin':
+            default:
+                return (
+                    <ReviewPanel
+                        title="Admin Triage & Review"
+                        currentStageStatus="admin"
+                        nextStageStatus="reviewer_first"
+                        reviewerName={user.email || 'Admin'}
+                    />
                 );
         }
     };
