@@ -31,7 +31,7 @@ export default function KeywordExtractor() {
             const { data, error } = await supabase
                 .from('articles')
                 .select('*')
-                .eq('status', 'ready_for_publishing')
+                .eq('status', 'LIT_APPROVED')
                 .order('created_at', { ascending: false });
 
             if (error) throw error;
@@ -188,7 +188,7 @@ export default function KeywordExtractor() {
             await articleService.updateArticleDetails(selectedArticle.id, {
                 tags: keywords,
                 file_url: finalPdfUrl, // Replaces Google Doc URL with permanent PDF storage
-                status: 'published'
+                status: 'PUBLISHED'
             });
 
             alert("Article is now LIVE! The Google Doc link has been replaced with the permanent PDF archive.");

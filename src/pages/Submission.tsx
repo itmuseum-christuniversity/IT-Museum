@@ -113,7 +113,7 @@ export default function Submission() {
                 submitter_email: formData.submitterEmail,
                 similarity_report_url: similarityReportUrl || 'Image uploaded',
                 originality_confirmed: formData.originalityConfirmed,
-                status: 'reviewer_first',
+                status: 'SUBMITTED',
                 file_url: googleDocUrl
             });
 

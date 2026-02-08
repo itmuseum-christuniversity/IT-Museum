@@ -142,7 +142,7 @@ export default function ReviewPanel({ title, currentStageStatus, nextStageStatus
             const nextArticle = articles[currentIndex + 1] || articles[currentIndex - 1];
 
             // Update status in database
-            await articleService.updateStatus(articleId, 'rejected');
+            await articleService.updateStatus(articleId, 'REJECTED');
 
             let emailSent = false;
             // Send rejection email if submitter email exists
@@ -348,7 +348,7 @@ export default function ReviewPanel({ title, currentStageStatus, nextStageStatus
                                                 className="cta-button"
                                                 style={{ flex: 1, background: '#2e7d32' }}
                                             >
-                                                ✅ {nextStageStatus === 'ready_for_publishing' ? 'Move to Final Processing' : 'Approve & Pass'}
+                                                ✅ {nextStageStatus === 'LIT_APPROVED' ? 'Move to Final Processing' : 'Approve & Pass'}
                                             </button>
                                             <button
                                                 onClick={() => activeArticle.id && openRejectModal(activeArticle.id)}

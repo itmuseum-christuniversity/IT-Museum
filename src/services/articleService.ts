@@ -16,7 +16,7 @@ export interface Article {
     similarity_report_url: string; // Link to similarity/plagiarism report
     originality_confirmed: boolean; // Confirmation that article is original
     file_url?: string;
-    status: 'reviewer_first' | 'reviewer_technical' | 'reviewer_literature' | 'admin' | 'ready_for_publishing' | 'published' | 'rejected' | 'submitted'; // submitted kept for legacy/fallback
+    status: 'SUBMITTED' | 'ADMIN_APPROVED' | 'IT_APPROVED' | 'TECH_APPROVED' | 'LIT_APPROVED' | 'PUBLISHED' | 'REJECTED';
     created_at?: string;
     tags?: string[];
 }
@@ -49,7 +49,8 @@ export const articleService = {
             .insert([
                 {
                     ...data,
-                    status: 'submitted'
+                    submitted_by_email: data.submitter_email, // Map to DB column name
+                    status: 'SUBMITTED'
                 }
             ])
             .select();
@@ -63,7 +64,7 @@ export const articleService = {
         const { data, error } = await supabase
             .from('articles')
             .select('*')
-            .in('status', ['accepted', 'published'])
+            .in('status', ['PUBLISHED'])
             .order('created_at', { ascending: false });
 
         if (error) throw error;
@@ -71,17 +72,13 @@ export const articleService = {
     },
 
     // Fetch submitted articles for Admin review
-    async getPendingArticles(status: Article['status'] = 'submitted') {
+    async getPendingArticles(status: Article['status'] = 'SUBMITTED') {
         let query = supabase
             .from('articles')
             .select('*');
 
-        if (status === 'admin') {
-            // Admin should see both 'admin' (legacy/manual) and 'submitted' (new)
-            query = query.or('status.eq.admin,status.eq.submitted');
-        } else {
-            query = query.eq('status', status);
-        }
+        // Simple query by status
+        query = query.eq('status', status);
 
         const { data, error } = await query.order('created_at', { ascending: false });
 

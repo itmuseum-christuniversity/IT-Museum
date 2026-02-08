@@ -27,13 +27,22 @@ export default function Admin() {
         const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
             setUser(currentUser);
             if (currentUser && currentUser.email) {
-                // Role mapping based on Gmail email patterns
+                // Role mapping based on Christ University email patterns
                 const email = currentUser.email.toLowerCase();
-                if (email.includes('firstreview') || email.includes('first.review')) setRole('reviewer_first');
-                else if (email.includes('technical') || email.includes('tech.review') || email.includes('technicalreview')) setRole('reviewer_technical');
-                else if (email.includes('literature') || email.includes('lit.review') || email.includes('literaturereview')) setRole('reviewer_literature');
-                else if (email.includes('admin') || email.includes('itmuseum.admin')) setRole('admin');
-                else setRole('admin');
+
+                // Literature Reviewer (Check first to prevent 'litreview' matching 'itreview')
+                if (email.includes('itmuseum.literaturereview') || email.includes('literaturereview') || email.includes('litreview')) setRole('reviewer_literature');
+
+                // Technical Reviewer
+                else if (email.includes('itmuseum.technicalreview') || email.includes('technicalreview') || email.includes('techreview')) setRole('reviewer_technical');
+
+                // IT Reviewer (formerly First Reviewer)
+                else if (email.includes('itmuseum.itreview') || email.includes('itreview')) setRole('reviewer_first');
+
+                // Admin
+                else if (email.includes('itmuseum.admin') || email.includes('admin')) setRole('admin');
+
+                else setRole('admin'); // Default fallback
             }
             setLoading(false);
         });
@@ -69,10 +78,10 @@ export default function Admin() {
 
     const handleCreateTestUsers = async () => {
         const users = [
-            { email: 'itmuseum.firstreview@gmail.com', pass: 'ITMuseum@2026', role: 'First Reviewer' },
-            { email: 'itmuseum.technicalreview@gmail.com', pass: 'ITMuseum@2026', role: 'Technical Reviewer' },
-            { email: 'itmuseum.literaturereview@gmail.com', pass: 'ITMuseum@2026', role: 'Literature Reviewer' },
-            { email: 'itmuseum.admin@gmail.com', pass: 'ITMuseum@2026', role: 'Admin' }
+            { email: 'itmuseum.itreview@christuniversity.in', pass: 'it.christ@26', role: 'IT Reviewer' },
+            { email: 'itmuseum.technicalreview@christuniversity.in', pass: 'tech.christ@26', role: 'Technical Reviewer' },
+            { email: 'itmuseum.literaturereview@christuniversity.in', pass: 'lit.christ@26', role: 'Literature Reviewer' },
+            { email: 'itmuseum.admin@christuniversity.in', pass: 'admin.christ@26', role: 'Admin' }
         ];
 
         let createdCount = 0;
@@ -84,10 +93,10 @@ export default function Admin() {
                 // Sign out immediately to not get stuck on the last one
                 await signOut(auth);
             } catch (error: any) {
-                console.log(`Skipped ${u.email} (might exist)`);
+                console.log(`Skipped ${u.email} (might exist or error: ${error.message})`);
             }
         }
-        alert(`Accounts created successfully.\n\nUse these credentials to login:\n\nFirst Reviewer: itmuseum.firstreview@gmail.com\nTechnical Reviewer: itmuseum.technicalreview@gmail.com\nLiterature Reviewer: itmuseum.literaturereview@gmail.com\nAdmin: itmuseum.admin@gmail.com\n\nPassword for all: ITMuseum@2026`);
+        alert(`Accounts initialization complete.\n\nCredentials:\n\nIT Reviewer: itmuseum.itreview@christuniversity.in (it.christ@26)\nTechnical: itmuseum.technicalreview@christuniversity.in (tech.christ@26)\nLiterature: itmuseum.literaturereview@christuniversity.in (lit.christ@26)\nAdmin: itmuseum.admin@christuniversity.in (admin.christ@26)`);
     };
 
     const handleLogout = async () => {
@@ -141,7 +150,7 @@ export default function Admin() {
                             <input
                                 type="email"
                                 required
-                                placeholder="your.email@gmail.com"
+                                placeholder="email@christuniversity.in"
                                 value={email}
                                 onChange={e => setEmail(e.target.value)}
                                 className="enhanced-input"
@@ -187,8 +196,8 @@ export default function Admin() {
                 return (
                     <ReviewPanel
                         title="IT Review Panel"
-                        currentStageStatus="reviewer_first"
-                        nextStageStatus="reviewer_technical"
+                        currentStageStatus="ADMIN_APPROVED"
+                        nextStageStatus="IT_APPROVED"
                         reviewerName={user.email || 'IT Reviewer'}
                     />
                 );
@@ -196,8 +205,8 @@ export default function Admin() {
                 return (
                     <ReviewPanel
                         title="Technical Review Panel"
-                        currentStageStatus="reviewer_technical"
-                        nextStageStatus="reviewer_literature"
+                        currentStageStatus="IT_APPROVED"
+                        nextStageStatus="TECH_APPROVED"
                         reviewerName={user.email || 'Tech Reviewer'}
                     />
                 );
@@ -206,8 +215,8 @@ export default function Admin() {
                     <>
                         <ReviewPanel
                             title="Literature Review Panel"
-                            currentStageStatus="reviewer_literature"
-                            nextStageStatus="ready_for_publishing"
+                            currentStageStatus="TECH_APPROVED"
+                            nextStageStatus="LIT_APPROVED"
                             reviewerName={user.email || 'Lit Reviewer'}
                             onActionComplete={() => setRefreshKey(prev => prev + 1)}
                         />
@@ -222,8 +231,8 @@ export default function Admin() {
                 return (
                     <ReviewPanel
                         title="Admin Triage & Review"
-                        currentStageStatus="admin"
-                        nextStageStatus="reviewer_first"
+                        currentStageStatus="SUBMITTED"
+                        nextStageStatus="ADMIN_APPROVED"
                         reviewerName={user.email || 'Admin'}
                     />
                 );
