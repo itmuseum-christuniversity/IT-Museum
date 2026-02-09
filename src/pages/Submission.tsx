@@ -110,7 +110,7 @@ export default function Submission() {
                 keywords: formData.keywords,
                 num_authors: formData.numAuthors,
                 author_designations: allAuthorsDesignations,
-                submitter_email: formData.submitterEmail,
+                submitted_email: formData.submitterEmail,
                 similarity_report_url: similarityReportUrl || 'Image uploaded',
                 originality_confirmed: formData.originalityConfirmed,
                 status: 'SUBMITTED',

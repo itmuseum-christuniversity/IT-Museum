@@ -198,6 +198,7 @@ export default function Admin() {
                         title="IT Review Panel"
                         currentStageStatus="ADMIN_APPROVED"
                         nextStageStatus="IT_APPROVED"
+                        rejectionStatus="ADMIN_REJECTED"
                         reviewerName={user.email || 'IT Reviewer'}
                     />
                 );
@@ -207,6 +208,7 @@ export default function Admin() {
                         title="Technical Review Panel"
                         currentStageStatus="IT_APPROVED"
                         nextStageStatus="TECH_APPROVED"
+                        rejectionStatus="IT_REJECTED"
                         reviewerName={user.email || 'Tech Reviewer'}
                     />
                 );
@@ -217,6 +219,7 @@ export default function Admin() {
                             title="Literature Review Panel"
                             currentStageStatus="TECH_APPROVED"
                             nextStageStatus="LIT_APPROVED"
+                            rejectionStatus="TECH_REJECTED"
                             reviewerName={user.email || 'Lit Reviewer'}
                             onActionComplete={() => setRefreshKey(prev => prev + 1)}
                         />
@@ -233,6 +236,7 @@ export default function Admin() {
                         title="Admin Triage & Review"
                         currentStageStatus="SUBMITTED"
                         nextStageStatus="ADMIN_APPROVED"
+                        rejectionStatus="ADMIN_REJECTED"
                         reviewerName={user.email || 'Admin'}
                     />
                 );

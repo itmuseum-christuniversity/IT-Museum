@@ -12,11 +12,11 @@ export interface Article {
     keywords: string; // Comma-separated keywords for NLP processing
     num_authors: number; // Number of authors (1-10)
     author_designations: string; // Designations for all authors
-    submitter_email?: string; // Email of the person submitting the article
+    submitted_email?: string; // Email of the person submitting the article
     similarity_report_url: string; // Link to similarity/plagiarism report
     originality_confirmed: boolean; // Confirmation that article is original
     file_url?: string;
-    status: 'SUBMITTED' | 'ADMIN_APPROVED' | 'IT_APPROVED' | 'TECH_APPROVED' | 'LIT_APPROVED' | 'PUBLISHED' | 'REJECTED';
+    status: 'SUBMITTED' | 'ADMIN_APPROVED' | 'ADMIN_REJECTED' | 'IT_APPROVED' | 'IT_REJECTED' | 'TECH_APPROVED' | 'TECH_REJECTED' | 'LIT_APPROVED' | 'LIT_REJECTED' | 'PUBLISHED';
     created_at?: string;
     tags?: string[];
 }
@@ -49,7 +49,6 @@ export const articleService = {
             .insert([
                 {
                     ...data,
-                    submitted_by_email: data.submitter_email, // Map to DB column name
                     status: 'SUBMITTED'
                 }
             ])

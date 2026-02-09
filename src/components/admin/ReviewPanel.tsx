@@ -7,11 +7,12 @@ interface ReviewPanelProps {
     title: string;
     currentStageStatus: Article['status'];
     nextStageStatus: Article['status'];
+    rejectionStatus: Article['status'];
     reviewerName: string;
     onActionComplete?: () => void;
 }
 
-export default function ReviewPanel({ title, currentStageStatus, nextStageStatus, reviewerName: _reviewerName, onActionComplete }: ReviewPanelProps) {
+export default function ReviewPanel({ title, currentStageStatus, nextStageStatus, rejectionStatus, reviewerName: _reviewerName, onActionComplete }: ReviewPanelProps) {
     const [articles, setArticles] = useState<Article[]>([]);
     const [loading, setLoading] = useState(true);
 
@@ -142,11 +143,11 @@ export default function ReviewPanel({ title, currentStageStatus, nextStageStatus
             const nextArticle = articles[currentIndex + 1] || articles[currentIndex - 1];
 
             // Update status in database
-            await articleService.updateStatus(articleId, 'REJECTED');
+            await articleService.updateStatus(articleId, rejectionStatus);
 
             let emailSent = false;
             // Send rejection email if submitter email exists
-            if (article?.submitter_email) {
+            if (article?.submitted_email) {
                 const serviceId = import.meta.env.VITE_EMAILJS_SERVICE_ID;
                 const templateId = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
                 const publicKey = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
@@ -154,7 +155,7 @@ export default function ReviewPanel({ title, currentStageStatus, nextStageStatus
                 if (serviceId && templateId && publicKey) {
                     try {
                         const templateParams = {
-                            to_email: article.submitter_email,
+                            to_email: article.submitted_email,
                             article_title: article.title,
                             rejection_reason: rejectReason,
                             recipient_name: article.author_name.split(',')[0]
@@ -179,8 +180,8 @@ export default function ReviewPanel({ title, currentStageStatus, nextStageStatus
             setRejectModalOpen(false);
 
             if (emailSent) {
-                showToast(`Article rejected and email sent to ${article?.submitter_email}`, "success");
-            } else if (!article?.submitter_email) {
+                showToast(`Article rejected and email sent to ${article?.submitted_email}`, "success");
+            } else if (!article?.submitted_email) {
                 showToast("Article rejected (no submitter email found).", "info");
             }
 
