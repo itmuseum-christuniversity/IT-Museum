@@ -144,9 +144,9 @@ export default function Submission() {
         <div className="page active" style={{ display: 'block' }}>
             <section className="hero" style={{ padding: '6rem 2rem 4rem', minHeight: '50vh', background: 'white' }}>
                 <div className="hero-content">
-                    <h1 className="fade-in">Research Submission Portal</h1>
+                    <h1 className="fade-in">Submission Portal</h1>
                     <p className="fade-in" style={{ animationDelay: '0.2s' }}>
-                        Contribute to the global repository of Kolam and Computational Art research.
+                        Contribute to document Indian IT Innovations
                     </p>
                 </div>
             </section>
@@ -156,7 +156,7 @@ export default function Submission() {
                     <div className="card-premium" style={{ flex: '1', minWidth: '250px', maxWidth: '300px', textAlign: 'center', padding: '2rem' }}>
                         <div style={{ background: 'rgba(13, 71, 161, 0.1)', color: 'var(--primary)', width: '40px', height: '40px', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 700, margin: '0 auto 1rem' }}>1</div>
                         <h3 style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>Download Template</h3>
-                        <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Use our template to ensure your research meets all formatting requirements.</p>
+                        <p style={{ fontSize: '0.9rem', color: 'var(--text-muted)' }}>Please ensure that your contribution meets all the requirements given below.</p>
                     </div>
 
                     <div className="card-premium" style={{ flex: '1', minWidth: '250px', maxWidth: '300px', textAlign: 'center', padding: '2rem' }}>

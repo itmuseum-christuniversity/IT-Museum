@@ -10,6 +10,8 @@ import rajasekharDImg from '../assets/team/rajasekhar-d.png';
 import alexeyPImg from '../assets/team/alexey-p.png';
 import krishnaPImg from '../assets/team/krishna-p.png';
 import jehosonJjImg from '../assets/team/jehoson-jj.png';
+import shashwatImg from '../assets/team/1745844616185.jpeg';
+import vishnuImg from '../assets/team/profile-pic.jpg';
 
 export default function Team() {
     useScrollAnimation();
@@ -112,13 +114,13 @@ export default function Team() {
                         <p style={{ color: 'var(--text-muted)', marginTop: '0.5rem', fontSize: '0.9rem' }}>Front End Developer</p>
                     </div>
                     <div className="profile-card">
-                        <div className="profile-img" style={{ background: '#2e7d32', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem' }}>VS</div>
+                        <div className="profile-img" style={{ backgroundImage: `url(${vishnuImg})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundColor: '#e0e0e0' }}></div>
                         <span className="profile-badge">BCA</span>
                         <h3>Vishnu S</h3>
                         <p style={{ color: 'var(--text-muted)', marginTop: '0.5rem', fontSize: '0.9rem' }}>Back End Developer</p>
                     </div>
                     <div className="profile-card">
-                        <div className="profile-img" style={{ background: '#388e3c', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem' }}>S</div>
+                        <div className="profile-img" style={{ backgroundImage: `url(${shashwatImg})`, backgroundSize: 'cover', backgroundPosition: 'top center', backgroundColor: '#e0e0e0' }}></div>
                         <span className="profile-badge">BCA</span>
                         <h3>Shashwat</h3>
                         <p style={{ color: 'var(--text-muted)', marginTop: '0.5rem', fontSize: '0.9rem' }}>Full Stack Developer</p>
