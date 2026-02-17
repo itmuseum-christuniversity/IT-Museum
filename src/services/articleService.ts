@@ -14,6 +14,7 @@ export interface Article {
     author_designations: string; // Designations for all authors
     submitted_email?: string; // Email of the person submitting the article
     similarity_report_url: string; // Link to similarity/plagiarism report
+    ai_report_url: string; // Link to AI detection report
     originality_confirmed: boolean; // Confirmation that article is original
     file_url?: string;
     status: 'SUBMITTED' | 'ADMIN_APPROVED' | 'ADMIN_REJECTED' | 'IT_APPROVED' | 'IT_REJECTED' | 'TECH_APPROVED' | 'TECH_REJECTED' | 'LIT_APPROVED' | 'LIT_REJECTED' | 'PUBLISHED';

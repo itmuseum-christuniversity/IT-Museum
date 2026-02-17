@@ -8,9 +8,8 @@ export default function Submission() {
     const [loading, setLoading] = useState(false);
     const [googleDocUrl, setGoogleDocUrl] = useState('');
     const [urlError, setUrlError] = useState('');
-    const [similarityReportUrl, setSimilarityReportUrl] = useState('');
-    const [similarityReportImage, setSimilarityReportImage] = useState<File | null>(null);
-    const [similarityReportError, setSimilarityReportError] = useState('');
+    const [similarityReportFile, setSimilarityReportFile] = useState<File | null>(null);
+    const [aiReportFile, setAiReportFile] = useState<File | null>(null);
     const [formData, setFormData] = useState({
         title: '',
         description: '',
@@ -39,26 +38,11 @@ export default function Submission() {
             setUrlError('Please provide the Google Docs URL.');
             return false;
         }
-        if (!url.includes('docs.google.com/document')) {
-            setUrlError('Please provide a valid Google Docs URL.');
+        if (!url.includes('docs.google.com/document') && !url.includes('drive.google.com')) {
+            setUrlError('Please provide a valid Google Docs or Google Drive URL.');
             return false;
         }
         setUrlError('');
-        return true;
-    };
-
-    const validateSimilarityReportUrl = (url: string) => {
-        if (!url) {
-            setSimilarityReportError('');
-            return false;
-        }
-        const validDomains = ['drive.google.com', 'dropbox.com', 'onedrive.live.com', 'docs.google.com'];
-        const isValid = validDomains.some(domain => url.includes(domain));
-        if (!isValid) {
-            setSimilarityReportError('Please provide a valid file sharing URL (Google Drive, Dropbox, etc.)');
-            return false;
-        }
-        setSimilarityReportError('');
         return true;
     };
 
@@ -73,8 +57,14 @@ export default function Submission() {
                 return;
             }
 
-            if (!similarityReportImage) {
-                alert('Please upload the similarity report image.');
+            if (!similarityReportFile) {
+                alert('Please upload the Similarity Report PDF.');
+                setLoading(false);
+                return;
+            }
+
+            if (!aiReportFile) {
+                alert('Please upload the AI Detection Report PDF.');
                 setLoading(false);
                 return;
             }
@@ -98,6 +88,10 @@ export default function Submission() {
                 return;
             }
 
+            // Upload reports to Supabase
+            const similarityReportUrl = await articleService.uploadFile(similarityReportFile, 'reports');
+            const aiReportUrl = await articleService.uploadFile(aiReportFile, 'reports');
+
             const allAuthorsNames = formData.authors.map(a => a.name).join(', ');
             const allAuthorsEmails = formData.authors.map(a => a.email).join(', ');
             const allAuthorsDesignations = formData.authors.map(a => a.designation).join(', ');
@@ -111,7 +105,8 @@ export default function Submission() {
                 num_authors: formData.numAuthors,
                 author_designations: allAuthorsDesignations,
                 submitted_email: formData.submitterEmail,
-                similarity_report_url: similarityReportUrl || 'Image uploaded',
+                similarity_report_url: similarityReportUrl,
+                ai_report_url: aiReportUrl,
                 originality_confirmed: formData.originalityConfirmed,
                 status: 'SUBMITTED',
                 file_url: googleDocUrl
@@ -128,10 +123,9 @@ export default function Submission() {
                 originalityConfirmed: false
             });
             setGoogleDocUrl('');
-            setSimilarityReportUrl('');
-            setSimilarityReportImage(null);
+            setSimilarityReportFile(null);
+            setAiReportFile(null);
             setUrlError('');
-            setSimilarityReportError('');
         } catch (error: any) {
             console.error("Error submitting document: ", error);
             alert('❌ Submission failed: ' + error.message);
@@ -181,8 +175,10 @@ export default function Submission() {
                                     <li style={{ color: 'white' }}>All submissions must be original and not previously published elsewhere.</li>
                                     <li style={{ color: 'white' }}>Include a clear abstract (max 250 words) and keywords.</li>
                                     <li style={{ color: 'white' }}>AI-generated content must not exceed 5% of the total manuscript.</li>
+                                    <li style={{ color: 'white' }}>Paste the Google Docs link or Google Drive link in the submission field.</li>
+                                    <li style={{ color: 'white' }}>You can add relevant pictures and videos within your document if needed.</li>
                                     <li style={{ background: '#FFD700', color: '#002147', padding: '12px 20px', borderRadius: '8px', listStyle: 'none', marginLeft: '-1.5rem', marginTop: '1.5rem', boxShadow: '0 4px 15px rgba(0,0,0,0.2)', fontWeight: 'bold', textAlign: 'center' }}>
-                                        Give Commenter Access to the Google Doc before submitting
+                                        Give Commenter Access to the document before submitting
                                     </li>
                                 </ul>
                             </div>
@@ -334,52 +330,53 @@ export default function Submission() {
                             </p>
                         </div>
 
-                        <div style={{ marginBottom: '1.5rem' }}>
-                            <label style={{ display: 'block', marginBottom: '0.75rem', fontWeight: 600 }}>Similarity Report</label>
+                        <div style={{ marginBottom: '2rem' }}>
+                            <label style={{ display: 'block', marginBottom: '1.5rem', fontWeight: 600, fontSize: '1.1rem' }}>Research Reports</label>
 
-                            <div style={{ marginBottom: '1rem' }}>
-                                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500, fontSize: '0.95rem' }}>Upload Report Image (PNG/JPG) *</label>
+                            {/* Similarity Report */}
+                            <div style={{ marginBottom: '2rem', padding: '1.5rem', background: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+                                <label style={{ display: 'block', marginBottom: '0.8rem', fontWeight: 700, fontSize: '0.9rem', color: 'var(--primary)' }}>1. SIMILARITY REPORT (PDF) *</label>
                                 <input
                                     type="file"
                                     required
-                                    accept="image/png,image/jpeg,image/jpg"
+                                    accept=".pdf"
                                     onChange={e => {
                                         const file = e.target.files?.[0];
                                         if (file) {
-                                            setSimilarityReportImage(file);
-                                            setSimilarityReportError('');
+                                            setSimilarityReportFile(file);
                                         }
                                     }}
-                                    className="enhanced-input"
-                                    style={{ width: '100%', padding: '0.75rem', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1rem', backgroundColor: 'white' }}
+                                    style={{ width: '100%', padding: '0.75rem', border: '2px solid #e0e0e0', borderRadius: '8px', backgroundColor: 'white' }}
                                 />
-                                {similarityReportImage && (
+                                {similarityReportFile && (
                                     <p style={{ marginTop: '0.5rem', fontSize: '0.85rem', color: '#2e7d32' }}>
-                                        ✓ File selected: {similarityReportImage.name}
+                                        ✓ {similarityReportFile.name}
                                     </p>
                                 )}
+                                <p style={{ fontSize: '0.8rem', color: '#64748b', marginTop: '0.5rem' }}>Upload your plagiarism/similarity report in PDF format.</p>
                             </div>
 
-                            <div>
-                                <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 500, fontSize: '0.95rem' }}>Report Link</label>
+                            {/* AI Detection Report */}
+                            <div style={{ marginBottom: '2rem', padding: '1.5rem', background: '#f8fafc', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+                                <label style={{ display: 'block', marginBottom: '0.8rem', fontWeight: 700, fontSize: '0.9rem', color: 'var(--primary)' }}>2. AI DETECTION REPORT (PDF) *</label>
                                 <input
-                                    type="url"
-                                    placeholder="Paste your similarity/plagiarism report URL (Google Drive, Dropbox, etc.)"
-                                    value={similarityReportUrl}
+                                    type="file"
+                                    required
+                                    accept=".pdf"
                                     onChange={e => {
-                                        setSimilarityReportUrl(e.target.value);
-                                        if (e.target.value) {
-                                            validateSimilarityReportUrl(e.target.value);
-                                        } else {
-                                            setSimilarityReportError('');
+                                        const file = e.target.files?.[0];
+                                        if (file) {
+                                            setAiReportFile(file);
                                         }
                                     }}
-                                    className={`enhanced-input ${similarityReportError ? 'error' : similarityReportUrl && !similarityReportError ? 'success' : ''}`}
-                                    style={{ width: '100%', padding: '1rem', border: `2px solid ${similarityReportError ? '#ef5350' : '#e0e0e0'}`, borderRadius: '8px', fontSize: '1rem' }}
+                                    style={{ width: '100%', padding: '0.75rem', border: '2px solid #e0e0e0', borderRadius: '8px', backgroundColor: 'white' }}
                                 />
-                                {similarityReportError && (
-                                    <p style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#ef5350' }}>❌ {similarityReportError}</p>
+                                {aiReportFile && (
+                                    <p style={{ marginTop: '0.5rem', fontSize: '0.85rem', color: '#2e7d32' }}>
+                                        ✓ {aiReportFile.name}
+                                    </p>
                                 )}
+                                <p style={{ fontSize: '0.8rem', color: '#64748b', marginTop: '0.5rem' }}>Upload your AI content detection report in PDF format.</p>
                                 <p style={{ fontSize: '0.85rem', marginTop: '0.5rem', color: '#d32f2f', fontWeight: 'bold' }}>
                                     ⚠️ AI content policy: Only up to 5% AI-generated content is permitted.
                                 </p>
@@ -387,7 +384,7 @@ export default function Submission() {
                         </div>
 
                         <div style={{ marginBottom: '2rem' }}>
-                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Submit your work (Google Doc link with Commenter Access or Drive link)</label>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Submit your work (Google Doc or Drive link with Commenter Access)</label>
                             <input
                                 type="url"
                                 required
@@ -404,7 +401,7 @@ export default function Submission() {
                                 <p style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#ef5350' }}>❌ {urlError}</p>
                             )}
                             <p style={{ marginTop: '0.5rem', fontSize: '0.9rem', color: '#666' }}>
-                                ℹ️ <strong>Give Commenter Access</strong> to the Google Doc before submitting.
+                                ℹ️ <strong>Give Commenter Access</strong> to the document before submitting.
                             </p>
                         </div>
 
@@ -425,7 +422,7 @@ export default function Submission() {
                             <button
                                 type="submit"
                                 className={`cta-button ${loading ? 'loading' : ''}`}
-                                disabled={loading || !!urlError || !googleDocUrl || !!similarityReportError || !formData.originalityConfirmed}
+                                disabled={loading || !!urlError || !googleDocUrl || !similarityReportFile || !aiReportFile || !formData.originalityConfirmed}
                                 style={{ fontSize: '1rem', padding: '14px 28px' }}
                             >
                                 {loading ? 'Submitting...' : '📤 Submit Article'}

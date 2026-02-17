@@ -12,7 +12,8 @@ import krishnaPImg from '../assets/team/krishna-p.png';
 import jehosonJjImg from '../assets/team/jehoson-jj.png';
 import shashwatImg from '../assets/team/1745844616185.jpeg';
 import vishnuImg from '../assets/team/profile-pic.jpg';
-
+import shruthiImg from '../assets/team/shruthi-patel.jpg';
+import jackJoyImg from '../assets/team/jack-sir.JPG.jpeg';
 export default function Team() {
     useScrollAnimation();
 
@@ -108,13 +109,13 @@ export default function Team() {
                 <h2 style={{ textAlign: 'center', marginBottom: '2rem', color: 'var(--primary)', fontFamily: 'Playfair Display, serif' }}>Student Developers</h2>
                 <div className="team-grid" style={{ justifyContent: 'center' }}>
                     <div className="profile-card">
-                        <div className="profile-img" style={{ background: '#1b5e20', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem' }}>SP</div>
+                        <div className="profile-img" style={{ background: '#7986cb', color: 'white', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '2rem' }}>SP</div>
                         <span className="profile-badge">BCA</span>
                         <h3>Shruthi S Patel</h3>
                         <p style={{ color: 'var(--text-muted)', marginTop: '0.5rem', fontSize: '0.9rem' }}>Front End Developer</p>
                     </div>
                     <div className="profile-card">
-                        <div className="profile-img" style={{ backgroundImage: `url(${vishnuImg})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundColor: '#e0e0e0' }}></div>
+                        <div className="profile-img" style={{ backgroundImage: `url(${vishnuImg})`, backgroundSize: 'cover', backgroundPosition: 'top center', backgroundColor: '#e0e0e0' }}></div>
                         <span className="profile-badge">BCA</span>
                         <h3>Vishnu S</h3>
                         <p style={{ color: 'var(--text-muted)', marginTop: '0.5rem', fontSize: '0.9rem' }}>Back End Developer</p>

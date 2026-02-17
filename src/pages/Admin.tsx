@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, User } from "firebase/auth";
+import { signInWithEmailAndPassword, signOut, onAuthStateChanged, User } from "firebase/auth";
 import { auth } from '../firebase-config';
 import ReviewPanel from '../components/admin/ReviewPanel';
 import KeywordExtractor from '../components/admin/KeywordExtractor';
@@ -76,28 +76,7 @@ export default function Admin() {
         }
     };
 
-    const handleCreateTestUsers = async () => {
-        const users = [
-            { email: 'itmuseum.itreview@christuniversity.in', pass: 'it.christ@26', role: 'IT Reviewer' },
-            { email: 'itmuseum.technicalreview@christuniversity.in', pass: 'tech.christ@26', role: 'Technical Reviewer' },
-            { email: 'itmuseum.literaturereview@christuniversity.in', pass: 'lit.christ@26', role: 'Literature Reviewer' },
-            { email: 'itmuseum.admin@christuniversity.in', pass: 'admin.christ@26', role: 'Admin' }
-        ];
 
-        let createdCount = 0;
-        for (const u of users) {
-            try {
-                await createUserWithEmailAndPassword(auth, u.email, u.pass);
-                createdCount++;
-                console.log(`Created ${u.email}`);
-                // Sign out immediately to not get stuck on the last one
-                await signOut(auth);
-            } catch (error: any) {
-                console.log(`Skipped ${u.email} (might exist or error: ${error.message})`);
-            }
-        }
-        alert(`Accounts initialization complete.\n\nCredentials:\n\nIT Reviewer: itmuseum.itreview@christuniversity.in (it.christ@26)\nTechnical: itmuseum.technicalreview@christuniversity.in (tech.christ@26)\nLiterature: itmuseum.literaturereview@christuniversity.in (lit.christ@26)\nAdmin: itmuseum.admin@christuniversity.in (admin.christ@26)`);
-    };
 
     const handleLogout = async () => {
         await signOut(auth);
@@ -172,19 +151,7 @@ export default function Admin() {
                         <button type="submit" className="cta-button" style={{ width: '100%', border: 'none', marginBottom: '1rem', fontSize: '1rem', padding: '14px' }}>Sign In</button>
                     </form>
 
-                    {process.env.NODE_ENV === 'development' && (
-                        <div style={{ textAlign: 'center', marginTop: '1.5rem', paddingTop: '1.5rem', borderTop: '1px solid #eee' }}>
-                            <p style={{ fontSize: '0.85rem', color: '#999', marginBottom: '0.75rem' }}>Development Tools</p>
-                            <button
-                                onClick={handleCreateTestUsers}
-                                style={{ background: 'none', border: '1px solid var(--primary)', color: 'var(--primary)', padding: '0.6rem 1.2rem', borderRadius: '6px', cursor: 'pointer', fontSize: '0.85rem', transition: 'all 0.3s ease' }}
-                                onMouseEnter={(e) => e.currentTarget.style.background = 'rgba(13, 71, 161, 0.05)'}
-                                onMouseLeave={(e) => e.currentTarget.style.background = 'none'}
-                            >
-                                Initialize User Accounts
-                            </button>
-                        </div>
-                    )}
+
                 </div>
             </div>
         );
