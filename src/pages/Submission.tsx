@@ -387,11 +387,11 @@ export default function Submission() {
                         </div>
 
                         <div style={{ marginBottom: '2rem' }}>
-                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Research Manuscript (Google Doc link with Commenter Access)</label>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', fontWeight: 600 }}>Submit your work (Google Doc link with Commenter Access or Drive link)</label>
                             <input
                                 type="url"
                                 required
-                                placeholder="Paste your Google Docs URL here"
+                                placeholder="Paste your Google Docs or Google Drive URL here"
                                 value={googleDocUrl}
                                 onChange={e => {
                                     setGoogleDocUrl(e.target.value);
