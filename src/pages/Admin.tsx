@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import { signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, User } from "firebase/auth";
 import { auth } from '../firebase-config';
+import { supabase } from '../lib/supabase';
 import ReviewPanel from '../components/admin/ReviewPanel';
 import KeywordExtractor from '../components/admin/KeywordExtractor';
 // import { contentService, Section } from '../services/contentService'; // Currently unused
@@ -15,6 +16,7 @@ export default function Admin() {
     const [role, setRole] = useState<UserRole>('admin');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [name, setName] = useState('');
     const [loading, setLoading] = useState(true);
 
     // Dashboard State - Currently unused, kept for future functionality
@@ -70,9 +72,33 @@ export default function Admin() {
     const handleLogin = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
+            // 1. Verify Name and Email against Supabase authorized_users
+            const { data: users, error } = await supabase
+                .from('authorized_users')
+                .select('*')
+                .eq('email', email)
+                .ilike('name', name.trim()); // Case-insensitive match
+
+            if (error) {
+                console.error("Supabase Auth Check Error:", error);
+                throw new Error("Could not verify authorization details.");
+            }
+
+            if (!users || users.length === 0) {
+                throw new Error("Authorization Failed: Name does not match records for this email.");
+            }
+
+            // 2. Perform Firebase Login
             await signInWithEmailAndPassword(auth, email, password);
+
+            // Optional: You might want to store the name in a context or local storage for display
+            // localStorage.setItem('adminName', name); 
+
         } catch (error: any) {
             alert("Login Failed: " + error.message);
+            // Ensure no lingering session if firebase succeeded but logic failed (though order prevents this, strictly speaking)
+            // If we moved firebase first, we'd need signOut here. 
+            // verifying first prevents firebase login call effectively.
         }
     };
 
@@ -145,6 +171,18 @@ export default function Admin() {
                     <h2 style={{ textAlign: 'center', marginBottom: '0.5rem' }}>Portal Login</h2>
                     <p style={{ textAlign: 'center', color: 'var(--text-muted)', marginBottom: '2.5rem', fontSize: '0.9rem' }}>IT Museum Administrative Access</p>
                     <form onSubmit={handleLogin}>
+                        <div style={{ marginBottom: '1.5rem' }}>
+                            <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)', fontWeight: 600 }}>Your Name</label>
+                            <input
+                                type="text"
+                                required
+                                placeholder="Enter your full name"
+                                value={name}
+                                onChange={e => setName(e.target.value)}
+                                className="enhanced-input"
+                                style={{ width: '100%', padding: '12px 16px', border: '2px solid #e0e0e0', borderRadius: '8px', fontSize: '1rem', transition: 'all 0.3s ease' }}
+                            />
+                        </div>
                         <div style={{ marginBottom: '1.5rem' }}>
                             <label style={{ display: 'block', marginBottom: '0.5rem', color: 'var(--text-muted)', fontWeight: 600 }}>Email Address</label>
                             <input
