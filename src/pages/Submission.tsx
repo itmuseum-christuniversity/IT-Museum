@@ -202,10 +202,10 @@ export default function Submission() {
                                 </ul>
                             </div>
                             <div>
-                                <a href="https://docs.google.com/document/d/1ExampleTemplate_URL" target="_blank" rel="noopener noreferrer" className="cta-button" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
+                                <a href="/IT%20Research%20Paper%20Template%20.pdf" target="_blank" rel="noopener noreferrer" className="cta-button" style={{ display: 'flex', alignItems: 'center', gap: '10px', textDecoration: 'none' }}>
                                     <span>View Document Template</span>
                                 </a>
-                                <p style={{ textAlign: 'center', color: 'rgba(255,255,255,0.7)', marginTop: '0.5rem', fontSize: '0.85rem' }}>Opens in Google Docs</p>
+                                <p style={{ textAlign: 'center', color: 'rgba(255,255,255,0.7)', marginTop: '0.5rem', fontSize: '0.85rem' }}>Opens as PDF</p>
                             </div>
                         </div>
                     </div >
