@@ -2,6 +2,7 @@
 import { FormEvent, useState } from 'react';
 import { useScrollAnimation } from '../hooks/useScrollAnimation';
 import { articleService } from '../services/articleService';
+import emailjs from '@emailjs/browser';
 
 export default function Submission() {
     useScrollAnimation();
@@ -111,6 +112,24 @@ export default function Submission() {
                 status: 'SUBMITTED',
                 file_url: googleDocUrl
             });
+
+            // Send confirmation email
+            const SERVICE_ID = 'service_xfk2dr6';
+            const TEMPLATE_ID = 'template_hnvd0pv';
+            const PUBLIC_KEY = '7yIw1m9N4ce0CcUxw';
+
+            try {
+                const templateParams = {
+                    title: formData.title,
+                    email: formData.submitterEmail
+                };
+
+                await emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams, PUBLIC_KEY);
+                console.log('Confirmation email sent successfully');
+            } catch (emailError) {
+                console.error('Error sending confirmation email:', emailError);
+                // We don't block the success alert because the submission itself was successful
+            }
 
             alert('✅ Submission successful! Our academic panel will review your article.');
             setFormData({
