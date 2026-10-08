@@ -1,165 +1,215 @@
-
-import { useNavigate } from 'react-router-dom';
-import DynamicCollections from '../components/DynamicCollections';
-import { useScrollAnimation } from '../hooks/useScrollAnimation';
-
-import { useState, useEffect, useMemo } from 'react';
-import { articleService, Article } from '../services/articleService';
+import { useMemo } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import Fuse from 'fuse.js';
-import { Search } from 'lucide-react';
+import { Search, X } from 'lucide-react';
+import { usePageMeta } from '../hooks/usePageMeta';
+import { useAsync } from '../hooks/useAsync';
+import { fetchArchive, KIND_LABEL, primeArchiveCache, type ArchiveItem, type ArchiveKind } from '../services/archive';
+import { ArchiveCard } from '../components/archive/ArchiveCard';
+import { CardSkeletons } from '../components/ui/Skeleton';
+import { EmptyState } from '../components/ui/EmptyState';
+import { ErrorState } from '../components/ui/ErrorState';
+import { Alert } from '../components/ui/Alert';
+import { PageIntro } from '../components/ui/PageIntro';
+
+type Sort = 'newest' | 'oldest' | 'title';
+const KINDS: ArchiveKind[] = ['article', 'exhibit', 'note'];
+
+/** Pure filtering so it can be unit-tested and reused. */
+export function filterArchive(items: ArchiveItem[], opts: { q: string; kind: ArchiveKind | ''; tag: string; sort: Sort }): ArchiveItem[] {
+    let list = items;
+    if (opts.kind) list = list.filter((i) => i.kind === opts.kind);
+    if (opts.tag) list = list.filter((i) => i.tags.some((t) => t.toLowerCase() === opts.tag.toLowerCase()));
+    const q = opts.q.trim();
+    if (q) {
+        const fuse = new Fuse(list, {
+            keys: [
+                { name: 'title', weight: 3 },
+                { name: 'tags', weight: 2 },
+                { name: 'authors.name', weight: 2 },
+                { name: 'summary', weight: 1 },
+            ],
+            threshold: 0.35,
+            ignoreLocation: true,
+        });
+        return fuse.search(q).map((r) => r.item); // relevance order when searching
+    }
+    const time = (i: ArchiveItem) => (i.date ? new Date(i.date).getTime() : opts.sort === 'oldest' ? Infinity : -Infinity);
+    const sorted = [...list];
+    if (opts.sort === 'title') sorted.sort((a, b) => a.title.localeCompare(b.title));
+    else if (opts.sort === 'oldest') sorted.sort((a, b) => time(a) - time(b));
+    else sorted.sort((a, b) => time(b) - time(a));
+    // Exhibits (undated) lead the default view.
+    if (opts.sort === 'newest') sorted.sort((a, b) => Number(b.kind === 'exhibit') - Number(a.kind === 'exhibit'));
+    return sorted;
+}
+
+export function topTags(items: ArchiveItem[], max = 12): string[] {
+    const counts = new Map<string, { label: string; n: number }>();
+    for (const i of items)
+        for (const t of i.tags) {
+            const k = t.toLowerCase();
+            const c = counts.get(k) ?? { label: t, n: 0 };
+            c.n++;
+            counts.set(k, c);
+        }
+    return [...counts.values()]
+        .sort((a, b) => b.n - a.n || a.label.localeCompare(b.label))
+        .slice(0, max)
+        .map((c) => c.label);
+}
 
 export default function Collection() {
-    useScrollAnimation();
-    const navigate = useNavigate();
-    const [articles, setArticles] = useState<Article[]>([]);
-    const [loading, setLoading] = useState(true);
-    const [searchQuery, setSearchQuery] = useState('');
+    usePageMeta('Digital archive', 'Search peer-reviewed research articles, exhibits and collection notes on the history of computing in India.');
+    const [params, setParams] = useSearchParams();
+    const q = params.get('q') ?? '';
+    const kind = (KINDS.includes(params.get('type') as ArchiveKind) ? params.get('type') : '') as ArchiveKind | '';
+    const tag = params.get('tag') ?? '';
+    const sort = (['newest', 'oldest', 'title'].includes(params.get('sort') ?? '') ? params.get('sort') : 'newest') as Sort;
 
-    useEffect(() => {
-        const loadArticles = async () => {
-            try {
-                const data = await articleService.getAcceptedArticles();
-                setArticles(data);
-            } catch (error) {
-                console.error("Failed to load articles", error);
-            } finally {
-                setLoading(false);
-            }
-        };
-        loadArticles();
-    }, []);
+    const state = useAsync(() => fetchArchive().then(primeArchiveCache), []);
 
-    // Configure Fuse.js for fuzzy search
-    const fuse = useMemo(() => {
-        return new Fuse(articles, {
-            keys: ['title', 'tags', 'description', 'author_name'],
-            threshold: 0.4, // 0.0 = perfect match, 1.0 = match anything. 0.4 is good for "lexical ambiguity"
-            includeScore: true
-        });
-    }, [articles]);
+    const update = (key: string, value: string) => {
+        const next = new URLSearchParams(params);
+        if (value) next.set(key, value);
+        else next.delete(key);
+        setParams(next, { replace: key === 'q' });
+    };
+    const clearAll = () => setParams(new URLSearchParams());
 
-    // Perform Search
-    const filteredArticles = useMemo(() => {
-        if (!searchQuery.trim()) return articles;
-        return fuse.search(searchQuery).map(result => result.item);
-    }, [searchQuery, articles, fuse]);
+    const data = state.status === 'ready' ? state.data : null;
+    const items = useMemo(() => data?.items ?? [], [data]);
+    const results = useMemo(() => filterArchive(items, { q, kind, tag, sort }), [items, q, kind, tag, sort]);
+    const tags = useMemo(() => topTags(items), [items]);
+    const filtered = Boolean(q || kind || tag);
 
     return (
-        <div className="page active" style={{ display: 'block' }}>
-            <section className="hero" style={{ minHeight: '40vh' }}>
-                <div className="hero-content">
-                    <h1>Digital Archive</h1>
-                    <p>Select an exhibit to explore detailed research and artifacts.</p>
-                </div>
-            </section>
+        <>
+            <PageIntro eyebrow="Collection" title="Digital archive">
+                <p>Peer-reviewed research articles, curated exhibits and collection notes on the history of computing in India.</p>
+            </PageIntro>
 
-            <section className="section" style={{ marginTop: '2rem' }}>
+            <section className="section section--tight" aria-label="Archive search and results">
+                <div className="container">
+                    <form className="archive-controls" role="search" onSubmit={(e) => e.preventDefault()}>
+                        <div className="field archive-controls__search">
+                            <label className="field__label" htmlFor="archive-q">
+                                Search the archive
+                            </label>
+                            <div className="input-icon">
+                                <Search size={18} aria-hidden="true" />
+                                <input
+                                    id="archive-q"
+                                    className="input input--search"
+                                    type="search"
+                                    value={q}
+                                    placeholder="Title, author or topic — e.g. TIFRAC, mainframes"
+                                    onChange={(e) => update('q', e.target.value)}
+                                />
+                            </div>
+                        </div>
+                        <div className="field">
+                            <label className="field__label" htmlFor="archive-type">
+                                Type
+                            </label>
+                            <select id="archive-type" className="select" value={kind} onChange={(e) => update('type', e.target.value)}>
+                                <option value="">All types</option>
+                                {KINDS.map((k) => (
+                                    <option key={k} value={k}>
+                                        {KIND_LABEL[k]}s
+                                    </option>
+                                ))}
+                            </select>
+                        </div>
+                        <div className="field">
+                            <label className="field__label" htmlFor="archive-sort">
+                                Sort by
+                            </label>
+                            <select id="archive-sort" className="select" value={sort} onChange={(e) => update('sort', e.target.value)} disabled={Boolean(q)} aria-describedby={q ? 'sort-note' : undefined}>
+                                <option value="newest">Newest first</option>
+                                <option value="oldest">Oldest first</option>
+                                <option value="title">Title A–Z</option>
+                            </select>
+                            {q && (
+                                <p id="sort-note" className="field__hint">
+                                    Sorted by relevance while searching.
+                                </p>
+                            )}
+                        </div>
+                    </form>
 
-                {/* Search Bar - Replaces Topic Filter */}
-                <div style={{ maxWidth: '600px', margin: '0 auto 4rem', position: 'relative' }}>
-                    <div style={{ position: 'relative' }}>
-                        <Search style={{ position: 'absolute', left: '1rem', top: '50%', transform: 'translateY(-50%)', color: '#999' }} />
-                        <input
-                            type="text"
-                            placeholder="Search archives (e.g., 'algorithm', 'history')..."
-                            value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
-                            style={{
-                                width: '100%',
-                                padding: '1rem 1rem 1rem 3rem',
-                                fontSize: '1.1rem',
-                                borderRadius: '30px',
-                                border: '1px solid #ddd',
-                                boxShadow: '0 4px 12px rgba(0,0,0,0.05)',
-                                outline: 'none',
-                                transition: 'all 0.3s ease'
-                            }}
-                            onFocus={(e) => e.target.style.boxShadow = '0 6px 16px rgba(0,0,0,0.1)'}
-                            onBlur={(e) => e.target.style.boxShadow = '0 4px 12px rgba(0,0,0,0.05)'}
-                        />
-                    </div>
-                    {searchQuery && (
-                        <p style={{ textAlign: 'center', marginTop: '1rem', color: '#666', fontSize: '0.9rem' }}>
-                            Found {filteredArticles.length} result{filteredArticles.length !== 1 ? 's' : ''} for "{searchQuery}"
+                    {tags.length > 0 && (
+                        <div className="archive-tags" role="group" aria-label="Filter by topic">
+                            <span className="subtle">Topics:</span>
+                            <ul className="tag-list">
+                                {tags.map((t) => {
+                                    const active = t.toLowerCase() === tag.toLowerCase();
+                                    return (
+                                        <li key={t}>
+                                            <button type="button" className="tag" aria-pressed={active} onClick={() => update('tag', active ? '' : t)}>
+                                                {t}
+                                            </button>
+                                        </li>
+                                    );
+                                })}
+                            </ul>
+                        </div>
+                    )}
+
+                    <div className="archive-summary">
+                        <p role="status" aria-live="polite" className="muted" style={{ margin: 0 }}>
+                            {state.status === 'loading'
+                                ? 'Loading the archive…'
+                                : state.status === 'ready'
+                                  ? `${results.length} ${results.length === 1 ? 'result' : 'results'}${q ? ` for “${q}”` : ''}${tag ? ` tagged “${tag}”` : ''}${kind ? ` in ${KIND_LABEL[kind].toLowerCase()}s` : ''}`
+                                  : ''}
                         </p>
-                    )}
-                </div>
+                        {filtered && (
+                            <button type="button" className="btn btn--ghost btn--sm" onClick={clearAll}>
+                                <X size={16} aria-hidden="true" /> Clear filters
+                            </button>
+                        )}
+                    </div>
 
-                <div className="gallery-grid">
-                    {/* Exhibit 1: Kolam Art - Always visible unless search excludes it (but it's static, so we keep it or hide it? usually static exhibits are separate) */}
-                    {/* Decision: Keep Kolam visible only if no search, OR we could make Kolam searchable if we added it to the 'articles' list in a unifying way. 
-                        For now, requested behavior implies searching the Supabase articles. I'll hide static items if searching to focus on results. 
-                    */}
-                    {!searchQuery && (
-                        <a onClick={() => navigate('/article/kolam')} className="gallery-item slide-in-up" style={{ cursor: 'pointer' }}>
-                            <div className="gallery-thumb">
-                                <div style={{ width: '100%', height: '100%', background: 'linear-gradient(45deg, #4A148C, #7B1FA2)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '3rem' }}>🥨</div>
-                            </div>
-                            <div className="gallery-content">
-                                <span className="gallery-tag">Ethnomathematics</span>
-                                <h3>The Art of Kolam</h3>
-                                <p style={{ color: 'var(--text-muted)', marginTop: '0.5rem' }}>Exploring the recursive geometry and array grammars hidden within traditional threshold patterns.</p>
-                                <span style={{ color: 'var(--primary)', fontWeight: 600, fontSize: '0.9rem', marginTop: '1rem', display: 'block' }}>Read Article &rarr;</span>
-                            </div>
-                        </a>
-                    )}
+                    {state.status === 'ready' &&
+                        state.data.errors.map((e) => (
+                            <Alert key={e.source} tone="warning" className="mb-5">
+                                <p>
+                                    {e.message} Other parts of the archive are shown.{' '}
+                                    <button type="button" className="link-button" onClick={state.retry}>
+                                        Try again
+                                    </button>
+                                </p>
+                            </Alert>
+                        ))}
 
-                    {/* Dynamic Articles from Supabase */}
-                    {loading ? (
-                        <p>Loading archive...</p>
-                    ) : (
-                        filteredArticles.length === 0 ? (
-                            <div style={{ gridColumn: '1/-1', textAlign: 'center', padding: '3rem', color: '#666', background: '#f9f9f9', borderRadius: '8px' }}>
-                                <p style={{ fontSize: '1.2rem', marginBottom: '0.5rem' }}>No matches found</p>
-                                <p style={{ fontSize: '0.9rem' }}>Try checking your spelling or using different keywords.</p>
-                            </div>
+                    {state.status === 'loading' && <CardSkeletons count={6} label="Loading the archive" />}
+                    {state.status === 'error' && <ErrorState title="The archive could not be loaded" onRetry={state.retry} />}
+                    {state.status === 'ready' &&
+                        (results.length === 0 ? (
+                            <EmptyState
+                                title={filtered ? 'No matching records' : 'The archive is being prepared'}
+                                action={
+                                    filtered ? (
+                                        <button type="button" className="btn" onClick={clearAll}>
+                                            Clear search and filters
+                                        </button>
+                                    ) : undefined
+                                }
+                            >
+                                <p>{filtered ? 'Try a different spelling, a broader term, or remove a filter.' : 'Published research will appear here after review.'}</p>
+                            </EmptyState>
                         ) : (
-
-                            filteredArticles.map((article, index) => (
-                                <a key={article.id} onClick={() => navigate(`/article/${article.id}`)} className="gallery-item slide-in-up" style={{ animationDelay: `${index * 100}ms`, cursor: 'pointer' }}>
-                                    <div className="gallery-thumb">
-                                        <div style={{ width: '100%', height: '100%', background: 'linear-gradient(45deg, #006064, #0097A7)', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'white', fontSize: '3rem' }}>📄</div>
-                                    </div>
-                                    <div className="gallery-content">
-                                        <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
-                                            <span className="gallery-tag" style={{ borderBottom: '2px solid var(--accent)', paddingBottom: '2px' }}>Feature Article</span>
-                                        </div>
-                                        <h3 style={{ fontSize: '1.2rem', marginBottom: '0.8rem', lineHeight: '1.3' }}>{article.title}</h3>
-                                        <p style={{ color: 'var(--text-muted)', marginBottom: '0.8rem', fontWeight: 600, fontSize: '0.9rem' }}>By {article.author_name}</p>
-
-                                        {article.tags && article.tags.length > 0 && (
-                                            <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap', marginBottom: '1rem' }}>
-                                                {article.tags.slice(0, 5).map(tag => (
-                                                    <span key={tag} style={{ fontSize: '0.7rem', background: '#f0f4f8', color: '#1565c0', padding: '2px 8px', borderRadius: '4px', border: '1px solid #e1e8ed' }}>
-                                                        {tag}
-                                                    </span>
-                                                ))}
-                                                {article.tags.length > 5 && (
-                                                    <span style={{ fontSize: '0.7rem', color: 'var(--primary)', fontWeight: 'bold', alignSelf: 'center' }}>
-                                                        +{article.tags.length - 5} more
-                                                    </span>
-                                                )}
-                                            </div>
-                                        )}
-
-                                        <p style={{ fontSize: '0.85rem', color: '#555', display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical', overflow: 'hidden', lineHeight: '1.5' }}>
-                                            {article.description}
-                                        </p>
-                                        <span style={{ color: 'var(--primary)', fontWeight: 700, fontSize: '0.85rem', marginTop: '1.2rem', display: 'block', borderTop: '1px solid #eee', paddingTop: '1rem' }}>
-                                            View Full Analysis &rarr;
-                                        </span>
-                                    </div>
-                                </a>
-                            ))
-
-                        )
-                    )}
-                </div>
-
-                <div style={{ marginTop: '3rem' }} className="gallery-grid">
-                    <DynamicCollections />
+                            <ul className="grid archive-grid" aria-label="Archive records">
+                                {results.map((item) => (
+                                    <li key={item.id}>
+                                        <ArchiveCard item={item} headingLevel={2} />
+                                    </li>
+                                ))}
+                            </ul>
+                        ))}
                 </div>
             </section>
-        </div>
+        </>
     );
 }

@@ -1,49 +1,92 @@
-
-import { useScrollAnimation } from '../hooks/useScrollAnimation';
+import { useState } from 'react';
+import { Link } from 'react-router-dom';
+import { ExternalLink, Mail, MapPin, Phone } from 'lucide-react';
+import { usePageMeta } from '../hooks/usePageMeta';
+import { PageIntro } from '../components/ui/PageIntro';
+import { CONTACT } from '../content/site';
 
 export default function Contact() {
-    useScrollAnimation();
+    usePageMeta('Visit & contact', 'Visit the IT Museum at CHRIST University, Bangalore Yeshwanthpur Campus, or contact the museum by email or phone.');
+    // The map is a third-party embed: load it only on request, with a text fallback.
+    const [showMap, setShowMap] = useState(false);
 
     return (
-        <div className="page active" style={{ display: 'block' }}>
-            <section className="hero" style={{ minHeight: '40vh' }}>
-                <div className="hero-content">
-                    <h1>Get in Touch</h1>
-                    <p>Visit us at the Bangalore Yeshwanthpur Campus or reach out online.</p>
-                </div>
-            </section>
-
-            <section className="section">
-                <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '4rem', alignItems: 'center' }}>
-                    <div className="card-premium">
-                        <h3 style={{ marginBottom: '2rem' }}>Contact Information</h3>
-
-                        <div style={{ marginBottom: '2rem' }}>
-                            <h4 style={{ fontSize: '1.1rem', color: 'var(--primary)' }}>📍 Location</h4>
-                            <p style={{ color: 'var(--text-muted)' }}>Christ University, Bangalore Yeshwanthpur Campus<br />Bangalore, Karnataka 560022</p>
+        <>
+            <PageIntro eyebrow="Visit" title="Visit & contact">
+                <p>The IT Museum is based at the Bangalore Yeshwanthpur Campus of CHRIST (Deemed to be University).</p>
+            </PageIntro>
+            <section className="section section--tight">
+                <div className="container contact">
+                    <div className="stack">
+                        <div className="contact__item">
+                            <MapPin aria-hidden="true" />
+                            <div>
+                                <h2>Address</h2>
+                                <address>
+                                    {CONTACT.campus}
+                                    <br />
+                                    {CONTACT.addressLines.map((l) => (
+                                        <span key={l}>
+                                            {l}
+                                            <br />
+                                        </span>
+                                    ))}
+                                </address>
+                                <p className="muted">{CONTACT.directions}</p>
+                                <a href={CONTACT.mapsUrl} target="_blank" rel="noopener noreferrer" className="arrow-link">
+                                    Get directions in Google Maps <ExternalLink size={14} aria-hidden="true" />
+                                    <span className="visually-hidden"> (opens in a new tab)</span>
+                                </a>
+                            </div>
                         </div>
-
-                        <div>
-                            <h4 style={{ fontSize: '1.1rem', color: 'var(--primary)' }}>📞 Contact</h4>
-                            <p style={{ color: 'var(--text-muted)' }}>080 6989 6666<br />itmuseum@christuniversity.in</p>
+                        <div className="contact__item">
+                            <Mail aria-hidden="true" />
+                            <div>
+                                <h2>Email</h2>
+                                <p>
+                                    <a href={`mailto:${CONTACT.email}`}>{CONTACT.email}</a>
+                                </p>
+                                <p className="muted">For questions about research submissions, use the reference from your confirmation email.</p>
+                            </div>
+                        </div>
+                        <div className="contact__item">
+                            <Phone aria-hidden="true" />
+                            <div>
+                                <h2>Phone</h2>
+                                <p>
+                                    <a href={CONTACT.phoneHref}>{CONTACT.phoneDisplay}</a> <span className="subtle">(campus switchboard)</span>
+                                </p>
+                            </div>
+                        </div>
+                        <div className="card card--sunken">
+                            <h2 className="h4">Submitting research?</h2>
+                            <p>
+                                Use the <Link to="/submission">guided submission</Link>. Already submitted? <Link to="/submission/status">Check your submission’s status</Link>.
+                            </p>
                         </div>
                     </div>
 
-                    {/* Google Map Embed */}
-                    <div style={{ borderRadius: '24px', overflow: 'hidden', height: '400px', boxShadow: 'var(--shadow-soft)' }}>
-                        <iframe
-                            src="https://maps.google.com/maps?q=Christ+University+Yeshwanthpur+Campus+Bangalore&t=&z=15&ie=UTF8&iwloc=&output=embed"
-                            width="100%"
-                            height="100%"
-                            style={{ border: 0 }}
-                            allowFullScreen
-                            loading="lazy"
-                            referrerPolicy="no-referrer-when-downgrade"
-                            title="Christ University Yeshwantpur Campus Map"
-                        ></iframe>
+                    <div className="contact__map">
+                        {showMap ? (
+                            <iframe
+                                src={CONTACT.mapEmbedUrl}
+                                title="Map of CHRIST University, Bangalore Yeshwanthpur Campus"
+                                loading="lazy"
+                                referrerPolicy="no-referrer-when-downgrade"
+                                allowFullScreen
+                            />
+                        ) : (
+                            <div className="contact__map-placeholder">
+                                <MapPin size={32} aria-hidden="true" />
+                                <p>The interactive map is provided by Google Maps and loads only if you choose to view it.</p>
+                                <button type="button" className="btn" onClick={() => setShowMap(true)}>
+                                    Show map
+                                </button>
+                            </div>
+                        )}
                     </div>
                 </div>
             </section>
-        </div>
+        </>
     );
 }

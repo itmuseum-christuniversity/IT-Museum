@@ -1,0 +1,112 @@
+/* =========================================================================
+   Design tokens — IT Museum, Christ University
+   Documented in docs/design-system.md. Change values here, not in components.
+   ========================================================================= */
+:root {
+    color-scheme: light;
+
+    /* Brand: restrained Christ University blue, warm paper, selective gold */
+    --blue-950: #0b1a3a;
+    --blue-900: #10244d;
+    --blue-800: #172f63;
+    --blue-700: #1d3c7f;
+    --blue-600: #234a9c; /* brand blue (logo) */
+    --blue-500: #3d64b5;
+    --blue-200: #c7d4ee;
+    --blue-100: #e5ebf6;
+    --blue-50: #f1f4fa;
+
+    --gold-700: #75591c; /* gold for text on light surfaces (AA) */
+    --gold-500: #c9a24b; /* decorative gold (rules, accents on dark) */
+    --gold-300: #e3c98d;
+    --gold-100: #f6eedb;
+
+    --paper: #faf8f4; /* page background */
+    --surface: #ffffff;
+    --surface-sunken: #f2eee6;
+    --line: #e2dbcd;
+    --line-strong: #c9bfab;
+
+    --ink: #1b1c20; /* body text: 16.8:1 on paper */
+    --ink-muted: #4a4c53; /* secondary text: 8.6:1 */
+    --ink-subtle: #686a72; /* captions/meta: 5.3:1 */
+    --ink-inverse: #f7f5f0;
+
+    /* Semantic */
+    --color-bg: var(--paper);
+    --color-text: var(--ink);
+    --color-link: var(--blue-700);
+    --color-link-hover: var(--blue-900);
+    --color-primary: var(--blue-600);
+    --color-primary-hover: var(--blue-700);
+    --color-focus: #1f5fd6;
+
+    --success-fg: #1d6a40;
+    --success-bg: #e5f2ea;
+    --warning-fg: #7a4f00;
+    --warning-bg: #fbf0d5;
+    --danger-fg: #9e2328;
+    --danger-bg: #fae8e8;
+    --info-fg: var(--blue-800);
+    --info-bg: var(--blue-50);
+
+    /* Typography */
+    --font-serif: 'Source Serif 4', 'Iowan Old Style', Georgia, serif;
+    --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+    --font-mono: ui-monospace, 'SFMono-Regular', Menlo, Consolas, monospace;
+
+    --text-xs: 0.75rem;
+    --text-sm: 0.875rem;
+    --text-base: 1rem;
+    --text-md: 1.125rem;
+    --text-lg: 1.25rem;
+    --text-xl: 1.5rem;
+    --text-2xl: 1.875rem;
+    --text-3xl: clamp(2rem, 1.5rem + 2vw, 2.625rem);
+    --text-4xl: clamp(2.375rem, 1.6rem + 3.4vw, 3.75rem);
+
+    --leading-tight: 1.15;
+    --leading-snug: 1.35;
+    --leading-body: 1.65;
+
+    /* Spacing (4px base) */
+    --space-1: 0.25rem;
+    --space-2: 0.5rem;
+    --space-3: 0.75rem;
+    --space-4: 1rem;
+    --space-5: 1.5rem;
+    --space-6: 2rem;
+    --space-7: 3rem;
+    --space-8: 4rem;
+    --space-9: 6rem;
+
+    /* Layout */
+    --container: 75rem;
+    --container-narrow: 46rem;
+    --gutter: clamp(1rem, 0.5rem + 2.5vw, 2.5rem);
+    --header-height: 4.5rem;
+
+    /* Shape & depth */
+    --radius-sm: 4px;
+    --radius-md: 8px;
+    --radius-lg: 14px;
+    --radius-pill: 999px;
+    --shadow-sm: 0 1px 2px rgb(16 36 77 / 0.06);
+    --shadow-md: 0 2px 4px rgb(16 36 77 / 0.05), 0 8px 24px rgb(16 36 77 / 0.07);
+    --shadow-lg: 0 12px 40px rgb(16 36 77 / 0.14);
+
+    /* Motion */
+    --ease: cubic-bezier(0.2, 0, 0, 1);
+    --dur-fast: 120ms;
+    --dur: 200ms;
+
+    /* Breakpoints (reference only — CSS media queries use literal values):
+       sm 40rem/640px · md 48rem/768px · lg 64rem/1024px · xl 80rem/1280px */
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :root {
+        --dur-fast: 0ms;
+        --dur: 0ms;
+    }
+}

@@ -1,11 +1,14 @@
+import { createClient, type SupabaseClient } from '@supabase/supabase-js';
+import { config, isSupabaseConfigured } from './config';
 
-import { createClient } from '@supabase/supabase-js';
+let client: SupabaseClient | null = null;
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
-
-if (!supabaseUrl || !supabaseAnonKey) {
-    console.warn('Missing Supabase environment variables. Please check your .env file.');
+/**
+ * Anonymous, read-only client for public content (published_articles view and
+ * sections). All privileged work goes through the Edge Functions.
+ */
+export function publicDb(): SupabaseClient {
+    if (!isSupabaseConfigured) throw new Error('The archive is not configured (missing Supabase settings).');
+    client ??= createClient(config.supabaseUrl, config.supabaseAnonKey, { auth: { persistSession: false } });
+    return client;
 }
-
-export const supabase = createClient(supabaseUrl || '', supabaseAnonKey || '');
