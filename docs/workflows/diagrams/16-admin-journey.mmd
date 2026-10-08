@@ -1,0 +1,38 @@
+flowchart TB
+    S(["Admin opens /admin"]):::start --> G{{"Signed in and an<br/>active admin record?"}}:::amber
+    G -->|"No"| L["Sign-in form or No access screen<br/>see the staff access workflow"]:::red --> G
+    G -->|"Yes"| OV
+    OV["Overview<br/>counts for every stage, your two queues highlighted<br/>Needs attention: waiting over 7 days or assigned to you<br/>Recent activity: last 15 audit events"]:::ink
+    OV --> NAVQ["Left menu"]:::grey
+    NAVQ --> INB["Inbox<br/>search by title, author, reference<br/>filter by stage, assignee, waiting time, dates<br/>oldest first"]:::blue
+    NAVQ --> ARC["Archive<br/>Published, Unpublished, Rejected, Changes requested"]:::blue
+    NAVQ --> STF["Staff and roles"]:::blue
+    NAVQ --> PUBS["View public site"]:::grey
+    INB --> WS["Article workspace<br/>manuscript and reports, details, notes, activity log<br/>decision panel, assignment"]:::blue
+    ARC --> WS
+    WS --> ST{{"Article status"}}:::amber
+    ST -->|"SUBMITTED"| INT["Intake triage<br/>approve, request changes or reject"]:::gold
+    ST -->|"FINAL_APPROVAL"| FIN["Prepare publication<br/>PDF, public details, checklist, publish"]:::gold
+    ST -->|"IT, TECH or LIT review"| MON["Monitor: read, add notes, assign a reviewer<br/>the stage owner makes the decision"]:::blue
+    ST -->|"PUBLISHED"| UNP["Unpublish with a reason"]:::red
+    ST -->|"UNPUBLISHED"| REP["Replace PDF or details, republish"]:::green
+    ST -->|"REJECTED"| REO["Reopen with a reason"]:::amber
+    ST -->|"CHANGES_REQUESTED"| WAIT["Read only - waiting for the contributor"]:::grey
+    INT --> BACK["Back to the Inbox or Overview"]:::grey
+    FIN --> BACK
+    MON --> BACK
+    UNP --> BACK
+    REP --> BACK
+    REO --> BACK
+    WAIT --> BACK
+    BACK --> OV
+    STF --> SO["Sign out any time from the top bar"]:::grey
+
+    classDef start fill:#10244d,stroke:#10244d,color:#ffffff
+    classDef blue fill:#e8eef9,stroke:#234a9c,color:#0b1a3a
+    classDef gold fill:#f6ecd2,stroke:#a8832b,color:#3d2d06
+    classDef red fill:#fbe4e4,stroke:#b3261e,color:#5c0f0b
+    classDef green fill:#e3f3e8,stroke:#2f7d4a,color:#0f3a1f
+    classDef amber fill:#fff1d6,stroke:#c77c00,color:#4a2c00
+    classDef ink fill:#10244d,stroke:#10244d,color:#ffffff
+    classDef grey fill:#f2eee6,stroke:#8b857a,color:#2b2a27

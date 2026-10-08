@@ -1,0 +1,36 @@
+flowchart TB
+    subgraph BR["Browser - React website"]
+        direction LR
+        PUBP["Public pages"]:::blue
+        SUBP["Submission and status pages"]:::gold
+        ADMP["Review portal /admin"]:::ink
+    end
+    subgraph SB["Supabase"]
+        direction TB
+        VIEW[("published_articles view<br/>sections table<br/>public read only")]:::green
+        PAPI["Edge Function public-api<br/>no login, reference + access key"]:::gold
+        SAPI["Edge Function staff-api<br/>verifies Firebase token<br/>checks staff_members role<br/>applies the shared workflow rules"]:::ink
+        DB[("Postgres<br/>articles, article_events,<br/>staff_members, notification_outbox")]:::blue
+        ST[("Storage<br/>reports PRIVATE<br/>publication-staging PRIVATE<br/>articles PUBLIC PDFs")]:::blue
+        NW["Edge Function notify-worker"]:::gold
+    end
+    FBA["Firebase Authentication<br/>staff sign-in only"]:::grey
+    FS[("Firebase Firestore collections<br/>old notes, read only")]:::grey
+    EJ["EmailJS<br/>server side"]:::grey
+
+    PUBP -->|"read published content"| VIEW
+    PUBP -->|"read notes"| FS
+    SUBP -->|"submit, status, resubmit"| PAPI
+    ADMP -->|"sign in"| FBA
+    ADMP -->|"ID token + actions"| SAPI
+    PAPI -->|"service role, server only"| DB
+    SAPI -->|"service role, server only"| DB
+    PAPI --> ST
+    SAPI --> ST
+    DB -->|"queued emails"| NW
+    NW --> EJ
+    classDef blue fill:#e8eef9,stroke:#234a9c,color:#0b1a3a
+    classDef gold fill:#f6ecd2,stroke:#a8832b,color:#3d2d06
+    classDef green fill:#e3f3e8,stroke:#2f7d4a,color:#0f3a1f
+    classDef ink fill:#10244d,stroke:#10244d,color:#ffffff
+    classDef grey fill:#f2eee6,stroke:#8b857a,color:#2b2a27

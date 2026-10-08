@@ -1,0 +1,51 @@
+flowchart TB
+    subgraph SRC["Three sources feed one archive"]
+        direction LR
+        P[("Research articles<br/>Supabase view published_articles<br/>only PUBLISHED rows exist here")]:::green
+        E["Curated exhibits<br/>written in code<br/>Kolam, Exhibit 001"]:::gold
+        N[("Collection notes<br/>old Firestore collections<br/>read only")]:::grey
+    end
+    SRC --> M["Archive page loads all three at the same time"]:::blue
+    M --> F{{"Did every<br/>source load?"}}:::amber
+    F -->|"Yes"| LIST
+    F -->|"One failed"| W["Warning banner names what failed<br/>with Try again<br/>the other sources still show"]:::red --> LIST
+    F -->|"Everything failed"| X["Archive could not be loaded<br/>Try again"]:::red
+
+    LIST["Result cards"]:::blue --> CTRL
+    subgraph CTRL["Visitor controls - all kept in the web address so a search can be shared"]
+        direction LR
+        c1["Search box<br/>fuzzy match on title, author,<br/>topics and summary"]:::blue
+        c2["Type<br/>Articles, Exhibits, Notes"]:::blue
+        c3["Topic chips<br/>most used tags"]:::blue
+        c4["Sort<br/>Newest, Oldest, Title A-Z<br/>relevance while searching"]:::blue
+    end
+    CTRL --> RES{{"Any results?"}}:::amber
+    RES -->|"No, filters on"| E1["No matching records<br/>Clear search and filters"]:::grey
+    RES -->|"No, nothing published yet"| E2["The archive is being prepared"]:::grey
+    RES -->|"Yes"| OPEN["Open a card"]:::green
+    OPEN --> REC
+
+    subgraph REC["Record page"]
+        direction TB
+        r1["Title, authors, reference, dates"]:::blue
+        r2["Abstract or summary"]:::blue
+        r3{{"Full document"}}:::amber
+        r3a["PDF: inline preview, Open, Download PDF"]:::green
+        r3b["Only a Google Doc link: Open the document"]:::gold
+        r3c["No file: contact the museum"]:::grey
+        r4["Cite this article<br/>Copy citation"]:::blue
+        r5["Topics link back to the archive<br/>Related records"]:::blue
+        r1 --> r2 --> r3
+        r3 --> r3a
+        r3 --> r3b
+        r3 --> r3c
+        r3a --> r4 --> r5
+    end
+    OPEN -->|"id not in the public view<br/>draft, rejected, unpublished, misspelt"| NF["Record not found<br/>never shows a draft"]:::red
+
+    classDef blue fill:#e8eef9,stroke:#234a9c,color:#0b1a3a
+    classDef gold fill:#f6ecd2,stroke:#a8832b,color:#3d2d06
+    classDef red fill:#fbe4e4,stroke:#b3261e,color:#5c0f0b
+    classDef green fill:#e3f3e8,stroke:#2f7d4a,color:#0f3a1f
+    classDef amber fill:#fff1d6,stroke:#c77c00,color:#4a2c00
+    classDef grey fill:#f2eee6,stroke:#8b857a,color:#2b2a27

@@ -1,0 +1,25 @@
+flowchart TB
+    A(["Someone opens /admin"]):::start --> SO{{"Signed in<br/>with Firebase?"}}:::amber
+    SO -->|"No"| LOGIN["Staff sign-in form<br/>email + password<br/>Forgot password sends a reset email<br/>and never says whether the account exists"]:::blue --> FB["Firebase Authentication"]:::grey --> TOK
+    SO -->|"Yes"| TOK["Browser sends a fresh ID token<br/>with every request"]:::blue
+    TOK --> VER{{"Server verifies the token<br/>signature, issuer, audience, expiry"}}:::amber
+    VER -->|"Invalid or expired"| E401["Session ended, sign in again"]:::red
+    VER -->|"Valid"| FIND{{"staff_members record<br/>for this Firebase user?"}}:::amber
+    FIND -->|"No"| BYMAIL{{"Record with the same email<br/>not yet linked to anyone?"}}:::amber
+    BYMAIL -->|"Yes, first sign-in"| LINK["Link the Firebase account to that record"]:::green --> ACT
+    BYMAIL -->|"No"| DENY
+    FIND -->|"Yes"| ACT{{"Active and has<br/>a valid role?"}}:::amber
+    ACT -->|"No"| DENY["No access screen<br/>Ask an IT Museum admin to grant you a role<br/>Sign out button"]:::red
+    ACT -->|"Yes"| ROLE{{"Role"}}:::amber
+    ROLE -->|"admin"| PA["Admin portal<br/>Overview, Inbox, Archive, Staff and roles<br/>sees every status"]:::ink
+    ROLE -->|"it_reviewer / tech_reviewer / lit_reviewer"| PR["Reviewer portal<br/>Overview and My queue only<br/>sees only their own stage"]:::blue
+    NOTE["Roles are never guessed from the wording of an email address<br/>Unknown accounts get nothing - deny by default"]:::gold -.-> FIND
+
+    classDef start fill:#10244d,stroke:#10244d,color:#ffffff
+    classDef blue fill:#e8eef9,stroke:#234a9c,color:#0b1a3a
+    classDef gold fill:#f6ecd2,stroke:#a8832b,color:#3d2d06
+    classDef red fill:#fbe4e4,stroke:#b3261e,color:#5c0f0b
+    classDef green fill:#e3f3e8,stroke:#2f7d4a,color:#0f3a1f
+    classDef amber fill:#fff1d6,stroke:#c77c00,color:#4a2c00
+    classDef ink fill:#10244d,stroke:#10244d,color:#ffffff
+    classDef grey fill:#f2eee6,stroke:#8b857a,color:#2b2a27

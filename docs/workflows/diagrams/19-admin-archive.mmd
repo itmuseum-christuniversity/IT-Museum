@@ -1,0 +1,26 @@
+flowchart TB
+    A(["Admin opens Archive"]):::start --> TB{{"Choose a tab"}}:::amber
+    TB -->|"Published"| P["List: title, author, reference, published date<br/>View link to the public page"]:::green
+    TB -->|"Unpublished"| U["Hidden from the public"]:::grey
+    TB -->|"Rejected"| R["Closed submissions"]:::red
+    TB -->|"Changes requested"| C["Waiting for contributors"]:::amber
+    P --> PO["Open article, Unpublish<br/>reason 10+ characters, internal only"]:::blue
+    PO --> PR["Public PDF deleted, private copy kept<br/>status UNPUBLISHED<br/>contributor emailed that it was withdrawn"]:::grey
+    U --> UO["Open article<br/>replace PDF or details if needed<br/>Republish with checklist and confirmation"]:::blue
+    UO --> UR["Status PUBLISHED again<br/>no second email"]:::green
+    R --> RO["Open article, Reopen<br/>reason 10+ characters"]:::blue
+    RO --> RR["Returns to the stage that rejected it<br/>or to SUBMITTED if that was not recorded<br/>no email"]:::amber
+    C --> CO["Open to read only<br/>no admin action - the contributor must resubmit<br/>it then returns to the stage that asked"]:::grey
+    PR -.-> U
+    UR -.-> P
+    RR -.-> NEWQ["Back in a review queue"]:::blue
+    NOTE["Imported old records show an imported tag with the old status<br/>every change adds an entry to the article's activity log"]:::gold -.-> TB
+
+    classDef start fill:#10244d,stroke:#10244d,color:#ffffff
+    classDef blue fill:#e8eef9,stroke:#234a9c,color:#0b1a3a
+    classDef gold fill:#f6ecd2,stroke:#a8832b,color:#3d2d06
+    classDef red fill:#fbe4e4,stroke:#b3261e,color:#5c0f0b
+    classDef green fill:#e3f3e8,stroke:#2f7d4a,color:#0f3a1f
+    classDef amber fill:#fff1d6,stroke:#c77c00,color:#4a2c00
+    classDef ink fill:#10244d,stroke:#10244d,color:#ffffff
+    classDef grey fill:#f2eee6,stroke:#8b857a,color:#2b2a27

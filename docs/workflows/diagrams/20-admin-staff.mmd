@@ -1,0 +1,33 @@
+flowchart TB
+    subgraph ONB["Giving a new person access"]
+        direction TB
+        o1["1 Create their email and password account<br/>in Firebase Authentication"]:::grey
+        o2["2 Admin opens Staff and roles<br/>Add staff member"]:::blue
+        o3["3 Enter name, email that matches the Firebase account,<br/>and exactly one role<br/>Active ticked"]:::blue
+        o4["4 Saved as a staff_members record<br/>list shows Active, not signed in yet"]:::green
+        o5["5 The person signs in for the first time<br/>the Firebase account is linked to the record<br/>list shows Active"]:::green
+        o1 --> o2 --> o3 --> o4 --> o5
+    end
+    subgraph CHG["Changing or removing access"]
+        direction TB
+        c1["Staff and roles list<br/>name, email, role, status"]:::blue
+        c2["Edit<br/>change the role or untick Active"]:::blue
+        c3{{"Is the admin editing<br/>their own record?"}}:::amber
+        c4["Refused: you cannot remove your own admin access<br/>ask another admin"]:::red
+        c5["Saved - takes effect on the next request"]:::green
+        c1 --> c2 --> c3
+        c3 -->|"Yes, removing admin or deactivating"| c4
+        c3 -->|"No"| c5
+    end
+    FIRST["Very first admin is created once in SQL<br/>insert into staff_members, role admin, active true"]:::gold --> o5
+    OLD["People copied from the old authorized_users table<br/>arrive INACTIVE with the role their email pattern implied<br/>review each, then tick Active"]:::gold --> c1
+    RULE["Access always comes from these records<br/>never from the wording of an email address"]:::ink
+
+    classDef start fill:#10244d,stroke:#10244d,color:#ffffff
+    classDef blue fill:#e8eef9,stroke:#234a9c,color:#0b1a3a
+    classDef gold fill:#f6ecd2,stroke:#a8832b,color:#3d2d06
+    classDef red fill:#fbe4e4,stroke:#b3261e,color:#5c0f0b
+    classDef green fill:#e3f3e8,stroke:#2f7d4a,color:#0f3a1f
+    classDef amber fill:#fff1d6,stroke:#c77c00,color:#4a2c00
+    classDef ink fill:#10244d,stroke:#10244d,color:#ffffff
+    classDef grey fill:#f2eee6,stroke:#8b857a,color:#2b2a27

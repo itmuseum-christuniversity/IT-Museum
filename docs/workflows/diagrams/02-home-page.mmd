@@ -1,0 +1,24 @@
+flowchart TB
+    L(["Visitor lands on Home"]):::start --> h1
+    h1["1. Hero<br/>India's computing story, researched and preserved<br/>Actions: Explore the archive, Contribute research"]:::blue
+    h1 --> h2["2. Mission<br/>Preserve, Verify, Share"]:::blue
+    h2 --> h3["3. From the archive<br/>Kolam exhibit card + 3 newest published articles"]:::blue
+    h3 --> h4["4. A short history<br/>HEC-2M at ISI, TIFRAC in Mumbai"]:::blue
+    h4 --> h5["5. The partnership<br/>CHRIST University and DataArt IT Museum<br/>+ 6 chapter links to the global timeline"]:::ink
+    h5 --> h6["6. Kolam exhibit call-out<br/>and the Board quote"]:::blue
+    h6 --> h7["7. Extra sections from the CMS<br/>Supabase sections table, cleaned of scripts<br/>shown only if there are any"]:::grey
+    h7 --> h8["8. Help document India's IT history<br/>Start a submission, Check a submission"]:::gold
+
+    h3 --> Q{{"Did the latest<br/>articles load?"}}:::amber
+    Q -->|"Loading"| SK["Placeholder cards<br/>with Loading label"]:::grey
+    Q -->|"Error"| ER["Warning: recent research could not be loaded<br/>Try again button<br/>Kolam card still shows"]:::red
+    Q -->|"Loaded or no articles yet"| OK["Kolam card + up to 3 article cards"]:::green
+
+    classDef start fill:#10244d,stroke:#10244d,color:#ffffff
+    classDef blue fill:#e8eef9,stroke:#234a9c,color:#0b1a3a
+    classDef gold fill:#f6ecd2,stroke:#a8832b,color:#3d2d06
+    classDef red fill:#fbe4e4,stroke:#b3261e,color:#5c0f0b
+    classDef green fill:#e3f3e8,stroke:#2f7d4a,color:#0f3a1f
+    classDef amber fill:#fff1d6,stroke:#c77c00,color:#4a2c00
+    classDef ink fill:#10244d,stroke:#10244d,color:#ffffff
+    classDef grey fill:#f2eee6,stroke:#8b857a,color:#2b2a27

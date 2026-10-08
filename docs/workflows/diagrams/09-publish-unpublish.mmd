@@ -1,0 +1,27 @@
+flowchart TB
+    F(["Article reaches FINAL_APPROVAL"]):::start --> CK{{"Publication checklist<br/>title 5+ characters<br/>author credit present<br/>abstract 30+ characters<br/>at least 1 archive tag<br/>final PDF uploaded"}}:::amber
+    CK -->|"Anything missing"| BLK["Publish button is disabled<br/>the server also refuses<br/>with the list of what is missing"]:::red
+    CK -->|"All complete and nothing unsaved"| DLG["Publish dialog<br/>tick: I have checked the PDF preview and the details"]:::blue
+    DLG -->|"Publish now"| SRV["Server re-checks the version and the checklist"]:::amber
+    SRV -->|"Someone changed it meanwhile"| CF["Conflict message, screen reloads"]:::red
+    SRV -->|"OK"| CP["Copy staged PDF from private staging<br/>to the public articles bucket"]:::blue
+    CP --> ST["One database transaction<br/>status PUBLISHED, published_at set<br/>audit event, Published email queued"]:::green
+    ST --> LIVE["Live now<br/>appears in Archive, search, Home featured<br/>Download PDF works for everyone"]:::green
+    ST -.->|"if the save fails"| UNDO["The public copy is removed again<br/>nothing half-published"]:::grey
+
+    LIVE --> UP{{"Admin later needs to withdraw it"}}:::amber
+    UP --> UR["Unpublish with a reason of 10+ characters<br/>reason stays internal"]:::blue
+    UR --> UT["Private copy of the PDF is kept<br/>public PDF is deleted<br/>status UNPUBLISHED, audit event<br/>Unpublished email queued"]:::grey
+    UT --> GONE["Gone from the archive, search and Home<br/>the record page now says Record not found"]:::red
+    GONE --> RP{{"Fixed and ready again?"}}:::amber
+    RP -->|"Yes"| RPP["Replace PDF or details if needed<br/>Republish with the same checklist and dialog<br/>no second email"]:::blue --> LIVE
+    RP -->|"No"| STAY["Stays UNPUBLISHED"]:::grey
+
+    classDef start fill:#10244d,stroke:#10244d,color:#ffffff
+    classDef blue fill:#e8eef9,stroke:#234a9c,color:#0b1a3a
+    classDef gold fill:#f6ecd2,stroke:#a8832b,color:#3d2d06
+    classDef red fill:#fbe4e4,stroke:#b3261e,color:#5c0f0b
+    classDef green fill:#e3f3e8,stroke:#2f7d4a,color:#0f3a1f
+    classDef amber fill:#fff1d6,stroke:#c77c00,color:#4a2c00
+    classDef ink fill:#10244d,stroke:#10244d,color:#ffffff
+    classDef grey fill:#f2eee6,stroke:#8b857a,color:#2b2a27

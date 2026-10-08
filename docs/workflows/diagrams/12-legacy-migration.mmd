@@ -1,0 +1,45 @@
+flowchart LR
+    subgraph OLD["Old status in the database"]
+        direction TB
+        o1["SUBMITTED"]
+        o2["ADMIN_APPROVED"]
+        o3["IT_APPROVED"]
+        o4["TECH_APPROVED"]
+        o5["LIT_APPROVED"]
+        o6["PUBLISHED"]
+        o7["IT_REJECTED"]
+        o8["TECH_REJECTED"]
+        o9["LIT_REJECTED"]
+        o10["ADMIN_REJECTED"]
+        o11["anything else"]
+    end
+    subgraph NEW["New status"]
+        direction TB
+        n1["SUBMITTED"]
+        n2["IT_REVIEW"]
+        n3["TECH_REVIEW"]
+        n4["LIT_REVIEW"]
+        n5["FINAL_APPROVAL<br/>needs a final PDF before publishing"]
+        n6["PUBLISHED<br/>shown as Added to archive<br/>because the real date is unknown"]
+        n7["REJECTED at TECH_REVIEW"]
+        n8["REJECTED at LIT_REVIEW"]
+        n9["REJECTED at stage unknown<br/>reopens to SUBMITTED"]
+        n10["SUBMITTED<br/>never hidden"]
+    end
+    o1 --> n1
+    o2 --> n2
+    o3 --> n3
+    o4 --> n4
+    o5 --> n5
+    o6 --> n6
+    o7 --> n7
+    o8 --> n8
+    o9 --> n8
+    o10 --> n9
+    o11 --> n10
+    BK["Before anything changes: copy of articles, sections and authorized_users<br/>goes to the migration_backup schema"]:::amber
+    KEEP["After: original value kept in legacy_status<br/>one legacy_import audit event per row<br/>file_url never overwritten<br/>old staff become INACTIVE staff_members to review"]:::green
+    BK --> OLD
+    NEW --> KEEP
+    classDef green fill:#e3f3e8,stroke:#2f7d4a,color:#0f3a1f
+    classDef amber fill:#fff1d6,stroke:#c77c00,color:#4a2c00

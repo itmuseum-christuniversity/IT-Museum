@@ -1,0 +1,26 @@
+flowchart TB
+    Q(["Staff member opens the portal"]):::start --> MQ["My queue shows only the stages this role decides<br/>Admin: SUBMITTED and FINAL_APPROVAL<br/>IT, Technical, Literature: their own stage"]:::blue
+    MQ --> OPEN["Open an article"]:::blue
+    OPEN --> ACC{{"Is it in a stage<br/>this role can see?"}}:::amber
+    ACC -->|"No"| NF["Article not found in your queues<br/>same answer for missing and not yours"]:::red
+    ACC -->|"Yes"| READ["Read the Google Doc, similarity and AI reports<br/>signed links that expire after 10 minutes<br/>read authors, description, keywords, history"]:::blue
+    READ --> NOTE["Optional: add an internal note<br/>staff only, cannot be edited or deleted"]:::grey
+    READ --> D{{"Decision"}}:::amber
+    NOTE --> D
+    D -->|"Approve"| A1["Confirmation dialog"]:::blue --> A2["Moves exactly one stage forward<br/>no email"]:::green
+    D -->|"Request changes"| R1["Reason of 10+ characters<br/>explains what to fix"]:::blue --> R2["Confirmation dialog shows the reason"]:::blue --> R3["CHANGES_REQUESTED<br/>return_to_stage remembers this stage<br/>reason shown to the contributor<br/>email sent with the reason"]:::amber
+    D -->|"Reject"| J1["Reason of 10+ characters"]:::blue --> J2["Confirmation dialog shows the reason"]:::blue --> J3["REJECTED<br/>rejected_at_stage remembers this stage<br/>reason shown to the contributor<br/>email sent with the reason"]:::red
+    A2 --> LEAVE["Article leaves this person's queue<br/>reviewers return to the queue list"]:::grey
+    R3 --> LEAVE
+    J3 --> LEAVE
+    R3 -.->|"contributor sends a revision"| BACK["Article returns to this same stage<br/>Revision received email<br/>appears in this queue again"]:::green
+    LIT["Literature reviewers can also suggest archive tags<br/>the admin makes the final choice"]:::gold -.-> READ
+
+    classDef start fill:#10244d,stroke:#10244d,color:#ffffff
+    classDef blue fill:#e8eef9,stroke:#234a9c,color:#0b1a3a
+    classDef gold fill:#f6ecd2,stroke:#a8832b,color:#3d2d06
+    classDef red fill:#fbe4e4,stroke:#b3261e,color:#5c0f0b
+    classDef green fill:#e3f3e8,stroke:#2f7d4a,color:#0f3a1f
+    classDef amber fill:#fff1d6,stroke:#c77c00,color:#4a2c00
+    classDef ink fill:#10244d,stroke:#10244d,color:#ffffff
+    classDef grey fill:#f2eee6,stroke:#8b857a,color:#2b2a27

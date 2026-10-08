@@ -1,0 +1,24 @@
+# Supabase CLI configuration (local development + function settings).
+project_id = "it-museum"
+
+[api]
+schemas = ["public"]
+
+[db]
+major_version = 15
+
+[storage]
+file_size_limit = "25MiB"
+
+# The Edge Functions authenticate callers themselves (Firebase ID tokens for
+# staff, reference + access key for contributors), so the Supabase gateway's
+# own JWT check is disabled for them.
+[functions.public-api]
+verify_jwt = false
+
+[functions.staff-api]
+verify_jwt = false
+
+# The worker checks its own caller (service-role bearer or x-cron-secret).
+[functions.notify-worker]
+verify_jwt = false

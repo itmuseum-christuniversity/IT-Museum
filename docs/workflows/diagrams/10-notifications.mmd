@@ -1,0 +1,26 @@
+sequenceDiagram
+    autonumber
+    participant A as Action: submit, decision, resubmit
+    participant DB as Database transaction
+    participant API as Edge Function
+    participant NW as notify-worker
+    participant EJ as EmailJS
+    participant CO as Contributor inbox
+    participant CR as Scheduler every 10 minutes
+    A->>DB: Change status + write audit event + queue email row
+    Note over DB: All three commit together or none do
+    DB-->>A: Done
+    API->>NW: Wake the worker
+    NW->>DB: Claim due rows (FOR UPDATE SKIP LOCKED)
+    Note over NW,DB: Two workers can never send the same email
+    NW->>NW: Render the email template
+    NW->>EJ: Send through the REST API using the private key
+    alt Delivered
+        EJ-->>CO: Email arrives
+        NW->>DB: Mark row sent
+    else Failed
+        NW->>DB: attempts + 1, try again later
+        Note over NW,DB: Waits 1, 5, 25, 125 minutes. After 5 attempts the row is marked failed and stays visible
+    end
+    CR->>NW: POST with x-cron-secret
+    Note over CR,NW: Picks up anything still waiting

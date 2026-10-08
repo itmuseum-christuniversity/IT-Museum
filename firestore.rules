@@ -1,0 +1,15 @@
+rules_version = '2';
+// Recommended rules for the legacy Firestore `collections` content shown read-only
+// in the public archive. Writes from browsers are not used by this application.
+// Deploy with: firebase deploy --only firestore:rules  (after reviewing current rules)
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /collections/{docId} {
+      allow read: if true;
+      allow write: if false;
+    }
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
