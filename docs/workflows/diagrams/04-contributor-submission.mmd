@@ -1,0 +1,33 @@
+flowchart TB
+    S0(["Contributor opens /submission"]):::start --> P0
+    P0["Step 1 - Prepare<br/>Read the checklist, open the template PDF<br/>Share the Google Doc: Anyone with the link, role Commenter<br/>Read the originality and AI-use guidelines"]:::blue
+    P0 -->|"Start submission"| P1
+    P1["Step 2 - Authors<br/>Your email for updates<br/>Up to 10 authors: name, institutional email, designation"]:::blue
+    P1 --> V1{{"Valid?"}}:::amber
+    V1 -->|"No"| E1["Error summary takes focus<br/>each message links to its field"]:::red --> P1
+    V1 -->|"Yes, Continue"| P2
+    P2["Step 3 - Research details<br/>Title (5+ characters)<br/>Description 20 to 250 words, live word count<br/>Keywords, comma separated<br/>Google Docs or Drive link"]:::blue
+    P2 --> V2{{"Valid?<br/>link host is checked,<br/>lookalike hosts are refused"}}:::amber
+    V2 -->|"No"| E2["Error summary + field errors"]:::red --> P2
+    V2 -->|"Yes, Continue"| P3
+    P3["Step 4 - Reports<br/>Similarity report PDF<br/>AI content detection report PDF<br/>each a PDF under 10 MB"]:::blue
+    P3 --> V3{{"Both PDFs<br/>valid?"}}:::amber
+    V3 -->|"No"| E3["Error summary + field errors"]:::red --> P3
+    V3 -->|"Yes, Continue"| P4
+    P4["Step 5 - Review and submit<br/>Summary with Change links back to any step<br/>Originality checkbox is required"]:::blue
+    P4 -->|"Submit article"| UP["Upload with progress bar<br/>Reports uploading, then Saving your submission"]:::gold
+    UP --> SV{{"Server checks everything again<br/>fields, link host, PDF signature, size"}}:::amber
+    SV -->|"Field problem"| BACK["Sent back to the step that owns the field<br/>with the server message"]:::red --> P1
+    SV -->|"Network or server failure"| FAIL["Your submission was not sent<br/>answers and chosen files are kept<br/>Try again"]:::red --> P4
+    SV -->|"All good"| SAVE["Reports saved in the PRIVATE reports bucket<br/>Reference ITM-YYYY-XXXXXX created<br/>One-time access key created, only its hash is stored<br/>Article saved as SUBMITTED<br/>Audit event written<br/>Confirmation email queued"]:::green
+    SAVE --> DONE["Confirmation page<br/>Reference + access key with Copy buttons<br/>What happens next<br/>Check status link"]:::green
+    DRAFT["Draft text is kept in the browser tab session<br/>cleared after a successful submit<br/>files are never stored locally"]:::grey -.-> P1
+
+    classDef start fill:#10244d,stroke:#10244d,color:#ffffff
+    classDef blue fill:#e8eef9,stroke:#234a9c,color:#0b1a3a
+    classDef gold fill:#f6ecd2,stroke:#a8832b,color:#3d2d06
+    classDef red fill:#fbe4e4,stroke:#b3261e,color:#5c0f0b
+    classDef green fill:#e3f3e8,stroke:#2f7d4a,color:#0f3a1f
+    classDef amber fill:#fff1d6,stroke:#c77c00,color:#4a2c00
+    classDef ink fill:#10244d,stroke:#10244d,color:#ffffff
+    classDef grey fill:#f2eee6,stroke:#8b857a,color:#2b2a27

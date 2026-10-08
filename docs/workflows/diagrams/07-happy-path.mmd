@@ -1,0 +1,25 @@
+sequenceDiagram
+    autonumber
+    participant C as Contributor
+    participant W as Website and servers
+    participant AD as Admin
+    participant IT as IT reviewer
+    participant TE as Technical reviewer
+    participant LI as Literature reviewer
+    participant PUB as Public archive
+    C->>W: Submit article, 2 report PDFs, Google Doc link
+    W-->>C: Reference + access key, confirmation email
+    Note over W: Status SUBMITTED
+    AD->>W: Intake check, approve
+    Note over W: Status IT_REVIEW
+    IT->>W: Review the Google Doc and reports, approve
+    Note over W: Status TECH_REVIEW
+    TE->>W: Check technical accuracy, approve
+    Note over W: Status LIT_REVIEW
+    LI->>W: Check language and citations, suggest tags, approve
+    Note over W: Status FINAL_APPROVAL
+    AD->>W: Upload final PDF, finalise title, author credit, abstract, tags
+    AD->>W: Publish, after confirming the preview
+    W->>PUB: Copy PDF to public storage, add to archive and search
+    W-->>C: Published email
+    Note over C,PUB: Status PUBLISHED - visitors can read, download and cite it

@@ -1,0 +1,34 @@
+flowchart TB
+    A(["Literature review approves"]):::start --> F["Article waits in FINAL_APPROVAL<br/>admin Inbox, Your queue: Final approval"]:::blue
+    F --> R["Open the workspace and review<br/>manuscript, reports, reviewers' notes<br/>tags suggested by the literature reviewer"]:::blue
+    R --> D0{{"Ready to publish?"}}:::amber
+    D0 -->|"Needs a revision"| RC["Request changes with a reason<br/>contributor emailed"]:::amber
+    D0 -->|"Not suitable"| RJ["Reject with a reason<br/>contributor emailed"]:::red
+    D0 -->|"Yes"| S1
+    subgraph PREP["Prepare publication panel"]
+        direction TB
+        S1["1 Final PDF<br/>export the approved Google Doc as PDF<br/>choose the file, PDF under 25 MB<br/>Upload PDF with progress bar"]:::gold
+        S1a["Saved privately in publication-staging<br/>inline preview appears, replace any time"]:::blue
+        S1b["Optional: Suggest tags from this PDF<br/>text is read inside the browser<br/>nothing is sent anywhere"]:::grey
+        S2["2 Public details<br/>title, author credit, abstract<br/>archive tags: add, remove, or click a suggestion<br/>suggestions come from the contributor, literature review and PDF scan"]:::gold
+        S2a["Save details<br/>version check, audit event"]:::blue
+        S3["3 Checklist<br/>title, author credit, abstract, 1+ tag, final PDF"]:::gold
+        S1 --> S1a --> S2
+        S1 -.-> S1b
+        S1b -.-> S2
+        S2 --> S2a --> S3
+    end
+    S3 --> C{{"All five green<br/>and no unsaved edits?"}}:::amber
+    C -->|"No"| X["Publish stays disabled<br/>warning says Save your edits"]:::red --> S2
+    C -->|"Yes"| P["Publish dialog<br/>tick: I have checked the PDF preview and the public details"]:::blue
+    P --> N["Publish now"]:::green
+    N --> OUT["Status PUBLISHED<br/>PDF copied to public storage<br/>appears in the archive immediately<br/>contributor gets the Published email<br/>audit event records the PDF"]:::green
+
+    classDef start fill:#10244d,stroke:#10244d,color:#ffffff
+    classDef blue fill:#e8eef9,stroke:#234a9c,color:#0b1a3a
+    classDef gold fill:#f6ecd2,stroke:#a8832b,color:#3d2d06
+    classDef red fill:#fbe4e4,stroke:#b3261e,color:#5c0f0b
+    classDef green fill:#e3f3e8,stroke:#2f7d4a,color:#0f3a1f
+    classDef amber fill:#fff1d6,stroke:#c77c00,color:#4a2c00
+    classDef ink fill:#10244d,stroke:#10244d,color:#ffffff
+    classDef grey fill:#f2eee6,stroke:#8b857a,color:#2b2a27

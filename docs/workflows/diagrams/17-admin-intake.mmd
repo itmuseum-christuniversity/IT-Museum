@@ -1,0 +1,25 @@
+flowchart TB
+    A(["New article waits in SUBMITTED"]):::start --> OV["Appears in the admin Inbox and on Overview<br/>Your queue: Admin intake"]:::blue
+    OV --> OPEN["Open the article workspace"]:::blue
+    OPEN --> CH["Intake guide - a reminder, not saved<br/>1 Manuscript link opens and reviewers can comment<br/>2 Both reports are present and readable<br/>3 Similarity and AI levels are within guidance<br/>4 Author names, emails and designations are complete<br/>5 The topic fits the museum's scope"]:::gold
+    CH --> AS{{"Assign someone first?"}}:::amber
+    AS -->|"Yes"| AS1["Choose an active staff member<br/>for this stage's role, saved in the log"]:::blue --> DEC
+    AS -->|"No"| DEC
+    DEC{{"Decision"}}:::amber
+    DEC -->|"Approve"| OK["Confirm<br/>status IT_REVIEW<br/>reaches the IT reviewer's queue"]:::green
+    DEC -->|"Request changes<br/>reason 10+ characters"| RC["Confirm<br/>status CHANGES_REQUESTED, will return to SUBMITTED<br/>contributor emailed with the reason"]:::amber
+    DEC -->|"Reject<br/>reason 10+ characters"| RJ["Confirm<br/>status REJECTED at SUBMITTED<br/>contributor emailed with the reason"]:::red
+    OK --> LOG["Audit log records who, when, from, to, and the reason"]:::grey
+    RC --> LOG
+    RJ --> LOG
+    OPEN -.->|"any time"| NOTE["Add an internal note"]:::grey
+    DEC -.->|"article changed in another session"| CF["Conflict message and automatic reload"]:::red
+
+    classDef start fill:#10244d,stroke:#10244d,color:#ffffff
+    classDef blue fill:#e8eef9,stroke:#234a9c,color:#0b1a3a
+    classDef gold fill:#f6ecd2,stroke:#a8832b,color:#3d2d06
+    classDef red fill:#fbe4e4,stroke:#b3261e,color:#5c0f0b
+    classDef green fill:#e3f3e8,stroke:#2f7d4a,color:#0f3a1f
+    classDef amber fill:#fff1d6,stroke:#c77c00,color:#4a2c00
+    classDef ink fill:#10244d,stroke:#10244d,color:#ffffff
+    classDef grey fill:#f2eee6,stroke:#8b857a,color:#2b2a27

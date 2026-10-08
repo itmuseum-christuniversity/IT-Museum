@@ -1,0 +1,44 @@
+flowchart TB
+    V(["Visitor"]):::start
+    subgraph PUBLIC["Public website - every page has the same header, footer, skip link and mobile menu"]
+        direction LR
+        H["Home<br/>/"]:::blue
+        A["Digital archive<br/>/collection"]:::blue
+        R["Record page<br/>/article/id"]:::blue
+        K["Kolam exhibit<br/>/article/kolam"]:::blue
+        T["Curators and team<br/>/team"]:::blue
+        C["Visit and contact<br/>/contact"]:::blue
+        S["Submit your research<br/>/submission"]:::gold
+        ST["Check a submission<br/>/submission/status"]:::gold
+        NF["Page not found<br/>any other address"]:::red
+    end
+    ADM["Review portal<br/>/admin<br/>staff only"]:::ink
+    EXT["External sites<br/>DataArt Museum, DataArt Retrospect,<br/>CHRIST University, Google Maps"]:::grey
+
+    V --> H
+    H -->|"Explore the archive"| A
+    H -->|"Featured card"| R
+    H -->|"Visit the Kolam exhibit"| K
+    H -->|"Contribute research"| S
+    H -->|"Check a submission"| ST
+    H -->|"menu"| T
+    H -->|"menu"| C
+    A -->|"open a result"| R
+    A -->|"open the exhibit"| K
+    R -->|"click a topic tag"| A
+    K -->|"click a topic tag"| A
+    R -->|"related record"| R
+    S -->|"after submitting: Check status"| ST
+    ST -->|"published: Read the article"| R
+    C -->|"Check your submission status"| ST
+    C -.->|"Show map, only if the visitor chooses"| EXT
+    H -.->|"partnership links and 6 chapters"| EXT
+    H -->|"Staff sign-in"| ADM
+    R -->|"unknown or unpublished id"| NF
+
+    classDef start fill:#10244d,stroke:#10244d,color:#ffffff
+    classDef blue fill:#e8eef9,stroke:#234a9c,color:#0b1a3a
+    classDef gold fill:#f6ecd2,stroke:#a8832b,color:#3d2d06
+    classDef red fill:#fbe4e4,stroke:#b3261e,color:#5c0f0b
+    classDef ink fill:#10244d,stroke:#10244d,color:#ffffff
+    classDef grey fill:#f2eee6,stroke:#8b857a,color:#2b2a27

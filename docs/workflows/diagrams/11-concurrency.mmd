@@ -1,0 +1,17 @@
+sequenceDiagram
+    autonumber
+    participant A as Reviewer A
+    participant B as Reviewer B - old screen
+    participant API as staff-api
+    participant DB as apply_article_change
+    A->>API: Open article - sees TECH_REVIEW, version 7
+    B->>API: Open the same article - version 7
+    A->>API: Approve, expecting TECH_REVIEW version 7
+    API->>DB: Does status AND version still match?
+    DB-->>API: Yes - LIT_REVIEW, version 8, audit event and emails saved
+    API-->>A: Moved to Literature review
+    B->>API: Reject, expecting TECH_REVIEW version 7
+    API->>DB: Does status AND version still match?
+    DB-->>API: No - it is now version 8
+    API-->>B: Conflict - this article changed
+    Note over B: Screen reloads with the latest version. B decides again with the new facts

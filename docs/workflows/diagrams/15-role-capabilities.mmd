@@ -1,0 +1,55 @@
+flowchart LR
+    subgraph ADM["Admin"]
+        direction TB
+        a1["Works SUBMITTED and FINAL_APPROVAL<br/>sees every status"]
+        a2["Intake: approve, request changes, reject"]
+        a3["Final approval: upload PDF, edit title, author credit,<br/>abstract and tags, publish"]
+        a4["Unpublish, republish, reopen rejected"]
+        a5["Assign articles, manage staff and roles"]
+        a6["Add internal notes"]
+    end
+    subgraph IT["IT reviewer"]
+        direction TB
+        i1["Works IT_REVIEW only"]
+        i2["Approve, request changes, reject"]
+        i3["Add internal notes"]
+    end
+    subgraph TE["Technical reviewer"]
+        direction TB
+        t1["Works TECH_REVIEW only"]
+        t2["Approve, request changes, reject"]
+        t3["Add internal notes"]
+    end
+    subgraph LI["Literature reviewer"]
+        direction TB
+        l1["Works LIT_REVIEW only"]
+        l2["Approve, request changes, reject"]
+        l3["Suggest archive tags"]
+        l4["Add internal notes - CANNOT publish"]
+    end
+    subgraph CO["Contributor - no login"]
+        direction TB
+        c1["Submit an article"]
+        c2["See a safe status with reference + access key"]
+        c3["Resubmit when changes are requested"]
+        c4["Never sees internal notes or reviewers"]
+    end
+    subgraph VI["Visitor"]
+        direction TB
+        v1["Read, search and cite published records"]
+        v2["Download published PDFs"]
+        v3["Never sees drafts, reports or reasons"]
+    end
+    a1 ~~~ a2 ~~~ a3 ~~~ a4 ~~~ a5 ~~~ a6
+    i1 ~~~ i2 ~~~ i3
+    t1 ~~~ t2 ~~~ t3
+    l1 ~~~ l2 ~~~ l3 ~~~ l4
+    c1 ~~~ c2 ~~~ c3 ~~~ c4
+    v1 ~~~ v2 ~~~ v3
+    ADM ~~~ IT ~~~ TE ~~~ LI ~~~ CO ~~~ VI
+    style ADM fill:#10244d,stroke:#10244d,color:#ffffff
+    style IT fill:#e8eef9,stroke:#234a9c
+    style TE fill:#e8eef9,stroke:#234a9c
+    style LI fill:#e8eef9,stroke:#234a9c
+    style CO fill:#f6ecd2,stroke:#a8832b
+    style VI fill:#f2eee6,stroke:#8b857a

@@ -1,0 +1,27 @@
+flowchart TB
+    NEW(["Contributor submits"]):::start --> S
+    subgraph REVIEW["REVIEW STAGES - each stage can only be decided by its owner. Approve moves exactly one step down"]
+        direction LR
+        S["SUBMITTED<br/>owner: Admin"]:::blue
+        I["IT_REVIEW<br/>owner: IT reviewer"]:::blue
+        T["TECH_REVIEW<br/>owner: Technical reviewer"]:::blue
+        L["LIT_REVIEW<br/>owner: Literature reviewer"]:::blue
+        F["FINAL_APPROVAL<br/>owner: Admin"]:::gold
+        S -->|"approve"| I -->|"approve"| T -->|"approve"| L -->|"approve"| F
+    end
+    F -->|"publish<br/>admin only, checklist complete"| P["PUBLISHED<br/>live in the public archive"]:::green
+    P -->|"unpublish + reason<br/>admin only"| U["UNPUBLISHED<br/>hidden, record kept"]:::grey
+    U -->|"republish<br/>admin only"| P
+    REVIEW -->|"request changes + reason<br/>any stage owner"| C["CHANGES_REQUESTED<br/>waiting for the contributor<br/>remembers return_to_stage"]:::amber
+    C -->|"contributor resubmits<br/>back to the stage that asked"| REVIEW
+    REVIEW -->|"reject + reason<br/>any stage owner"| X["REJECTED<br/>closed<br/>remembers rejected_at_stage"]:::red
+    X -->|"reopen + reason<br/>admin only<br/>back to the stage that rejected<br/>SUBMITTED if unknown"| REVIEW
+    LEG(["Old records are mapped in once<br/>see the legacy migration diagram"]):::grey -.-> REVIEW
+
+    classDef start fill:#10244d,stroke:#10244d,color:#ffffff
+    classDef blue fill:#e8eef9,stroke:#234a9c,color:#0b1a3a
+    classDef gold fill:#f6ecd2,stroke:#a8832b,color:#3d2d06
+    classDef red fill:#fbe4e4,stroke:#b3261e,color:#5c0f0b
+    classDef green fill:#e3f3e8,stroke:#2f7d4a,color:#0f3a1f
+    classDef amber fill:#fff1d6,stroke:#c77c00,color:#4a2c00
+    classDef grey fill:#f2eee6,stroke:#8b857a,color:#2b2a27

@@ -1,0 +1,26 @@
+flowchart TB
+    S(["Contributor opens /submission/status"]):::start --> IN["Enter reference + access key<br/>reference can be pre-filled from the link<br/>the key is never put in the web address"]:::blue
+    IN --> CHK{{"Server compares the key's hash<br/>in constant time"}}:::amber
+    CHK -->|"No match or unknown reference"| ERR["Same generic error for both cases<br/>nothing reveals whether the reference exists"]:::red --> IN
+    CHK -->|"Match"| VIEW["Safe status view<br/>reference, title, submitted date<br/>friendly status label and description<br/>history of contributor-visible steps only<br/>never internal notes or reviewer names"]:::green
+    VIEW --> WHICH{{"Which status?"}}:::amber
+    WHICH -->|"Received, In review, Final approval"| WAIT["Nothing to do - the panels are working<br/>In review shows stage 2, 3 or 4 of 5"]:::grey
+    WHICH -->|"Published"| PUB["Read the published article link"]:::green
+    WHICH -->|"Not accepted"| REJ["Reviewer's reason is shown<br/>no resubmission on this reference"]:::red
+    WHICH -->|"Withdrawn from archive"| WD["Notice that it is not in the public archive"]:::grey
+    WHICH -->|"Changes requested"| CR["Reviewer's note is shown<br/>Send your revision form appears"]:::gold
+    CR --> F["What did you change? 10+ characters<br/>Optional new document link<br/>Optional replacement similarity and AI reports"]:::blue
+    F --> FV{{"Valid?"}}:::amber
+    FV -->|"No"| FE["Field errors, answers kept"]:::red --> F
+    FV -->|"Yes, Send revision"| RS["Server replaces only what was sent<br/>status goes back to the stage that asked for changes<br/>one audit event with the contributor's note<br/>Revision received email queued"]:::green
+    RS --> VIEW
+    LEG["Old submissions made before October 2026 have no access key<br/>the museum answers by email"]:::grey -.-> IN
+
+    classDef start fill:#10244d,stroke:#10244d,color:#ffffff
+    classDef blue fill:#e8eef9,stroke:#234a9c,color:#0b1a3a
+    classDef gold fill:#f6ecd2,stroke:#a8832b,color:#3d2d06
+    classDef red fill:#fbe4e4,stroke:#b3261e,color:#5c0f0b
+    classDef green fill:#e3f3e8,stroke:#2f7d4a,color:#0f3a1f
+    classDef amber fill:#fff1d6,stroke:#c77c00,color:#4a2c00
+    classDef ink fill:#10244d,stroke:#10244d,color:#ffffff
+    classDef grey fill:#f2eee6,stroke:#8b857a,color:#2b2a27
