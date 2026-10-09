@@ -1,0 +1,134 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1440" height="920" viewBox="0 0 1440 920" role="img" aria-labelledby="title description">
+  <title id="title">IT Museum — India application architecture</title>
+  <desc id="description">The React browser application connects public reading to published Supabase content and legacy Firestore notes. Submission and status requests use a public Supabase Edge Function. Staff authenticate with Firebase and use a staff Edge Function. Edge Functions enforce shared workflow rules before accessing protected Postgres and storage. A notification worker sends queued emails through EmailJS.</desc>
+  <defs>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,5 L0,10 z" fill="#64748b" />
+    </marker>
+    <marker id="arrowBlue" markerWidth="10" markerHeight="10" refX="8" refY="5" orient="auto" markerUnits="strokeWidth">
+      <path d="M0,0 L10,5 L0,10 z" fill="#245b87" />
+    </marker>
+    <style>
+      text { font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+      .title { fill: #132c43; font-size: 30px; font-weight: 700; }
+      .subtitle { fill: #526779; font-size: 15px; }
+      .zone { fill: #f5f8fb; stroke: #d7e1e9; stroke-width: 1.5; }
+      .zone-edge { fill: #f4f7fa; stroke: #b9cad8; stroke-width: 1.5; }
+      .zone-label { fill: #344c60; font-size: 15px; font-weight: 700; letter-spacing: 1.1px; }
+      .node { fill: #ffffff; stroke: #b8c8d5; stroke-width: 1.5; }
+      .node-blue { fill: #edf5fb; stroke: #7fa6c5; stroke-width: 1.6; }
+      .node-dark { fill: #183c5a; stroke: #183c5a; stroke-width: 1.5; }
+      .node-title { fill: #18364f; font-size: 17px; font-weight: 700; }
+      .node-title-light { fill: #ffffff; font-size: 17px; font-weight: 700; }
+      .node-copy { fill: #506678; font-size: 13px; }
+      .node-copy-light { fill: #e6eff5; font-size: 13px; }
+      .connector { fill: none; stroke: #64748b; stroke-width: 2; marker-end: url(#arrow); }
+      .connector-blue { fill: none; stroke: #245b87; stroke-width: 2.2; marker-end: url(#arrowBlue); }
+      .connector-dashed { fill: none; stroke: #8193a2; stroke-width: 1.8; stroke-dasharray: 6 6; marker-end: url(#arrow); }
+      .label-bg { fill: #ffffff; stroke: #e1e8ee; stroke-width: 1; }
+      .edge-label { fill: #42586a; font-size: 12px; font-weight: 600; }
+      .note { fill: #667b8d; font-size: 12px; }
+    </style>
+  </defs>
+
+  <rect width="1440" height="920" fill="#ffffff" />
+  <text class="title" x="56" y="58">IT Museum — India | Application architecture</text>
+  <text class="subtitle" x="56" y="86">Public pages and staff tools share a browser app; protected operations pass through server-verified Edge Functions.</text>
+
+  <!-- Main architecture zones -->
+  <rect class="zone" x="48" y="122" width="360" height="620" rx="18" />
+  <text class="zone-label" x="72" y="158">BROWSER · REACT 19 / VITE / TYPESCRIPT</text>
+
+  <rect class="zone-edge" x="470" y="122" width="400" height="620" rx="18" />
+  <text class="zone-label" x="494" y="158">SUPABASE EDGE FUNCTIONS</text>
+
+  <rect class="zone" x="932" y="122" width="460" height="620" rx="18" />
+  <text class="zone-label" x="956" y="158">PROTECTED DATA AND STORAGE</text>
+
+  <!-- Browser nodes -->
+  <rect class="node" x="78" y="194" width="300" height="118" rx="12" />
+  <text class="node-title" x="102" y="228">Public website</text>
+  <text class="node-copy" x="102" y="254">Home · Archive · Articles · Team · Contact</text>
+  <text class="node-copy" x="102" y="278">Published content reads with anon key</text>
+
+  <rect class="node-blue" x="78" y="346" width="300" height="110" rx="12" />
+  <text class="node-title" x="102" y="380">Submission and status</text>
+  <text class="node-copy" x="102" y="406">Reference + access key</text>
+  <text class="node-copy" x="102" y="430">No contributor account required</text>
+
+  <rect class="node-dark" x="78" y="490" width="300" height="110" rx="12" />
+  <text class="node-title-light" x="102" y="524">Staff admin portal</text>
+  <text class="node-copy-light" x="102" y="550">Queues · review · final publication</text>
+  <text class="node-copy-light" x="102" y="574">Role-specific actions</text>
+
+  <rect class="node" x="78" y="634" width="300" height="76" rx="12" />
+  <text class="node-title" x="102" y="666">Firebase Authentication</text>
+  <text class="node-copy" x="102" y="690">Staff sign-in issues an ID token</text>
+
+  <!-- Edge nodes -->
+  <rect class="node-blue" x="506" y="194" width="328" height="100" rx="12" />
+  <text class="node-title" x="530" y="230">public-api</text>
+  <text class="node-copy" x="530" y="257">Validates submission and contributor access</text>
+  <text class="node-copy" x="530" y="278">Uploads and status requests</text>
+
+  <rect class="node-blue" x="506" y="346" width="328" height="104" rx="12" />
+  <text class="node-title" x="530" y="382">staff-api</text>
+  <text class="node-copy" x="530" y="409">Verifies Firebase token and explicit staff role</text>
+  <text class="node-copy" x="530" y="432">Checks queue access and requested action</text>
+
+  <rect class="node-dark" x="506" y="504" width="328" height="92" rx="12" />
+  <text class="node-title-light" x="530" y="540">Shared workflow rules</text>
+  <text class="node-copy-light" x="530" y="568">Status transitions · permissions · audit</text>
+
+  <rect class="node" x="506" y="634" width="328" height="76" rx="12" />
+  <text class="node-title" x="530" y="666">notify-worker</text>
+  <text class="node-copy" x="530" y="690">Retries queued messages</text>
+
+  <!-- Data nodes -->
+  <rect class="node" x="968" y="194" width="388" height="170" rx="12" />
+  <text class="node-title" x="994" y="230">Supabase Postgres</text>
+  <text class="node-copy" x="994" y="258">Articles · workflow state · staff roles</text>
+  <text class="node-copy" x="994" y="282">Audit events · notification outbox · sections</text>
+  <line x1="994" y1="300" x2="1328" y2="300" stroke="#e1e8ee" />
+  <text class="node-copy" x="994" y="328">Published view exposes public fields only</text>
+
+  <rect class="node" x="968" y="408" width="388" height="160" rx="12" />
+  <text class="node-title" x="994" y="444">Supabase Storage</text>
+  <text class="node-copy" x="994" y="472">reports · private reviewer access</text>
+  <text class="node-copy" x="994" y="496">publication-staging · private</text>
+  <text class="node-copy" x="994" y="520">articles · published PDFs</text>
+
+  <!-- External services -->
+  <rect class="node" x="48" y="786" width="400" height="88" rx="12" />
+  <text class="node-title" x="74" y="822">Firebase Firestore</text>
+  <text class="node-copy" x="74" y="850">Legacy collection notes · read-only</text>
+
+  <rect class="node" x="1012" y="786" width="380" height="88" rx="12" />
+  <text class="node-title" x="1038" y="822">EmailJS REST</text>
+  <text class="node-copy" x="1038" y="850">Server-side contributor notifications</text>
+
+  <!-- Data paths -->
+  <path class="connector-dashed" d="M378 250 H430 V730 H900 V340 H968" />
+  <rect class="label-bg" x="500" y="746" width="224" height="30" rx="8" />
+  <text class="edge-label" x="516" y="766">published view · public fields only</text>
+
+  <path class="connector-dashed" d="M78 250 H24 V760 H248 V786" />
+  <rect class="label-bg" x="38" y="718" width="196" height="32" rx="8" />
+  <text class="edge-label" x="55" y="739">legacy notes · read-only</text>
+
+  <path class="connector-blue" d="M378 400 H506" />
+  <path class="connector-blue" d="M834 244 H900 V278 H968" />
+  <path class="connector-blue" d="M834 244 H884 V488 H968" />
+  <path class="connector" d="M378 545 H506" />
+  <path class="connector" d="M378 672 H442 V398 H506" />
+  <rect class="label-bg" x="407" y="618" width="96" height="34" rx="8" />
+  <text class="edge-label" x="422" y="640">ID token</text>
+
+  <path class="connector-blue" d="M834 244 H850 V550 H834" />
+  <path class="connector-blue" d="M670 450 V504" />
+  <path class="connector-blue" d="M834 550 H900 V280 H968" />
+  <path class="connector-blue" d="M834 550 H914 V488 H968" />
+  <path class="connector" d="M968 340 H900 V672 H834" />
+  <path class="connector" d="M670 710 V830 H1012" />
+  <text class="note" x="56" y="904">Service-role credentials stay inside Edge Functions; the browser never receives privileged database or storage credentials.</text>
+</svg>

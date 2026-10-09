@@ -2,25 +2,33 @@
 
 Public archive and editorial review portal for the **IT Museum — India**, a partnership between CHRIST (Deemed to be University), Bangalore Yeshwanthpur Campus, and the [DataArt IT Museum](https://museum.dataart.com/). It documents India's contributions to the history of computing through peer-reviewed research and curated exhibits.
 
+The application gives visitors a searchable digital archive, gives contributors a guided submission and status experience, and gives staff a controlled review-to-publication workflow. It is designed for preserving research and cultural history while keeping unpublished material, reviewer notes, reports, and staff actions private.
+
+## Features
+
+- **Digital archive:** Search and filter published research articles and curated exhibits.
+- **Accessible exhibits:** Read article metadata, citations, tags, and published PDF documents.
+- **Guided submissions:** Submit authors, manuscript links, research reports, originality confirmation, and supporting metadata with recoverable validation errors.
+- **Contributor status:** Check a submission with its reference and access key without creating an account.
+- **Editorial review:** Route submissions through intake, IT, technical, literature, and final admin approval queues.
+- **Audit and notifications:** Record immutable workflow events and queue contributor notifications with retry handling.
+- **Role-based staff portal:** Give each reviewer only the queue and actions assigned to their role; final publishing remains admin-only.
+
+## Tech stack
+
+- **Frontend:** React 19, TypeScript, Vite 7, React Router, and CSS design tokens.
+- **Data and storage:** Supabase Postgres, Row Level Security, Edge Functions, and Supabase Storage.
+- **Authentication:** Firebase Authentication for staff sign-in; staff roles are explicit Supabase records and are never inferred from email text.
+- **Legacy content:** Firebase Firestore `collections` documents remain read-only until they are migrated to the primary content model.
+- **Notifications and documents:** Server-side EmailJS delivery, private report storage, and public published PDFs.
+- **Quality tooling:** Vitest, Testing Library, axe-core, ESLint, TypeScript, and PGlite migration tests.
+
 - **Public site:** home, archive (search and filters), article/exhibit pages, team, visit & contact, guided submission, and submission status lookup.
 - **Review portal (`/admin`):** role-based queues, an article workspace, a decision workflow with an immutable audit log, final publication, archive management, and staff roles.
 
 ## Architecture
 
-```
-Browser (React 19 + Vite 7 + TypeScript)
- ├─ public pages ── anon key ──► Supabase: view `published_articles`, table `sections` (read-only)
- ├─ public pages ──────────────► Firebase Firestore `collections` (legacy notes, read-only)
- ├─ submission / status ───────► Edge Function `public-api`  (no login; reference + access key)
- └─ /admin ── Firebase Auth ID token ──► Edge Function `staff-api`
-                                          │ verifies the token (JWKS) → explicit staff_members role
-                                          │ shared rules: supabase/functions/_shared/workflow.ts
-                                          ▼ service role (server-side only)
-                                 Postgres: articles, article_events, staff_members, notification_outbox
-                                 Storage:  reports (private) · publication-staging (private) · articles (public PDFs)
-                                          │
-                                 Edge Function `notify-worker` ──► EmailJS REST (server-side) with retries
-```
+![Application architecture diagram](docs/architecture.svg)
 
 - **Source of truth:** Supabase Postgres holds articles, workflow state, the audit log and staff roles. Firebase is used only for staff **sign-in** and for the legacy Firestore `collections` notes, which are shown read-only in the archive (see [Content sources](#content-sources)).
 - **Trust boundary:** browsers can only read published content. Every privileged read and write goes through the Edge Functions, which use the service-role key on the server. The workflow rules live in `supabase/functions/_shared/workflow.ts`. The same module drives the UI (to decide which buttons to show) and the server (to enforce them), and the tests cover it.
