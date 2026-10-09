@@ -8,6 +8,9 @@ import alexeyP from '../assets/team/alexey-p.jpg';
 import krishnaP from '../assets/team/krishna-p.jpg';
 import jehosonJj from '../assets/team/jehoson-jj.jpg';
 import vishnuS from '../assets/team/profile-pic.jpg';
+import jackJoy from '../assets/team/jack-sir.JPG.jpeg';
+import shruthiPatel from '../assets/team/shruthi-patel.jpg';
+import shashwat from '../assets/team/shash.jpeg';
 
 export interface TeamMember {
     name: string;
@@ -23,7 +26,7 @@ export interface TeamGroup {
 }
 
 // Credits as published on the previous site. Members without a photo are
-// shown with a monogram (portraits were intentionally removed in Feb 2026).
+// shown with a monogram.
 export const TEAM: TeamGroup[] = [
     {
         id: 'mentors',
@@ -41,7 +44,7 @@ export const TEAM: TeamGroup[] = [
             { name: 'Dr. Balakrishnan C', role: 'Coordinator & Curator', affiliation: 'Computer Science, BYC', photo: balakrishnanC },
             { name: 'Dr. Gayathry S Warrier', role: 'Curator — Technical', affiliation: 'Computer Science, BYC', photo: gayathrySw },
             { name: 'Dr. Rajasekhar D', role: 'Curator — Cultural', affiliation: 'Media Studies, BYC', photo: rajasekharD },
-            { name: 'Mr. Jack Joy', role: 'Curator — Logistics', affiliation: 'CDL, BYC' },
+            { name: 'Mr. Jack Joy', role: 'Curator — Logistics', affiliation: 'CDL, BYC', photo: jackJoy },
         ],
     },
     {
@@ -61,9 +64,9 @@ export const TEAM: TeamGroup[] = [
         id: 'developers',
         title: 'Student developers',
         members: [
-            { name: 'Shruthi S Patel', role: 'Front End Developer', affiliation: 'BCA' },
+            { name: 'Shruthi S Patel', role: 'Front End Developer', affiliation: 'BCA', photo: shruthiPatel },
             { name: 'Vishnu S', role: 'Back End Developer', affiliation: 'BCA', photo: vishnuS },
-            { name: 'Shashwat', role: 'Full Stack Developer', affiliation: 'BCA' },
+            { name: 'Shashwat', role: 'Full Stack Developer', affiliation: 'BCA', photo: shashwat },
         ],
     },
 ];
